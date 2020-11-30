@@ -22,6 +22,15 @@ public class User {
   private String email;
 
   private String password;
+  
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+          cascade = CascadeType.ALL)
+  private Set<Images> images;
+  
+  
+  
+  
+  
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
@@ -38,7 +47,13 @@ public class User {
     this.password = password;
   }
 
-  public Long getId() {
+  public Set<Images> getImages() {
+return images;}
+
+public void setImages(Set<Images> images) {
+this.images = images;}
+
+public Long getId() {
     return id;
   }
 
