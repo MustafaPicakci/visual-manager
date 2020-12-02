@@ -2,6 +2,7 @@ package com.application.backend.controllers;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,11 @@ public class TestController {
   public String allAccess() {
     return "Public Content.";
   }
-
+  @GetMapping("/users")
+  public List<User> users() {
+    return userRepository.findAll();
+  }
+  
   @GetMapping("/sil")
   public void sil() {
     userRepository.deleteById((long) 1);

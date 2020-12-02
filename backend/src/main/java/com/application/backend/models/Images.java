@@ -1,6 +1,8 @@
 package com.application.backend.models;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,7 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,6 +27,10 @@ public class Images {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long image_id;
 
+  public void setImage_id(long image_id) {
+    this.image_id = image_id;
+  }
+
   @Column(nullable = true)
   private String image_name;
 
@@ -33,6 +41,21 @@ public class Images {
   @Lob
   @Column(length = Integer.MAX_VALUE, nullable = true)
   private byte[] image;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "image_tags",
+      joinColumns = @JoinColumn(name = "image_id"),
+      inverseJoinColumns = @JoinColumn(name = "tag_id"))
+  private Set<Tags> tags = new HashSet<>();
+
+  public Set<Tags> getTags() {
+    return tags;
+  }
+
+  public void setTags(Set<Tags> tags) {
+    this.tags = tags;
+  }
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
@@ -50,10 +73,6 @@ public class Images {
     this.upload_date = upload_date;
     this.image = image;
     this.user = user;
-  }
-
-  public void setImage_id(int image_id) {
-    this.image_id = image_id;
   }
 
   public String getImage_name() {
