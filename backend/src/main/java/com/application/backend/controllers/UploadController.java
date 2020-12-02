@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.application.backend.models.Images;
+import com.application.backend.repository.ImageRepository;
 import com.application.backend.services.ImageServiceImpl;
 
 @CrossOrigin(origins = "*")
@@ -25,8 +26,6 @@ import com.application.backend.services.ImageServiceImpl;
 public class UploadController {
 
   @Autowired ImageServiceImpl imageServiceImpl;
- 
-
 
   @PostMapping("/image")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
@@ -34,10 +33,10 @@ public class UploadController {
 	  imageServiceImpl.SaveImage(file);
 	  System.out.println("calisti");
   };
-  
- /* @GetMapping("/all")
+
+  @GetMapping("/all")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public List<Images> getImages() {
 	  return imageServiceImpl.FindImagesForUser();
-  };*/
+  };
 }

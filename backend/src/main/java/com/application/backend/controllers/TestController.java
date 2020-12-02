@@ -37,6 +37,11 @@ public class TestController {
     return "Public Content.";
   }
 
+  @GetMapping("/sil")
+  public void sil() {
+    userRepository.deleteById((long) 1);
+  }
+
   @GetMapping("/user")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public String userAccess() {
@@ -58,7 +63,7 @@ public class TestController {
   @PostMapping("/deneme")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images deneme(MultipartFile multipartFile) throws IOException {
-   byte[] imageFile = multipartFile.getBytes();
+    byte[] imageFile = multipartFile.getBytes();
     Images image = new Images();
     /*  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
@@ -66,7 +71,6 @@ public class TestController {
     image.setImage(imageFile);
     image.setUser(userRepository.findByUsername(username));*/
 
- 
     return imageRepository.save(image);
   }
 

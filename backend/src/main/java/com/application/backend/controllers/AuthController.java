@@ -55,7 +55,7 @@ public class AuthController {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String jwt = jwtUtils.generateJwtToken(authentication);
-
+    Long expirationDate=jwtUtils.getExpitarionDate();
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
     List<String> roles =
         userDetails
@@ -66,7 +66,7 @@ public class AuthController {
 
     return ResponseEntity.ok(
         new JwtResponse(
-            jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+           expirationDate ,jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
   }
 
   @PostMapping("/signup")

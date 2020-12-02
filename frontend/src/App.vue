@@ -74,6 +74,9 @@ export default {
       return false;
     }
   },
+    created() {
+    this.$store.dispatch("auth/initAuth");
+  },
   methods: {
     logOut() {
       this.$store.dispatch('auth/logout');
