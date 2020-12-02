@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import { router } from "./router";
-import store from "./store";
+import store from "./store/store";
 import Vuex from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

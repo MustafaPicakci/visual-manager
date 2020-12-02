@@ -7,7 +7,7 @@ import Profile from "./views/Profile.vue";
 import BoardAdmin from "./views/BoardAdmin.vue";
 import BoardModerator from "./views/BoardModerator.vue";
 import BoardUser from "./views/BoardUser.vue";
-import store from "./store/index";
+import store from "./store/store";
 
 Vue.use(Router);
 

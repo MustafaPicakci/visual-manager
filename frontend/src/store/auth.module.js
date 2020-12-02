@@ -1,5 +1,5 @@
 import AuthService from "../services/auth.service";
-
+import { router } from "../router";
 const user = JSON.parse(localStorage.getItem("user"));
 const initialState = user
   ? { status: { loggedIn: true }, user }
@@ -24,6 +24,7 @@ export const auth = {
     logout({ commit }) {
       AuthService.logout();
       commit("logout");
+      router.replace("/login");
     },
     register({ commit }, user) {
       return AuthService.register(user).then(
@@ -36,6 +37,29 @@ export const auth = {
           return Promise.reject(error);
         }
       );
+    },
+    initAuth({ dispatch, commit }) {
+      if (user) {
+        let expirationDate = user.expirationDate;
+        let time = new Date().getTime(); //ms cinsinden şu anki zaman
+
+        if (time >= expirationDate) {
+          console.log("token süresi geçmiş");
+          console.log(time);
+          dispatch("logout");
+        } else {
+          let timerSecond = +expirationDate - time;
+          console.log(timerSecond + "sadasdasd");
+          dispatch("setTimeoutTimer", timerSecond);
+        }
+      } else {
+        return false;
+      }
+    },
+    setTimeoutTimer({ dispatch }, expiresIn) {
+      setTimeout(() => {
+        dispatch("logout");
+      }, expiresIn);
     }
   },
   mutations: {

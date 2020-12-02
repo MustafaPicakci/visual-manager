@@ -32,7 +32,9 @@ public class JwtUtils {
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
 				.compact();
 	}
-
+	public Long getExpitarionDate() {
+		return new Date().getTime() + jwtExpirationMs;
+	}
 	public String getUserNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}

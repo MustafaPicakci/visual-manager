@@ -2,6 +2,7 @@ package com.application.backend.models;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,7 +34,7 @@ public class Images {
   @Column(length = Integer.MAX_VALUE, nullable = true)
   private byte[] image;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 

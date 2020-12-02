@@ -64,7 +64,6 @@ export default {
      vsuccess(file, response) {
      console.log(file);
      console.log(response)
-     // this.$store.dispatch("getAllImages");
     },
   }
 };

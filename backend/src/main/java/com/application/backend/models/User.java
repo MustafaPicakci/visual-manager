@@ -12,6 +12,7 @@ import javax.persistence.*;
       @UniqueConstraint(columnNames = "username"),
       @UniqueConstraint(columnNames = "email")
     })
+
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,15 +23,9 @@ public class User {
   private String email;
 
   private String password;
-  
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
-          cascade = CascadeType.ALL)
+
+  @OneToMany(targetEntity = Images.class, mappedBy = "user", cascade = CascadeType.ALL)
   private Set<Images> images;
-  
-  
-  
-  
-  
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
@@ -46,14 +41,16 @@ public class User {
     this.email = email;
     this.password = password;
   }
-
+  /*
   public Set<Images> getImages() {
-return images;}
+    return images;
+  }
 
-public void setImages(Set<Images> images) {
-this.images = images;}
+  public void setImages(Set<Images> images) {
+    this.images = images;
+  }*/
 
-public Long getId() {
+  public Long getId() {
     return id;
   }
 
