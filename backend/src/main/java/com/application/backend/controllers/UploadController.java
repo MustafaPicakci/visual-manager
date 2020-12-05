@@ -17,17 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.application.backend.models.Images;
+import com.application.backend.models.Tags;
 import com.application.backend.repository.ImageRepository;
+import com.application.backend.repository.TagRepository;
 import com.application.backend.services.ImageServiceImpl;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/upload")
+@RequestMapping("/api/image")
 public class UploadController {
 
   @Autowired ImageServiceImpl imageServiceImpl;
+  @Autowired ImageRepository imageRepository;
+  @Autowired TagRepository tagRepository;
+  
 
-  @PostMapping("/image")
+  @PostMapping("/newImages")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public void UploadImage(MultipartFile file) {
 	  imageServiceImpl.SaveImage(file);
@@ -38,5 +43,20 @@ public class UploadController {
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public List<Images> getImages() {
 	  return imageServiceImpl.FindImagesForUser();
+  };
+  
+  @PostMapping("/setTag")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public void setTag(long image_id,String tag_name) {
+	 Images image=imageRepository.getOne(image_id);
+	 //Tags tag=new Tags(tag_name);
+	// Tags tag2=new Tags("Mahmut");
+	 long id=1;
+	Tags tag= tagRepository.getOne(id);
+	 image.addTag(tag);
+	// image.addTag(tag2);
+	
+	
+	 imageRepository.save(image);
   };
 }
