@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav v-if="currentUser" class="navbar navbar-expand navbar-dark bg-dark">
+    <!--  <nav v-if="currentUser" class="navbar navbar-expand navbar-dark bg-dark">
       <a href class="navbar-brand" @click.prevent>bezKoder</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -46,8 +46,8 @@
         </li>
       </div>
     </nav>
-
-    <div class="container">
+-->
+    <div>
       <router-view />
     </div>
   </div>
@@ -61,26 +61,26 @@ export default {
     },
     showAdminBoard() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_ADMIN');
+        return this.currentUser.roles.includes("ROLE_ADMIN");
       }
 
       return false;
     },
     showModeratorBoard() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_MODERATOR');
+        return this.currentUser.roles.includes("ROLE_MODERATOR");
       }
 
       return false;
     }
   },
-    created() {
+  created() {
     this.$store.dispatch("auth/initAuth");
   },
   methods: {
     logOut() {
-      this.$store.dispatch('auth/logout');
-      this.$router.push('/login');
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/login");
     }
   }
 };
