@@ -30,33 +30,58 @@ public class UploadController {
   @Autowired ImageServiceImpl imageServiceImpl;
   @Autowired ImageRepository imageRepository;
   @Autowired TagRepository tagRepository;
-  
 
   @PostMapping("/newImages")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public void UploadImage(MultipartFile file) {
-	  imageServiceImpl.SaveImage(file);
-	  System.out.println("calisti");
+    imageServiceImpl.SaveImage(file);
+    System.out.println("calisti");
   };
 
   @GetMapping("/all")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public List<Images> getImages() {
-	  return imageServiceImpl.FindImagesForUser();
+    return imageServiceImpl.FindImagesForUser();
   };
-  
+
   @PostMapping("/setTag")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-  public void setTag(long image_id,String tag_name) {
-	 Images image=imageRepository.getOne(image_id);
-	 //Tags tag=new Tags(tag_name);
-	// Tags tag2=new Tags("Mahmut");
-	 long id=1;
-	Tags tag= tagRepository.getOne(id);
-	 image.addTag(tag);
-	// image.addTag(tag2);
-	
-	
-	 imageRepository.save(image);
+  public void setTag(long imageId, String tagName) {
+    Images image = imageRepository.getOne(imageId);
+
+    Tags tag = null;
+    try {
+      tag = tagRepository.findTagsByTagName(tagName);
+    } catch (Exception e) {
+      System.out.println("tagi bulma sorunlu");
+    }
+    if (tag == null) {
+      tag = new Tags(tagName);
+    }
+
+    image.addTag(tag);
+
+    imageRepository.save(image);
+  };
+
+  @PostMapping("/deleteTag")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public void deleteTag(long tag_id) {
+    tagRepository.deleteById(tag_id);
+  };
+
+  @PostMapping("/deleteImage")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public void deleteImage(long imageId) {
+    imageRepository.deleteById(imageId);
+  };
+
+  @PostMapping("/unlinkTag")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public void unlinkTag(long imageId, String tagName) {
+    Images image = imageRepository.getOne(imageId);
+    Tags tag = tagRepository.findTagsByTagName(tagName);
+    image.removeTagFromImage(tag);
+    imageRepository.save(image);
   };
 }

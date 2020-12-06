@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,36 +24,41 @@ public class Tags {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
-  private long tag_id;
+  private long id;
 
   @Column(unique = true)
-  private String tag_name;
+  private String tagName;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy = "tags")
   private List<Images> images = new ArrayList<>();
 
+  @PreRemove
+  private void preRemove() {
+     images.forEach( image -> image.setTags(null));
+  }
+  
   public Tags() {}
 
-  public Tags(String tag_name) {
+  public Tags(String tagName) {
     super();
-    this.tag_name = tag_name;
+    this.tagName = tagName;
   }
 
-  public long getTag_id() {
-    return tag_id;
+  public long getId() {
+    return id;
   }
 
-  public void setTag_id(long tag_id) {
-    this.tag_id = tag_id;
+  public void setId(long id) {
+    this.id = id;
   }
 
-  public String getTag_name() {
-    return tag_name;
+  public String getTagName() {
+    return tagName;
   }
 
-  public void setTag_name(String tag_name) {
-    this.tag_name = tag_name;
+  public void setTagName(String tagName) {
+    this.tagName = tagName;
   }
 
   public List<Images> getImages() {
@@ -68,8 +74,8 @@ public class Tags {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((images == null) ? 0 : images.hashCode());
-    result = prime * result + (int) (tag_id ^ (tag_id >>> 32));
-    result = prime * result + ((tag_name == null) ? 0 : tag_name.hashCode());
+    result = prime * result + (int) (id ^ (id >>> 32));
+    result = prime * result + ((tagName == null) ? 0 : tagName.hashCode());
     return result;
   }
 
@@ -82,10 +88,10 @@ public class Tags {
     if (images == null) {
       if (other.images != null) return false;
     } else if (!images.equals(other.images)) return false;
-    if (tag_id != other.tag_id) return false;
-    if (tag_name == null) {
-      if (other.tag_name != null) return false;
-    } else if (!tag_name.equals(other.tag_name)) return false;
+    if (id != other.id) return false;
+    if (tagName == null) {
+      if (other.tagName != null) return false;
+    } else if (!tagName.equals(other.tagName)) return false;
     return true;
   }
 }
