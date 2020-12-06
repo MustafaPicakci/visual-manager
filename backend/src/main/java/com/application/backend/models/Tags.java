@@ -35,9 +35,9 @@ public class Tags {
 
   @PreRemove
   private void preRemove() {
-     images.forEach( image -> image.setTags(null));
+    images.forEach(image -> image.setTags(null));
   }
-  
+
   public Tags() {}
 
   public Tags(String tagName) {
