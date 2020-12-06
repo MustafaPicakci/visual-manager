@@ -35,7 +35,7 @@ export default {
     return {
       content: "",
       dropzoneOptions: {
-        url: "http://localhost:3000/api/image/newImages",
+        url: "http://localhost:3000/api/images/add",
         thumbnailWidth: 200,
         addRemoveLinks: true,
         headers: { ...authHeader() }

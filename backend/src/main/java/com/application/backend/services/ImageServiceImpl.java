@@ -11,21 +11,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.application.backend.models.Images;
+import com.application.backend.models.Tags;
 import com.application.backend.models.User;
 import com.application.backend.repository.ImageRepository;
+import com.application.backend.repository.TagRepository;
 import com.application.backend.repository.UserRepository;
 
 @Service
 public class ImageServiceImpl implements ImageService {
+
   @Autowired ImageRepository imageRepository;
   @Autowired UserRepository userRepository;
+  @Autowired TagRepository tagRepository;
 
   @Override
-  public void SaveImage(MultipartFile file) {
+  public void saveImage(MultipartFile file) {
     try {
-      //  System.out.println(file.getContentType());
-      //  System.out.println(file.getSize());
-
       byte[] imageFile = file.getBytes();
       Date uploadDate = new Date();
       String imageName = file.getOriginalFilename();
@@ -42,18 +43,43 @@ public class ImageServiceImpl implements ImageService {
       imageRepository.save(image);
 
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
 
   @Override
-  public List<Images> FindImagesForUser() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String username = authentication.getName();
+  public List<Images> findImagesForUser(User user) {
+    return imageRepository.findAllByUser(user);
+  }
 
-    User user = userRepository.findByUsername(username);
+  @Override
+  public void setTag(long imageId, String tagName) {
+    Images image = imageRepository.getOne(imageId);
+    Tags tag = null;
+    try {
+      tag = tagRepository.findTagsByTagName(tagName);
+    } catch (Exception e) {
+      System.out.println("tagi bulma sorunlu");
+    }
+    if (tag == null) {
+      tag = new Tags(tagName);
+    }
 
-    return imageRepository.findAllByUserId(user.getId());
+    image.addTag(tag);
+
+    imageRepository.save(image);
+  }
+
+  @Override
+  public void deleteImage(long imageId) {
+    imageRepository.deleteById(imageId);
+  }
+
+  @Override
+  public void unlikTag(long imageId, long tagId) {
+    Images image = imageRepository.getOne(imageId);
+    Tags tag = tagRepository.findTagsById(tagId);
+    image.removeTagFromImage(tag);
+    imageRepository.save(image);
   }
 }

@@ -7,5 +7,11 @@ import com.application.backend.models.Tags;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tags, Long> {
-	Tags findTagsByTagName(String tagName);
+  Tags findTagsByTagName(String tagName);
+
+  Tags findTagsById(long tagId);
+
+  /* List<Tags> findAllByUser(User user);
+
+  void deleteByUser(User user);*/
 }
