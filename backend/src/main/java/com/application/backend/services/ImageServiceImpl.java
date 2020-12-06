@@ -33,11 +33,11 @@ public class ImageServiceImpl implements ImageService {
       String username = authentication.getName();
 
       User user = userRepository.findByUsername(username);
-      
+
       Images image = new Images();
       image.setImage(imageFile);
-      image.setImage_name(imageName);
-      image.setUpload_date(uploadDate);
+      image.setImageName(imageName);
+      image.setUploadDate(uploadDate);
       image.setUser(user);
       imageRepository.save(image);
 
@@ -49,11 +49,11 @@ public class ImageServiceImpl implements ImageService {
 
   @Override
   public List<Images> FindImagesForUser() {
-	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      String username = authentication.getName();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
 
-      User user = userRepository.findByUsername(username);
-      
-     return imageRepository.findAllByUserId(user.getId());
+    User user = userRepository.findByUsername(username);
+
+    return imageRepository.findAllByUserId(user.getId());
   }
 }
