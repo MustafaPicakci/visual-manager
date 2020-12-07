@@ -3,21 +3,17 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import { auth } from "./auth.module";
+import { imageOparations } from "./image.module";
 import authHeader from "../services/auth-header";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    images: []
-  },
-  mutations: {
-
-  },
-  actions: {
-
-  },
+  state: {},
+  mutations: {},
+  actions: {},
   getters: {},
   modules: {
-    auth
+    auth,
+    imageOparations
   }
 });
