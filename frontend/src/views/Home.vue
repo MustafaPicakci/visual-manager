@@ -72,7 +72,7 @@
           <div class="blog-masonry masonry-true">
             <div class="post-masonry col-md-4 col-sm-6">
               <div class="post-thumb">
-                <img src="../assets/images/6.jpg" alt="" />
+                <img src="../assets/images/1.jpg" alt="" />
                 <div class="title-over">
                   <h4><a href="#">Title one goes here</a></h4>
                 </div>
@@ -89,7 +89,7 @@
             <!-- /.post-masonry -->
             <div class="post-masonry col-md-4 col-sm-6">
               <div class="post-thumb">
-                <img src="../assets/images/6.jpg" alt="" />
+                <img src="../assets/images/2.jpg" alt="" />
                 <div class="title-over">
                   <h4><a href="#">Second Image Title</a></h4>
                 </div>
@@ -106,7 +106,7 @@
             <!-- /.post-masonry -->
             <div class="post-masonry col-md-4 col-sm-6">
               <div class="post-thumb">
-                <img src="../assets/images/6.jpg" alt="" />
+                <img src="../assets/images/3.jpg" alt="" />
                 <div class="title-over">
                   <h4><a href="#">Image Number Three</a></h4>
                 </div>
@@ -123,7 +123,7 @@
             <!-- /.post-masonry -->
             <div class="post-masonry col-md-4 col-sm-6">
               <div class="post-thumb">
-                <img src="../assets/images/6.jpg" alt="" />
+                <img src="../assets/images/4.jpg" alt="" />
                 <div class="title-over">
                   <h4><a href="#">Aliquam sed magna risus</a></h4>
                 </div>
