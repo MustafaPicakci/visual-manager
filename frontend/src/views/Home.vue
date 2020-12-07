@@ -149,8 +149,12 @@
 export default {
   name: "Home",
   data() {
-    return {};
+    return {
+   
+    };
   },
-  mounted() {}
+  created(){
+       this.$store.dispatch("getUserImages");
+  }
 };
 </script>
