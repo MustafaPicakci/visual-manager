@@ -25,7 +25,8 @@ public class ImageServiceImpl implements ImageService {
   @Autowired TagRepository tagRepository;
 
   @Override
-  public void saveImage(MultipartFile file) {
+  public Images saveImage(MultipartFile file) {
+    Images image = new Images();
     try {
       byte[] imageFile = file.getBytes();
       Date uploadDate = new Date();
@@ -35,7 +36,6 @@ public class ImageServiceImpl implements ImageService {
 
       User user = userRepository.findByUsername(username);
 
-      Images image = new Images();
       image.setImage(imageFile);
       image.setImageName(imageName);
       image.setUploadDate(uploadDate);
@@ -45,6 +45,7 @@ public class ImageServiceImpl implements ImageService {
     } catch (IOException e) {
       e.printStackTrace();
     }
+    return image;
   }
 
   @Override

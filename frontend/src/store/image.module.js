@@ -8,18 +8,21 @@ export const imageOperations = {
   actions: {
     getUserImages({ commit }) {
       ImageService.getUserImages().then(response => {
-        commit("addImages", response.data);
+        commit("setImages", response.data);
         console.log(response.data);
       });
     }
   },
   mutations: {
-    addImages(state, images) {
+    setImages(state, images) {
       state.images = images;
+    },
+    addImage(state, images) {
+      state.images.push(images);
     }
   },
   getters: {
-    getImages(state){
+    getImages(state) {
       return state.images;
     }
   }

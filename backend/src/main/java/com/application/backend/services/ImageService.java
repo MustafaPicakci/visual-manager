@@ -6,7 +6,7 @@ import com.application.backend.models.Images;
 import com.application.backend.models.User;
 
 public interface ImageService {
-  public abstract void saveImage(MultipartFile file);
+  public abstract Images saveImage(MultipartFile file);
 
   public abstract List<Images> findImagesForUser(User user);
 

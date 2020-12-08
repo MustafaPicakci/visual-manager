@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import Thumbnail from "../components/Thumbnail.vue";
 import vueDropzone from "vue2-dropzone";
 import authHeader from "../services/auth-header";
@@ -55,9 +55,9 @@ export default {
     })
   },
   methods: {
+    ...mapMutations(["addImage"]),
     vsuccess(file, response) {
-      console.log(file);
-      console.log(response);
+      this.addImage(response);
     }
   }
 };
