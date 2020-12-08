@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!--  <nav v-if="currentUser" class="navbar navbar-expand navbar-dark bg-dark">
+    <nav v-if="currentUser" class="navbar navbar-expand navbar-dark bg-dark">
       <a href class="navbar-brand" @click.prevent>bezKoder</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -15,7 +15,9 @@
           <router-link to="/mod" class="nav-link">Moderator Board</router-link>
         </li>
         <li class="nav-item">
-          <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
+          <router-link v-if="currentUser" to="/user" class="nav-link"
+            >User</router-link
+          >
         </li>
       </div>
 
@@ -46,7 +48,7 @@
         </li>
       </div>
     </nav>
--->
+
     <div>
       <router-view />
     </div>
