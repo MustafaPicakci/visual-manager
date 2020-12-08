@@ -1,103 +1,82 @@
 <template>
-  <div>
-    <div class="content-bg"></div>
-    <div class="bg-overlay"></div>
-    <!-- SITE TOP -->
-    <div class="site-top">
-      <div class="site-header clearfix">
-        <div class="container">
-          <a href="#" class="site-brand pull-left"
-            ><strong>Masonry</strong> Free Template</a
-          >
-          <div class="social-icons pull-right">
-            <ul>
-              <li><a href="#" class="fa fa-facebook"></a></li>
-              <li><a href="#" class="fa fa-twitter"></a></li>
-              <li><a href="#" class="fa fa-behance"></a></li>
-              <li><a href="#" class="fa fa-dribbble"></a></li>
-              <li><a href="#" class="fa fa-google-plus"></a></li>
-            </ul>
-          </div>
+  <div class="container text-center">
+    <br />
+    <vue-dropzone
+      :id="id1"
+      :options="dropzoneOptions"
+      :useCustomSlot="true"
+      @vdropzone-success="vsuccess"
+    >
+      <div class="dropzone-custom-content">
+        <h3 class="dropzone-custom-title">
+          Görselleri Buraya sürükle ve bırak !
+        </h3>
+        <div class="subtitle">
+          ...veya sadece tıkla ve istediğin görseli seç
         </div>
       </div>
-      <!-- .site-header -->
-      <div class="site-banner">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-offset-2 col-md-8 text-center">
-              <h2>
-                Get free templates from <span class="blue">template</span
-                ><span class="green">mo</span>
-              </h2>
-              <p>
-                Masonry is free responsive template that can be used for any
-                website. You may download, modify and use this layout for your
-                personal or commercial websites. Please tell your friends about
-                <span class="blue">template</span
-                ><span class="green">mo</span>.com website. Thank you.
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <form action="#" method="post" class="subscribe-form">
-              <fieldset class="col-md-offset-4 col-md-3 col-sm-8">
-                <input
-                  type="email"
-                  id="subscribe-email"
-                  placeholder="Enter your email..."
-                />
-              </fieldset>
-              <fieldset class="col-md-5 col-sm-4">
-                <input
-                  type="submit"
-                  id="subscribe-submit"
-                  class="button white"
-                  value="Subscribe!"
-                />
-              </fieldset>
-            </form>
-          </div>
-        </div>
-      </div>
-      <!-- .site-banner -->
-    </div>
-    <!-- .site-top -->
-
-    <!----------------------------------------------------------------------------------->
-
-    <!-- MAIN POSTS -->
-    <div class="main-posts">
-      <div class="container">
-        <div class="row">
-         
-            <app-thumbnails :images="imageList"></app-thumbnails>
-            
-            <!-- /.post-masonry -->
-          
-        </div>
-      </div>
-    </div>
+    </vue-dropzone>
+    <br />
+    <br />
+    <br />
+    <h1>Etiketlenmeyi bekleyen görseller</h1>
+    <thumbnail :images="imageList"></thumbnail>
   </div>
 </template>
-
 <script>
-import Thumbnails from "../components/Thumbnails";
-import {mapGetters} from "vuex"
+import { mapGetters } from "vuex";
+import Thumbnail from "../components/Thumbnail.vue";
+import vueDropzone from "vue2-dropzone";
+import authHeader from "../services/auth-header";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+
 export default {
   name: "Home",
   components: {
-    "app-thumbnails": Thumbnails
+    Thumbnail,
+    vueDropzone
   },
   data() {
-    return {};
+    return {
+      dropzoneOptions: {
+        url: "http://localhost:3000/api/images/add",
+        thumbnailWidth: 200,
+        addRemoveLinks: true,
+        headers: { ...authHeader() }
+      }
+    };
   },
   created() {
     this.$store.dispatch("getUserImages");
   },
   computed: {
-   ...mapGetters({
-     imageList:'getImages'
-   })
+    ...mapGetters({
+      imageList: "getImages"
+    })
+  },
+  methods: {
+    vsuccess(file, response) {
+      console.log(file);
+      console.log(response);
+    }
   }
 };
 </script>
+<style scoped>
+.dropzone-custom-content {
+  position: absolute;
+
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.dropzone-custom-title {
+  margin-top: 0;
+  color: #00b782;
+}
+
+.subtitle {
+  color: #314b5f;
+}
+</style>
