@@ -1,7 +1,7 @@
 import { router } from "../router";
 import ImageService from "../services/image.service";
 
-export const imageOparations = {
+export const imageOperations = {
   state: {
     images: []
   },
@@ -14,9 +14,13 @@ export const imageOparations = {
     }
   },
   mutations: {
-    addImages({ state }, images) {
-      state=images;
+    addImages(state, images) {
+      state.images = images;
     }
   },
-  getters: {}
+  getters: {
+    getImages(state){
+      return state.images;
+    }
+  }
 };
