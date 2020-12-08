@@ -69,76 +69,11 @@
     <div class="main-posts">
       <div class="container">
         <div class="row">
-          <div class="blog-masonry masonry-true">
-            <div class="post-masonry col-md-4 col-sm-6">
-              <div class="post-thumb">
-                <img src="../assets/images/1.jpg" alt="" />
-                <div class="title-over">
-                  <h4><a href="#">Title one goes here</a></h4>
-                </div>
-                <div class="post-hover text-center">
-                  <div class="inside">
-                    <i class="fa fa-plus"></i>
-                    <span class="date">25 Jan 2084</span>
-                    <h4><a href="#">Title one goes here</a></h4>
-                    <p>Cum sociis natoque penatibus et magnis dis parturient</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+         
+            <app-thumbnails :images="imageList"></app-thumbnails>
+            
             <!-- /.post-masonry -->
-            <div class="post-masonry col-md-4 col-sm-6">
-              <div class="post-thumb">
-                <img src="../assets/images/2.jpg" alt="" />
-                <div class="title-over">
-                  <h4><a href="#">Second Image Title</a></h4>
-                </div>
-                <div class="post-hover text-center">
-                  <div class="inside">
-                    <i class="fa fa-plus"></i>
-                    <span class="date">24 Jan 2084</span>
-                    <h4><a href="#">Second Image Title</a></h4>
-                    <p>Donec venenatis libero sapien, eu condimentum lacus</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.post-masonry -->
-            <div class="post-masonry col-md-4 col-sm-6">
-              <div class="post-thumb">
-                <img src="../assets/images/3.jpg" alt="" />
-                <div class="title-over">
-                  <h4><a href="#">Image Number Three</a></h4>
-                </div>
-                <div class="post-hover text-center">
-                  <div class="inside">
-                    <i class="fa fa-plus"></i>
-                    <span class="date">23 Jan 2084</span>
-                    <h4><a href="#">Image Number Three</a></h4>
-                    <p>Sed vitae lacus eget ipsum scelerisque condimentum</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.post-masonry -->
-            <div class="post-masonry col-md-4 col-sm-6">
-              <div class="post-thumb">
-                <img src="../assets/images/4.jpg" alt="" />
-                <div class="title-over">
-                  <h4><a href="#">Aliquam sed magna risus</a></h4>
-                </div>
-                <div class="post-hover text-center">
-                  <div class="inside">
-                    <i class="fa fa-plus"></i>
-                    <span class="date">22 Jan 2084</span>
-                    <h4><a href="#">Aliquam sed magna risus</a></h4>
-                    <p>Praesent pharetra blandit ex sed imperdiet</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.post-masonry -->
-          </div>
+          
         </div>
       </div>
     </div>
@@ -146,15 +81,23 @@
 </template>
 
 <script>
+import Thumbnails from "../components/Thumbnails";
+import {mapGetters} from "vuex"
 export default {
   name: "Home",
-  data() {
-    return {
-   
-    };
+  components: {
+    "app-thumbnails": Thumbnails
   },
-  created(){
-       this.$store.dispatch("getUserImages");
+  data() {
+    return {};
+  },
+  created() {
+    this.$store.dispatch("getUserImages");
+  },
+  computed: {
+   ...mapGetters({
+     imageList:'getImages'
+   })
   }
 };
 </script>
