@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <!-- Grid row -->
+  <div class="com-thumb">
     <div class="row">
-      <!-- Grid column -->
       <div class="col-md-12 d-flex justify-content-center mb-5">
         <button
           type="button"
@@ -26,29 +24,28 @@
           Sea
         </button>
       </div>
-      <!-- Grid column -->
     </div>
-    <!-- Grid row -->
 
-    <!-- Grid row -->
+    <div v-if="!images.length" class="alert alert-danger" role="alert">
+      Hiç görsel yok :(
+    </div>
     <div class="gallery" id="gallery">
-      <!-- Grid column -->
       <div
-        class="mb-3 pics animation all 2"
+        class="thumbnail mb-3 pics animation all 2"
         v-for="image in images"
         :key="image.id"
       >
         <img
-          class="img-fluid"
+          class="image img-fluid"
           :src="'data:image/jpeg;base64,' + image.image"
           alt="Card image cap"
         />
+        <div class="image-panel">
+          <button class="btn btn-danger">Sil</button>
+          <button class="btn btn-warning">Etiket Ekle</button>
+        </div>
       </div>
-      <!-- Grid column -->
-
-      <!-- Grid column -->
     </div>
-    <!-- Grid row -->
   </div>
 </template>
 
@@ -58,6 +55,28 @@ export default {
 };
 </script>
 <style scoped>
+.image {
+  opacity: 1;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+}
+.thumbnail:hover .image {
+  opacity: 0.3;
+}
+.thumbnail:hover .image-panel {
+  opacity: 1;
+}
+
+.image-panel {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
 .gallery {
   -webkit-column-count: 3;
   -moz-column-count: 3;
