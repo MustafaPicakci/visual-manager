@@ -30,10 +30,17 @@
       Hiç görsel yok :(
     </div>
     <div class="gallery" id="gallery">
+      <v-modal name="example">
+        <div>
+          <app-tags v-model="imageTags" color="primary"></app-tags>
+        </div>
+        This is a modal</v-modal
+      >
       <div
         class="thumbnail mb-3 pics animation all 2"
         v-for="image in images"
         :key="image.id"
+        @click="selectImage(image)"
       >
         <img
           class="image img-fluid"
@@ -50,8 +57,38 @@
 </template>
 
 <script>
+import Axios from "axios";
+import Tags from "./InputTag/Tags";
+import TmageService from "../services/tag.service";
+import tagService from "../services/tag.service";
+
 export default {
-  props: ["images"]
+  props: ["images"],
+  data() {
+    return {
+      selectedImage: null,
+      imageTags: ""
+    };
+  },
+  components: {
+    appTags: Tags
+  },
+  mounted() {},
+  methods: {
+    selectImage(image) {
+      this.imageTags = "";
+      tagService.ListImageTags(image).then(response => {
+        let tags = response.data;
+        let tmp = tags.map(item => item.tagName);
+        for (let tag in tmp) {
+          this.imageTags += tmp[tag] + ",";
+        }
+      });
+      setTimeout(() => {
+        this.$modal.show("example");
+      }, 100);
+    }
+  }
 };
 </script>
 <style scoped>
