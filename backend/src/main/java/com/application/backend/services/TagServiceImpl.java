@@ -1,8 +1,12 @@
 package com.application.backend.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.application.backend.models.Images;
+import com.application.backend.models.Tags;
 import com.application.backend.repository.TagRepository;
 import com.application.backend.repository.UserRepository;
 
@@ -15,6 +19,12 @@ public class TagServiceImpl implements TagService {
   @Override
   public void deleteTag(long tagId) {
     tagRepository.deleteById(tagId);
+  }
+
+  @Override
+  public List<Tags> ListImageTags(Images image) {
+
+    return tagRepository.findTagsByimages(image);
   }
   /*
   @Override

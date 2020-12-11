@@ -1,5 +1,8 @@
 package com.application.backend.controllers;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -8,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.application.backend.models.Images;
+import com.application.backend.models.Tags;
 import com.application.backend.repository.TagRepository;
 import com.application.backend.security.services.UserDetailsServiceImpl;
 import com.application.backend.services.TagServiceImpl;
@@ -26,6 +31,13 @@ public class TagController {
   public void deleteTag(long tagId) {
     tagServiceImpl.deleteTag(tagId);
   };
+
+  @PostMapping("/listImageTags")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public List<Tags> ListImageTags(Images image) {
+    return tagServiceImpl.ListImageTags(image);
+  };
+
   /*
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   @PostMapping("/list")
