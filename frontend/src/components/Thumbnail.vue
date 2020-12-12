@@ -32,7 +32,11 @@
     <div class="gallery" id="gallery">
       <v-modal name="example">
         <div>
-          <app-tags v-model="imageTags" color="primary"></app-tags>
+          <app-tags
+            :imageId="selectedImageId"
+            v-model="imageTags"
+            color="primary"
+          ></app-tags>
         </div>
         This is a modal</v-modal
       >
@@ -59,7 +63,6 @@
 <script>
 import Axios from "axios";
 import Tags from "./InputTag/Tags";
-import TmageService from "../services/tag.service";
 import tagService from "../services/tag.service";
 
 export default {
@@ -67,6 +70,7 @@ export default {
   data() {
     return {
       selectedImage: null,
+      selectedImageId: null,
       imageTags: ""
     };
   },
@@ -77,6 +81,9 @@ export default {
   methods: {
     selectImage(image) {
       this.imageTags = "";
+      this.selectedImage = image;
+      this.selectedImageId = image.id;
+
       tagService.ListImageTags(image).then(response => {
         let tags = response.data;
         let tmp = tags.map(item => item.tagName);
@@ -86,7 +93,7 @@ export default {
       });
       setTimeout(() => {
         this.$modal.show("example");
-      }, 100);
+      }, 200);
     }
   }
 };

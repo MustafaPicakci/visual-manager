@@ -6,11 +6,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.application.backend.models.Images;
+import com.application.backend.models.Tags;
 import com.application.backend.models.User;
 import com.application.backend.security.services.UserDetailsServiceImpl;
 import com.application.backend.services.ImageServiceImpl;
@@ -26,7 +29,7 @@ public class ImageController {
   @PostMapping("/add")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images add(MultipartFile file) {
-   return imageServiceImpl.saveImage(file);
+    return imageServiceImpl.saveImage(file);
   };
 
   @GetMapping("/list")
@@ -38,8 +41,9 @@ public class ImageController {
 
   @PostMapping("/set/tag")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-  public void setTag(long imageId, String tagName) {
-    imageServiceImpl.setTag(imageId, tagName);
+  public void setTag(Tags data) {
+
+    imageServiceImpl.setTag(data.getImages().get(0).getId(), data.getTagName());
   };
 
   @PostMapping("/delete")
