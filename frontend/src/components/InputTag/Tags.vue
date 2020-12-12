@@ -14,6 +14,8 @@
 </template>
 <script>
 import Tag from "./Tag";
+import tagService from "../../services/image.service";
+import imageService from "../../services/image.service";
 export default {
   created() {
     if (this.value) {
@@ -27,6 +29,9 @@ export default {
   props: {
     value: {
       required: false
+    },
+    imageId: {
+      required: true
     },
     color: {
       type: String,
@@ -55,6 +60,7 @@ export default {
         });
 
         if (!matchedTag) {
+          imageService.SetTags(this.imageId, text.value);
           this.tags.push(text.value);
           text.value = "";
         } else {
