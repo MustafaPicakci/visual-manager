@@ -41,9 +41,9 @@ public class ImageController {
 
   @PostMapping("/set/tag")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-  public void setTag(Tags data) {
+  public Images setTag(Tags data) {
 
-    imageServiceImpl.setTag(data.getImages().get(0).getId(), data.getTagName());
+   return imageServiceImpl.setTag(data.getImages().get(0).getId(), data.getTagName());
   };
 
   @PostMapping("/delete")

@@ -1,9 +1,9 @@
 <template>
   <div class="tag-container">
     <tag
-      v-for="(tag, index) in tags"
+      v-for="(tag, index) in value"
       :tagColor="color"
-      :key="tag"
+      :key="tag.id"
       :tag="tag"
       :index="index"
       @remove-one-tag-event="removeOneTag($event)"
@@ -16,13 +16,13 @@
 import Tag from "./Tag";
 import tagService from "../../services/image.service";
 import imageService from "../../services/image.service";
+import { mapGetters } from "vuex";
+
 export default {
   created() {
     if (this.value) {
-      console.log(this.value);
       if (this.value.length > 0) {
-        this.value = this.value.slice(0, -1); // en sondaki ',' ü silmek için
-        this.tags = this.value.split(",");
+        this.tags = this.value;
       }
     }
   },
@@ -49,19 +49,36 @@ export default {
     };
   },
   methods: {
+    ...mapGetters(["getTags", "getLastInsertedTag"]),
     addTag(event) {
       let text = event.target;
       let matchedTag = false;
       if (text.value.length > 0) {
         this.tags.forEach(tag => {
-          if (tag.toLowerCase() === text.value.toLowerCase()) {
+          if (tag.tagName.toLowerCase() === text.value.toLowerCase()) {
             matchedTag = true;
           }
         });
 
         if (!matchedTag) {
-          imageService.SetTags(this.imageId, text.value);
-          this.tags.push(text.value);
+          console.log("response-data:");
+          let payload = {
+            imageId: this.imageId,
+            tagName: text.value
+          };
+          /* imageService.SetTags(this.imageId, text.value).then(response => {
+            this.tags.push(response.data.tags[response.data.tags.length - 1]);
+          });
+*/
+
+          this.$store.dispatch("setTag", payload);
+
+          console.log("etiket:  ");
+          setTimeout(() => {
+            console.log(this.getLastInsertedTag());
+            this.tags.push(this.getLastInsertedTag());
+          }, 1000);
+
           text.value = "";
         } else {
           this.error = true;
@@ -83,7 +100,7 @@ export default {
   },
   watch: {
     tags() {
-      this.$emit("input", this.tags.join(",")); //arrayde bir değişiklik olduğunda v-model in de bu değişikliği yakalamasını sağladık
+      this.$emit("input", this.tags); //arrayde bir değişiklik olduğunda v-model in de bu değişikliği yakalamasını sağladık
     }
   }
 };

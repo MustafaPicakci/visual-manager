@@ -46,6 +46,9 @@
         :key="image.id"
         @click="selectImage(image)"
       >
+        <p v-for="tag in image.tags" :key="tag.id">
+          {{ tag.tagName }}
+        </p>
         <img
           class="image img-fluid"
           :src="'data:image/jpeg;base64,' + image.image"
@@ -71,29 +74,30 @@ export default {
     return {
       selectedImage: null,
       selectedImageId: null,
-      imageTags: ""
+      imageTags: []
     };
   },
   components: {
     appTags: Tags
   },
-  mounted() {},
+  watch: {
+    images(value) {
+      return value;
+    }
+  },
   methods: {
     selectImage(image) {
-      this.imageTags = "";
+      this.imageTags = [];
       this.selectedImage = image;
       this.selectedImageId = image.id;
-
-      tagService.ListImageTags(image).then(response => {
-        let tags = response.data;
-        let tmp = tags.map(item => item.tagName);
-        for (let tag in tmp) {
-          this.imageTags += tmp[tag] + ",";
-        }
+      let tags = [];
+      image.tags.forEach(element => {
+        console.log("burası");
+        console.log(element);
+        tags.push(element);
       });
-      setTimeout(() => {
-        this.$modal.show("example");
-      }, 200);
+      this.imageTags = tags;
+      this.$modal.show("example");
     }
   }
 };

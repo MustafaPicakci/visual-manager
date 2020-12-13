@@ -1,6 +1,6 @@
 <template>
   <span class="tag" :class="selectedTheme">
-    <span class="content">{{ tag }}</span>
+    <span class="content">{{ tag.tagName }}</span>
     <span @click="$emit('remove-one-tag-event', index)" class="close-btn"
       >X</span
     >
