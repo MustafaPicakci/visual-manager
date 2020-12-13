@@ -54,7 +54,7 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  public void setTag(long imageId, String tagName) {
+  public Images setTag(long imageId, String tagName) {
     Images image = imageRepository.getOne(imageId);
     Tags tag = null;
     try {
@@ -68,7 +68,7 @@ public class ImageServiceImpl implements ImageService {
 
     image.addTag(tag);
 
-    imageRepository.save(image);
+    return imageRepository.save(image);
   }
 
   @Override

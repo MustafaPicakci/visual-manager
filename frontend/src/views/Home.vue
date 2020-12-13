@@ -20,11 +20,16 @@
     <br />
     <br />
     <h1>Etiketlenmeyi bekleyen görseller</h1>
-    <thumbnail :images="imageList"></thumbnail>
+    <thumbnail :images="getImages"></thumbnail>
+    <p v-for="image in getImages" :key="image.id">
+      <a v-for="tag in image.tags" :key="tag.id">
+        {{ tag.tagName }},
+      </a>
+    </p>
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations,mapState } from "vuex";
 import Thumbnail from "../components/Thumbnail.vue";
 import vueDropzone from "vue2-dropzone";
 import authHeader from "../services/auth-header";
@@ -50,9 +55,7 @@ export default {
     this.$store.dispatch("getUserImages");
   },
   computed: {
-    ...mapGetters({
-      imageList: "getImages"
-    })
+    ...mapGetters(["getImages"])
   },
   methods: {
     ...mapMutations(["addImage"]),

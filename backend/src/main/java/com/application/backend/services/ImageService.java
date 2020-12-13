@@ -10,7 +10,7 @@ public interface ImageService {
 
   public abstract List<Images> findImagesForUser(User user);
 
-  public abstract void setTag(long imageId, String tagName);
+  public abstract Images setTag(long imageId, String tagName);
 
   public abstract void deleteImage(long imageId);
 
