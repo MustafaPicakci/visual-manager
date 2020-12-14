@@ -14,8 +14,6 @@ export const imageOperations = {
       });
     },
     setTag({ commit }, payload) {
-      console.log("Settag");
-
       return new Promise((resolve, reject) => {
         ImageService.SetTags(payload.imageId, payload.tagName)
           .then(response => {
@@ -36,23 +34,13 @@ export const imageOperations = {
     addNewTag(state, payload) {
       if (!state.images.length) {
         state.images = payload;
-        console.log(state.images.length);
       } else {
         for (let i = 0; i < state.images.length; i++) {
-          console.log("for");
-          console.log(state.images[i]);
           if (state.images[i].id == payload.id) {
             Vue.set(state.images, i, payload);
           }
         }
       }
-
-      state.images.forEach(image => {
-        /*if (image.id === payload.id) {
-          Vue.set(state.images, image, payload);
-          console.log(state.images);
-        }*/
-      });
     },
     setImages(state, images) {
       state.images = images;
@@ -66,17 +54,14 @@ export const imageOperations = {
       return state.tag;
     },
     getImages(state) {
-      console.log("getters  getImages");
       return state.images;
     },
     getTags(state, payload) {
-      console.log("getterrss");
       let tags = [];
       state.images.forEach(image => {
         if (image.id === payload) {
           this.tags = image.tags[image.tags.length - 1];
-          console.log("sadasf sooooon");
-          console.log(this.tags);
+
           return tags;
         }
       });

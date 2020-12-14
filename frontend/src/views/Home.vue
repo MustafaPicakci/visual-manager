@@ -2,10 +2,10 @@
   <div class="container text-center">
     <br />
     <vue-dropzone
-      :id="id1"
       :options="dropzoneOptions"
       :useCustomSlot="true"
       @vdropzone-success="vsuccess"
+      id="dropzone"
     >
       <div class="dropzone-custom-content">
         <h3 class="dropzone-custom-title">
@@ -21,15 +21,10 @@
     <br />
     <h1>Etiketlenmeyi bekleyen görseller</h1>
     <thumbnail :images="getImages"></thumbnail>
-    <p v-for="image in getImages" :key="image.id">
-      <a v-for="tag in image.tags" :key="tag.id">
-        {{ tag.tagName }},
-      </a>
-    </p>
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations,mapState } from "vuex";
+import { mapGetters, mapMutations, mapState } from "vuex";
 import Thumbnail from "../components/Thumbnail.vue";
 import vueDropzone from "vue2-dropzone";
 import authHeader from "../services/auth-header";

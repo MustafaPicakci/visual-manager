@@ -44,12 +44,12 @@ export const auth = {
         let time = new Date().getTime(); //ms cinsinden şu anki zaman
 
         if (time >= expirationDate) {
-          console.log("token süresi geçmiş");
-          console.log(time);
+          console.log("token süresi geçmiş -- " + time);
+
           dispatch("logout");
         } else {
           let timerSecond = +expirationDate - time;
-          console.log(timerSecond + "sadasdasd");
+          console.log("kalan süre: " + timerSecond);
           dispatch("setTimeoutTimer", timerSecond);
         }
       } else {

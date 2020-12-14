@@ -46,9 +46,6 @@
         :key="image.id"
         @click="selectImage(image)"
       >
-        <p v-for="tag in image.tags" :key="tag.id">
-          {{ tag.tagName }}
-        </p>
         <img
           class="image img-fluid"
           :src="'data:image/jpeg;base64,' + image.image"
