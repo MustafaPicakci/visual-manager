@@ -69,11 +69,10 @@ export default {
           this.$store
             .dispatch("setTag", payload)
             .then(data => {
-              console.log(data);
               this.tags.push(data.tags[data.tags.length - 1]);
             })
             .catch(data => {
-              alert("etiket eklenemedi")
+              alert("etiket eklenemedi");
             });
 
           text.value = "";
