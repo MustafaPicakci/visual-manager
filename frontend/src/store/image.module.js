@@ -27,7 +27,6 @@ export const imageOperations = {
       });
     },
     unlinkTag({ commit }, payload) {
-      console.log(payload);
       return new Promise((resolve, reject) => {
         ImageService.unlinkTag(payload)
           .then(response => {
@@ -38,9 +37,19 @@ export const imageOperations = {
             reject(response);
           });
       });
+    },
+    deleteImage({ commit }, payload) {
+      ImageService.deleteImage(payload.imageId).then(response => {
+        commit("deleteImage", payload);
+      });
     }
   },
   mutations: {
+    deleteImage(state, payload) {
+      if (payload) {
+        Vue.delete(state.images, payload.index);
+      }
+    },
     unlinkTag(state, payload) {
       for (let i = 0; i < state.images.length; i++) {
         if (state.images[i].id == payload.id) {

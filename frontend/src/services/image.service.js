@@ -11,7 +11,7 @@ class ImageService {
     let data = new FormData();
     data.append("images", payload.imageId);
     data.append("tagName", payload.tagName);
-    console.log(data.images)
+    console.log(data.images);
     return axios.post(API_URL + "set/tag", data, {
       headers: authHeader(),
       "Content-Type": "multipart/form-data"
@@ -19,12 +19,20 @@ class ImageService {
   }
 
   unlinkTag(payload) {
-    console.log(payload)
     let data = new FormData();
     data.append("images", payload.images);
     data.append("tags", payload.tagId);
-    console.log(data)
+
     return axios.post(API_URL + "unlinkTag", data, {
+      headers: authHeader(),
+      "Content-Type": "multipart/form-data"
+    });
+  }
+  deleteImage(imageId) {
+    let data = new FormData();
+    data.append("images", imageId);
+
+    return axios.post(API_URL + "delete", data, {
       headers: authHeader(),
       "Content-Type": "multipart/form-data"
     });
