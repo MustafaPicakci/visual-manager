@@ -92,8 +92,6 @@ export default {
       this.selectedImageId = image.id;
       let tags = [];
       image.tags.forEach(element => {
-        console.log("burası");
-        console.log(element);
         tags.push(element);
       });
       this.imageTags = tags;
