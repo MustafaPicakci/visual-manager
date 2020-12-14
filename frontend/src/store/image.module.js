@@ -15,7 +15,7 @@ export const imageOperations = {
     },
     setTag({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        ImageService.SetTags(payload.imageId, payload.tagName)
+        ImageService.SetTags(payload)
           .then(response => {
             commit("keepTag", response.data);
             commit("addNewTag", response.data);
@@ -25,9 +25,29 @@ export const imageOperations = {
             reject(response);
           });
       });
+    },
+    unlinkTag({ commit }, payload) {
+      console.log(payload);
+      return new Promise((resolve, reject) => {
+        ImageService.unlinkTag(payload)
+          .then(response => {
+            commit("unlinkTag", response.data);
+            resolve(response.data);
+          })
+          .catch(response => {
+            reject(response);
+          });
+      });
     }
   },
   mutations: {
+    unlinkTag(state, payload) {
+      for (let i = 0; i < state.images.length; i++) {
+        if (state.images[i].id == payload.id) {
+          Vue.set(state.images, i, payload);
+        }
+      }
+    },
     keepTag(state, payload) {
       state.tag = payload.tags[payload.tags.length - 1];
     },

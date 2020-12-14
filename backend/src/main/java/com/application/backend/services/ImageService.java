@@ -14,5 +14,5 @@ public interface ImageService {
 
   public abstract void deleteImage(long imageId);
 
-  public abstract void unlikTag(long imageId, long tagId);
+  public abstract Images unlikTag(long imageId, long tagId);
 }

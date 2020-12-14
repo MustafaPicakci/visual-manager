@@ -43,7 +43,7 @@ public class ImageController {
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images setTag(Tags data) {
 
-   return imageServiceImpl.setTag(data.getImages().get(0).getId(), data.getTagName());
+    return imageServiceImpl.setTag(data.getImages().get(0).getId(), data.getTagName());
   };
 
   @PostMapping("/delete")
@@ -54,7 +54,7 @@ public class ImageController {
 
   @PostMapping("/unlinkTag")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-  public void unlinkTag(long imageId, long tagId) {
-    imageServiceImpl.unlikTag(imageId, tagId);
+  public Images unlinkTag(Tags data) {
+    return imageServiceImpl.unlikTag(data.getImages().get(0).getId(), data.getId());
   };
 }

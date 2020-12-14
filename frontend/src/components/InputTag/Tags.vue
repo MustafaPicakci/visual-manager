@@ -91,7 +91,21 @@ export default {
       }
     },
     removeOneTag(index) {
-      this.tags.splice(index, 1);
+      // this.tags.splice(index, 1);
+      console.log(index);
+      let payload = {
+        images: this.imageId,
+        tagId: this.tags[index].id
+      };
+      console.log(payload)
+      this.$store
+        .dispatch("unlinkTag", payload)
+        .then(data => {
+          this.tags.splice(index, 1);
+        })
+        .catch(data => {
+          alert("etiket eklenemedi");
+        });
     }
   },
   watch: {
