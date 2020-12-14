@@ -77,10 +77,10 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  public void unlikTag(long imageId, long tagId) {
+  public Images unlikTag(long imageId, long tagId) {
     Images image = imageRepository.getOne(imageId);
     Tags tag = tagRepository.findTagsById(tagId);
     image.removeTagFromImage(tag);
-    imageRepository.save(image);
+    return imageRepository.save(image);
   }
 }
