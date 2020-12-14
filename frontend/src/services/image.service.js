@@ -11,7 +11,6 @@ class ImageService {
     var data = new FormData();
     data.append("images", imageId);
     data.append("tagName", tagName);
-    console.log(imageId + tagName);
     return axios.post(API_URL + "set/tag", data, {
       headers: authHeader(),
       "Content-Type": "multipart/form-data"

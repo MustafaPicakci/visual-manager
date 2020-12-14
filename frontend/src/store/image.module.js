@@ -11,20 +11,22 @@ export const imageOperations = {
     getUserImages({ commit }) {
       ImageService.getUserImages().then(response => {
         commit("setImages", response.data);
-        console.log(response.data);
       });
     },
     setTag({ commit }, payload) {
       console.log("Settag");
 
-      ImageService.SetTags(payload.imageId, payload.tagName).then(response => {
-        commit("keepTag", response.data);
-        commit("addNewTag", response.data);
+      return new Promise((resolve, reject) => {
+        ImageService.SetTags(payload.imageId, payload.tagName)
+          .then(response => {
+            commit("keepTag", response.data);
+            commit("addNewTag", response.data);
+            resolve(response.data);
+          })
+          .catch(response => {
+            reject(response);
+          });
       });
-      /*return new Promise((resolve,reject)=>{
-        resolve(payload);
-      })*/
-      //  return tag;
     }
   },
   mutations: {

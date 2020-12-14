@@ -61,23 +61,20 @@ export default {
         });
 
         if (!matchedTag) {
-          console.log("response-data:");
           let payload = {
             imageId: this.imageId,
             tagName: text.value
           };
-          /* imageService.SetTags(this.imageId, text.value).then(response => {
-            this.tags.push(response.data.tags[response.data.tags.length - 1]);
-          });
-*/
 
-          this.$store.dispatch("setTag", payload);
-
-          console.log("etiket:  ");
-          setTimeout(() => {
-            console.log(this.getLastInsertedTag());
-            this.tags.push(this.getLastInsertedTag());
-          }, 1000);
+          this.$store
+            .dispatch("setTag", payload)
+            .then(data => {
+              console.log(data);
+              this.tags.push(data.tags[data.tags.length - 1]);
+            })
+            .catch(data => {
+              alert("etiket eklenemedi")
+            });
 
           text.value = "";
         } else {
