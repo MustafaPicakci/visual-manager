@@ -48,8 +48,9 @@ public class ImageController {
 
   @PostMapping("/delete")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-  public void deleteImage(long imageId) {
-    imageServiceImpl.deleteImage(imageId);
+  public void deleteImage(Images data) {
+	
+    imageServiceImpl.deleteImage(data.getId());
   };
 
   @PostMapping("/unlinkTag")
