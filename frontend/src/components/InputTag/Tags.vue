@@ -86,25 +86,36 @@ export default {
       }
     },
     removeTag(event) {
-      if (event.target.value.length <= 0) {
-        this.tags.splice(this.tags.length - 1, 1); // son elemanı siliyoruz
+      if (this.tags.length > 0) {
+        if (event.target.value.length <= 0) {
+          let payload = {
+            images: this.imageId,
+            tagId: this.tags[this.tags.length - 1].id
+          };
+          this.$store
+            .dispatch("unlinkTag", payload)
+            .then(data => {
+              this.tags.splice(this.tags.length - 1, 1); // son elemanı siliyoruz
+            })
+            .catch(data => {
+              alert("etiket silinemedi");
+            });
+        }
       }
     },
     removeOneTag(index) {
-      // this.tags.splice(index, 1);
-      console.log(index);
       let payload = {
         images: this.imageId,
         tagId: this.tags[index].id
       };
-      console.log(payload)
+
       this.$store
         .dispatch("unlinkTag", payload)
         .then(data => {
           this.tags.splice(index, 1);
         })
         .catch(data => {
-          alert("etiket eklenemedi");
+          alert("etiket silinemedi");
         });
     }
   },
