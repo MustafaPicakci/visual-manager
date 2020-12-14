@@ -44,7 +44,6 @@
         class="thumbnail mb-3 pics animation all 2"
         v-for="(image, index) in images"
         :key="image.id"
-        @click="selectImage(image)"
       >
         <img
           class="image img-fluid"
@@ -55,7 +54,7 @@
           <button @click="deleteImage(index)" class="btn btn-danger">
             Sil
           </button>
-          <button @click="imageInfo()" class="btn btn-warning">
+          <button @click="imageInfo(image)" class="btn btn-warning">
             Düzenle
           </button>
         </div>
@@ -88,14 +87,15 @@ export default {
   },
   methods: {
     deleteImage(index) {
-      this.selectImage(this.images[index])
+      this.selectImage(this.images[index]);
       let payload = {
         imageId: this.selectedImage.id,
         index: index
       };
       this.$store.dispatch("deleteImage", payload);
     },
-    imageInfo() {
+    imageInfo(image) {
+      this.selectImage(image);
       this.$modal.show("imageInfo");
     },
     selectImage(image) {
