@@ -30,7 +30,7 @@
       Hiç görsel yok :(
     </div>
     <div class="gallery" id="gallery">
-      <v-modal name="example">
+      <v-modal name="imageInfo">
         <div>
           <app-tags
             :imageId="selectedImageId"
@@ -53,7 +53,12 @@
         />
         <div class="image-panel">
           <button class="btn btn-danger">Sil</button>
-          <button class="btn btn-warning">Etiket Ekle</button>
+          <button
+            @click="imageInfo()"
+            class="btn btn-warning"
+          >
+            Düzenle
+          </button>
         </div>
       </div>
     </div>
@@ -83,6 +88,9 @@ export default {
     }
   },
   methods: {
+    imageInfo() {
+      this.$modal.show("imageInfo");
+    },
     selectImage(image) {
       this.imageTags = [];
       this.selectedImage = image;
@@ -92,7 +100,6 @@ export default {
         tags.push(element);
       });
       this.imageTags = tags;
-      this.$modal.show("example");
     }
   }
 };
