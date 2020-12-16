@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -71,9 +73,18 @@ public class ImageServiceImpl implements ImageService {
     return imageRepository.save(image);
   }
 
+  @Transactional
   @Override
   public void deleteImage(long imageId) {
+    // etiketleri başka görseller kullanmıyorsa, onları da siliyoruz
+    Images image = imageRepository.getOne(imageId);
+    List<Tags> tags = image.getTags();
     imageRepository.deleteById(imageId);
+    for (Tags tag : tags) {
+      if (!imageRepository.existsByTagsId(tag.getId())) {
+        tagRepository.deleteById(tag.getId());
+      }
+    }
   }
 
   @Override
