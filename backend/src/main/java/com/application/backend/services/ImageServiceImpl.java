@@ -81,6 +81,12 @@ public class ImageServiceImpl implements ImageService {
     Images image = imageRepository.getOne(imageId);
     Tags tag = tagRepository.findTagsById(tagId);
     image.removeTagFromImage(tag);
-    return imageRepository.save(image);
+
+    image = imageRepository.save(image);
+    if (!imageRepository.existsByTagsId(tagId)) {
+      // bu etikete sahip başka bir görsel yosa etiketi sil !
+      tagRepository.deleteById(tagId);
+    }
+    return image;
   }
 }

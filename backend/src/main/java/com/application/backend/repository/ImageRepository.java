@@ -12,4 +12,6 @@ import com.application.backend.models.User;
 public interface ImageRepository extends JpaRepository<Images, Long> {
 
   List<Images> findAllByUser(User user);
+
+  boolean existsByTagsId(long tagId);
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.application.backend.models.Images;
 import com.application.backend.models.Tags;
+import com.application.backend.repository.ImageRepository;
 import com.application.backend.repository.TagRepository;
 import com.application.backend.security.services.UserDetailsServiceImpl;
 import com.application.backend.services.TagServiceImpl;
@@ -21,23 +22,23 @@ import com.application.backend.services.TagServiceImpl;
 @RestController
 @RequestMapping("/api/tags")
 public class TagController {
-
+  @Autowired ImageRepository imageRepository;
   @Autowired TagRepository tagRepository;
   @Autowired TagServiceImpl tagServiceImpl;
   @Autowired UserDetailsServiceImpl userDetailsServiceImpl;
 
-  @PostMapping("/delete")
-  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-  public void deleteTag(long tagId) {
-    tagServiceImpl.deleteTag(tagId);
-  };
+  /*@PostMapping("/delete")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public void deleteTag(long tagId) {
+      tagServiceImpl.deleteTag(tagId);
+    };
 
   @PostMapping("/listImageTags")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public List<Tags> ListImageTags(Images image) {
     return tagServiceImpl.ListImageTags(image);
   };
-
+  */
   /*
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   @PostMapping("/list")

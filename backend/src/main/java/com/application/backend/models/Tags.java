@@ -33,11 +33,12 @@ public class Tags {
   @ManyToMany(mappedBy = "tags")
   private List<Images> images = new ArrayList<>();
 
+  /*
   @PreRemove
   private void preRemove() {
     images.forEach(image -> image.setTags(null));
   }
-
+*/
   public Tags() {}
 
   public Tags(String tagName) {
