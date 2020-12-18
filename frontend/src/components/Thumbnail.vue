@@ -1,31 +1,5 @@
 <template>
   <div class="com-thumb">
-    <div class="row">
-      <div class="col-md-12 d-flex justify-content-center mb-5">
-        <button
-          type="button"
-          class="btn btn-outline-black waves-effect filter"
-          data-rel="all"
-        >
-          All
-        </button>
-        <button
-          type="button"
-          class="btn btn-outline-black waves-effect filter"
-          data-rel="1"
-        >
-          Mountains
-        </button>
-        <button
-          type="button"
-          class="btn btn-outline-black waves-effect filter"
-          data-rel="2"
-        >
-          Sea
-        </button>
-      </div>
-    </div>
-
     <div v-if="!images.length" class="alert alert-danger" role="alert">
       Hiç görsel yok :(
     </div>
@@ -69,6 +43,7 @@ import Tags from "./InputTag/Tags";
 import tagService from "../services/tag.service";
 
 export default {
+  name: "thumbnail",
   props: ["images"],
   data() {
     return {
@@ -112,8 +87,8 @@ export default {
 };
 </script>
 <style scoped>
-.thumbnail{
-  border:10px solid white;
+.thumbnail {
+  border: 10px solid white;
   padding: 2px;
 }
 .image {
