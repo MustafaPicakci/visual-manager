@@ -6,7 +6,7 @@
           <input
             type="text"
             class="form-control"
-            placeholder="Search by title"
+            placeholder="Search by tag"
             v-model="searchTag"
           />
           <div class="input-group-append">

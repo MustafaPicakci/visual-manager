@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +18,7 @@ import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
 import com.application.backend.models.Tags;
 import com.application.backend.models.User;
+import com.application.backend.repository.ImageRepository;
 import com.application.backend.security.services.UserDetailsServiceImpl;
 import com.application.backend.services.ImageServiceImpl;
 
@@ -29,6 +29,7 @@ public class ImageController {
 
   @Autowired ImageServiceImpl imageServiceImpl;
   @Autowired UserDetailsServiceImpl userDetailsServiceImpl;
+  @Autowired ImageRepository imageRepository;
 
   @PostMapping("/add")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
@@ -49,17 +50,25 @@ public class ImageController {
       @RequestParam(required = false) String tag,
       @RequestParam int pageNumber,
       @RequestParam int pageSize) {
-	 try { 
-	  ImagePage imagePage=new ImagePage();
-	  imagePage.setPageNumber(pageNumber);
-	  imagePage.setPageSize(pageSize);
-      System.out.println(pageNumber+"--"+ pageSize);
-    
-    User user = userDetailsServiceImpl.loadUser();
-    return new ResponseEntity<>(imageServiceImpl.findImagesForUser(user, imagePage),HttpStatus.OK);
-	 }catch (Exception e) {
-	 return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
-	 }	
+
+    try {
+      ImagePage imagePage = new ImagePage();
+      imagePage.setPageNumber(pageNumber);
+      imagePage.setPageSize(pageSize);
+      System.out.println(pageNumber + "--" + pageSize);
+
+      User user = userDetailsServiceImpl.loadUser();
+
+      if (tag == null) {
+        return new ResponseEntity<>(
+            imageServiceImpl.findImagesForUser(user, imagePage), HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(
+            imageServiceImpl.findImagesForUserWithTag(tag, user, imagePage), HttpStatus.OK);
+      }
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   };
 
   @PostMapping("/set/tag")
