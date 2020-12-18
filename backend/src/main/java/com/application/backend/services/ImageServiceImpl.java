@@ -7,11 +7,16 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
 import com.application.backend.models.Tags;
 import com.application.backend.models.User;
@@ -53,6 +58,14 @@ public class ImageServiceImpl implements ImageService {
   @Override
   public List<Images> findImagesForUser(User user) {
     return imageRepository.findAllByUser(user);
+  }
+
+  @Override
+  public Page<Images> findImagesForUser(User user, ImagePage imagePage) {
+	  Sort sort=Sort.by(imagePage.getSortDirection(),imagePage.getSortBy());
+			  Pageable pageable=PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(),sort);
+			  
+    return imageRepository.findAllByUser(user, pageable);
   }
 
   @Override

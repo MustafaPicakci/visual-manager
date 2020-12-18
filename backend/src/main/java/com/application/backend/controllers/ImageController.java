@@ -2,6 +2,9 @@ package com.application.backend.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
 import com.application.backend.models.Tags;
 import com.application.backend.models.User;
@@ -39,6 +43,25 @@ public class ImageController {
     return imageServiceImpl.findImagesForUser(user);
   };
 
+  @GetMapping("/getAll")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public ResponseEntity<Page<Images>> getAll(
+      @RequestParam(required = false) String tag,
+      @RequestParam int pageNumber,
+      @RequestParam int pageSize) {
+	 try { 
+	  ImagePage imagePage=new ImagePage();
+	  imagePage.setPageNumber(pageNumber);
+	  imagePage.setPageSize(pageSize);
+      System.out.println(pageNumber+"--"+ pageSize);
+    
+    User user = userDetailsServiceImpl.loadUser();
+    return new ResponseEntity<>(imageServiceImpl.findImagesForUser(user, imagePage),HttpStatus.OK);
+	 }catch (Exception e) {
+	 return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+	 }	
+  };
+
   @PostMapping("/set/tag")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images setTag(Tags data) {
@@ -49,7 +72,7 @@ public class ImageController {
   @PostMapping("/delete")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public void deleteImage(Images data) {
-	
+
     imageServiceImpl.deleteImage(data.getId());
   };
 

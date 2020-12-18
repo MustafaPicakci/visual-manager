@@ -7,6 +7,11 @@ class ImageService {
   getUserImages() {
     return axios.get(API_URL + "list", { headers: authHeader() });
   }
+  getAllUserImages(params) {
+    console.log(params)
+    return axios.get(API_URL + "getAll", { params,headers: authHeader(), });
+  }
+
   SetTags(payload) {
     let data = new FormData();
     data.append("images", payload.imageId);

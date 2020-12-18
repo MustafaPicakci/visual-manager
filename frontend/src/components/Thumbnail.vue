@@ -112,7 +112,12 @@ export default {
 };
 </script>
 <style scoped>
+.thumbnail{
+  border:10px solid white;
+  padding: 2px;
+}
 .image {
+  width: 100%;
   opacity: 1;
   transition: 0.5s ease;
   backface-visibility: hidden;
