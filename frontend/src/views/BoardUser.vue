@@ -8,6 +8,10 @@
             class="form-control"
             placeholder="Search by tag"
             v-model="searchTag"
+            @keypress.enter="
+              pageNumber = 1;
+              retrieveImages();
+            "
           />
           <div class="input-group-append">
             <button
@@ -42,21 +46,8 @@
           next-text="Next"
           @change="handlePageChange"
         ></b-pagination>
-      </div>
 
-      <div class="col-md-6">
-        <h4>Image List</h4>
-        <ul class="list-group" id="tutorials-list">
-          <li
-            class="list-group-item"
-            :class="{ active: index == currentIndex }"
-            v-for="(image, index) in images"
-            :key="index"
-            @click="setActiveImage(image, index)"
-          >
-            {{ image.imageName }}
-          </li>
-        </ul>
+        <thumbnail :images="images"></thumbnail>
       </div>
     </div>
   </div>
@@ -67,6 +58,7 @@ import UserService from "../services/user.service";
 
 import authHeader from "../services/auth-header";
 import imageService from "../services/image.service";
+import Thumbnail from "../components/Thumbnail.vue";
 
 export default {
   name: "User",
@@ -82,7 +74,9 @@ export default {
       pageSizes: [3, 6, 9]
     };
   },
-  components: {},
+  components: {
+    Thumbnail
+  },
   mounted() {
     this.retrieveImages();
   },
