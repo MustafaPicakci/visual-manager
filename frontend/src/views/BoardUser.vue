@@ -1,88 +1,132 @@
 <template>
   <div class="container">
-    <header class="jumbotron">
-      <h3>{{ content }}</h3>
-
-      <vue-dropzone
-        :id="id1"
-        :options="dropzoneOptions"
-        :useCustomSlot="true"
-        @vdropzone-success="vsuccess"
-      >
-        <div class="dropzone-custom-content">
-          <h3 class="dropzone-custom-title">
-            Drag and drop to upload content!
-          </h3>
-          <div class="subtitle">
-            ...or click to select a file from your computer
+    <div class="list row">
+      <div class="col-md-8">
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search by title"
+            v-model="searchTag"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              @click="
+                pageNumber = 1;
+                retrieveImages();
+              "
+            >
+              Search
+            </button>
           </div>
         </div>
-      </vue-dropzone>
-    </header>
+      </div>
+
+      <div class="col-md-12">
+        <div class="mb-3">
+          Items per Page:
+          <select v-model="pageSize" @change="handlePageSizeChange($event)">
+            <option v-for="size in pageSizes" :key="size" :value="size">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+
+        <b-pagination
+          v-model="pageNumber"
+          :total-rows="count"
+          :per-page="pageSize"
+          prev-text="Prev"
+          next-text="Next"
+          @change="handlePageChange"
+        ></b-pagination>
+      </div>
+
+      <div class="col-md-6">
+        <h4>Image List</h4>
+        <ul class="list-group" id="tutorials-list">
+          <li
+            class="list-group-item"
+            :class="{ active: index == currentIndex }"
+            v-for="(image, index) in images"
+            :key="index"
+            @click="setActiveImage(image, index)"
+          >
+            {{ image.imageName }}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import UserService from "../services/user.service";
 
-import vue2Dropzone from "vue2-dropzone";
 import authHeader from "../services/auth-header";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import imageService from "../services/image.service";
 
 export default {
   name: "User",
   data() {
     return {
-      content: "",
-      dropzoneOptions: {
-        url: "http://localhost:3000/api/images/add",
-        thumbnailWidth: 200,
-        addRemoveLinks: true,
-        headers: { ...authHeader() }
-      }
+      images: [],
+      currentImage: null,
+      currentIndex: -1,
+      searchTag: "",
+      pageNumber: 1,
+      count: 0,
+      pageSize: 3,
+      pageSizes: [3, 6, 9]
     };
   },
-  components: {
-    vueDropzone: vue2Dropzone
-  },
+  components: {},
   mounted() {
-    UserService.getUserBoard().then(
-      response => {
-        this.content = response.data;
-      },
-      error => {
-        this.content =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-      }
-    );
+    this.retrieveImages();
   },
   methods: {
-     vsuccess(file, response) {
-     console.log(file);
-     console.log(response)
+    getRequestParams(searchTag, pageNumber, pageSize) {
+      let params = {};
+      if (searchTag) {
+        params["tag"] = searchTag;
+      }
+      if (pageNumber) {
+        params["pageNumber"] = pageNumber - 1;
+      }
+      if (pageSize) {
+        params["pageSize"] = pageSize;
+      }
+      return params;
     },
+    retrieveImages() {
+      const params = this.getRequestParams(
+        this.searchTag,
+        this.pageNumber,
+        this.pageSize
+      );
+      imageService
+        .getAllUserImages(params)
+        .then(response => {
+          this.images = response.data.content;
+          this.count = response.data.totalElements;
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    handlePageChange(value) {
+      this.pageNumber = value;
+      this.retrieveImages();
+    },
+    handlePageSizeChange(event) {
+      this.pageSize = event.target.value;
+      this.pageNumber = 1;
+      this.retrieveImages();
+    }
   }
 };
 </script>
-<style scoped>
-.dropzone-custom-content {
-  position: absolute;
-  top: 26%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.dropzone-custom-title {
-  margin-top: 0;
-  color: #00b782;
-}
-
-.subtitle {
-  color: #314b5f;
-}
-</style>
+<style scoped></style>

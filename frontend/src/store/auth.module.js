@@ -84,7 +84,7 @@ export const auth = {
   },
   getters: {
     isLoggedIn(state) {
-      return state.auth.status.loggedIn;
+      return state.status.loggedIn;
     }
   }
 };

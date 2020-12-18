@@ -1,6 +1,7 @@
 import { router } from "../router";
 import ImageService from "../services/image.service";
 import Vue from "vue";
+import imageService from "../services/image.service";
 
 export const imageOperations = {
   state: {
@@ -13,6 +14,7 @@ export const imageOperations = {
         commit("setImages", response.data);
       });
     },
+
     setTag({ commit }, payload) {
       return new Promise((resolve, reject) => {
         ImageService.SetTags(payload)

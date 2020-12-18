@@ -6,6 +6,7 @@ import Vuex from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import VModal from "vue-js-modal";
+
 import {
   faHome,
   faUser,
@@ -13,15 +14,18 @@ import {
   faSignInAlt,
   faSignOutAlt
 } from "@fortawesome/free-solid-svg-icons";
-/*
-Vue.config.productionTip = false;
-*/
+
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt);
 
 Vue.use(VModal, { componentName: "v-modal" });
 
 Vue.use(Vuex);
 
+// Install BootstrapVue
+Vue.use(BootstrapVue)
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 new Vue({
   router,
