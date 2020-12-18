@@ -14,6 +14,8 @@ public interface ImageService {
 
   public abstract List<Images> findImagesForUser(User user);
   public abstract Page<Images> findImagesForUser(User user,ImagePage imagePage);
+  
+  public abstract Page<Images> findImagesForUserWithTag(String tag,User user,ImagePage imagePage);
 
   public abstract Images setTag(long imageId, String tagName);
 
