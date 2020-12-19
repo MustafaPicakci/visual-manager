@@ -1,9 +1,9 @@
 <template>
   <div class="com-thumb">
-    <div v-if="!images.length" class="alert alert-danger" role="alert">
-      Hiç görsel yok :(
-    </div>
-    <div class="gallery" id="gallery">
+    <div class="row">
+      <div v-if="!images.length" class="alert alert-danger" role="alert">
+        Hiç görsel yok :(
+      </div>
       <v-modal name="imageInfo">
         <div>
           <app-tags
@@ -14,6 +14,28 @@
         </div>
         This is a modal</v-modal
       >
+
+      <div
+        class="col-lg-4 col-md-3 col-6 mb-4  thumbnail"
+        v-for="(image, index) in images"
+        :key="image.id"
+      >
+        <img
+          class="img-fluid img-thumbnail image"
+          :src="'data:image/jpeg;base64,' + image.image"
+          alt=""
+        />
+        <div class="image-panel">
+          <button @click="deleteImage(index)" class="btn btn-danger">
+            Sil
+          </button>
+          <button @click="imageInfo(image)" class="btn btn-warning">
+            Düzenle
+          </button>
+        </div>
+      </div>
+
+      <!--
       <div
         class="thumbnail mb-3 pics animation all 2"
         v-for="(image, index) in images"
@@ -32,7 +54,7 @@
             Düzenle
           </button>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -43,7 +65,6 @@ import Tags from "./InputTag/Tags";
 import tagService from "../services/tag.service";
 
 export default {
-  name: "thumbnail",
   props: ["images"],
   data() {
     return {
@@ -86,16 +107,12 @@ export default {
   }
 };
 </script>
-<style scoped>
-.thumbnail {
-  border: 10px solid white;
-  padding: 2px;
-}
+<style>
 .image {
-  width: 100%;
   opacity: 1;
-  transition: 0.5s ease;
-  backface-visibility: hidden;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
 }
 .thumbnail:hover .image {
   opacity: 0.3;
@@ -113,40 +130,5 @@ export default {
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   text-align: center;
-}
-.gallery {
-  -webkit-column-count: 3;
-  -moz-column-count: 3;
-  column-count: 3;
-  -webkit-column-width: 33%;
-  -moz-column-width: 33%;
-  column-width: 33%;
-}
-.gallery .pics {
-  -webkit-transition: all 350ms ease;
-  transition: all 350ms ease;
-}
-.gallery .animation {
-  -webkit-transform: scale(1);
-  -ms-transform: scale(1);
-  transform: scale(1);
-}
-
-@media (max-width: 450px) {
-  .gallery {
-    -webkit-column-count: 1;
-    -moz-column-count: 1;
-    column-count: 1;
-    -webkit-column-width: 100%;
-    -moz-column-width: 100%;
-    column-width: 100%;
-  }
-}
-
-@media (max-width: 400px) {
-  .btn.filter {
-    padding-left: 1.1rem;
-    padding-right: 1.1rem;
-  }
 }
 </style>
