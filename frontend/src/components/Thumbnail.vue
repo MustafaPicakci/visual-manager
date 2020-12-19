@@ -1,5 +1,6 @@
 <template>
   <div class="com-thumb">
+    <Loader :status="loaderStatus"></Loader>
     <div class="row">
       <div v-if="!images.length" class="alert alert-danger" role="alert">
         Hiç görsel yok :(
@@ -34,27 +35,6 @@
           </button>
         </div>
       </div>
-
-      <!--
-      <div
-        class="thumbnail mb-3 pics animation all 2"
-        v-for="(image, index) in images"
-        :key="image.id"
-      >
-        <img
-          class="image img-fluid"
-          :src="'data:image/jpeg;base64,' + image.image"
-          alt="Card image cap"
-        />
-        <div class="image-panel">
-          <button @click="deleteImage(index)" class="btn btn-danger">
-            Sil
-          </button>
-          <button @click="imageInfo(image)" class="btn btn-warning">
-            Düzenle
-          </button>
-        </div>
-      </div>-->
     </div>
   </div>
 </template>
@@ -68,6 +48,7 @@ export default {
   props: ["images"],
   data() {
     return {
+      loaderStatus: true,
       selectedImage: null,
       selectedImageId: null,
       imageTags: []
@@ -78,6 +59,9 @@ export default {
   },
   watch: {
     images(value) {
+      if (this.images.length) {
+        this.loaderStatus = false;
+      }
       return value;
     }
   },
