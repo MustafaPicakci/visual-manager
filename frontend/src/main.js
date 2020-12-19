@@ -15,17 +15,17 @@ import {
   faSignOutAlt
 } from "@fortawesome/free-solid-svg-icons";
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt);
-
+import Loader from "./components/Loader";
 Vue.use(VModal, { componentName: "v-modal" });
-
+Vue.component("Loader", Loader);
 Vue.use(Vuex);
 
 // Install BootstrapVue
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 new Vue({
   router,

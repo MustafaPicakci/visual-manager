@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Loader :status="loaderStatus"></Loader>
     <div class="list row">
       <div class="col-md-8">
         <div class="input-group mb-3">
@@ -28,17 +29,11 @@
         </div>
       </div>
 
-      <div class="col-md-12">
-        <div class="mb-3">
-          Items per Page:
-          <select v-model="pageSize" @change="handlePageSizeChange($event)">
-            <option v-for="size in pageSizes" :key="size" :value="size">
-              {{ size }}
-            </option>
-          </select>
-        </div>
+      <div class="col-md-12" text-center>
+        <thumbnail :images="images"></thumbnail>
 
         <b-pagination
+          align="center"
           v-model="pageNumber"
           :total-rows="count"
           :per-page="pageSize"
@@ -46,8 +41,6 @@
           next-text="Next"
           @change="handlePageChange"
         ></b-pagination>
-
-        <thumbnail :images="images"></thumbnail>
       </div>
     </div>
   </div>
@@ -60,23 +53,23 @@ import authHeader from "../services/auth-header";
 import imageService from "../services/image.service";
 import Thumbnail from "../components/Thumbnail.vue";
 
+
 export default {
   name: "User",
   data() {
     return {
       images: [],
-      currentImage: null,
-      currentIndex: -1,
+      loaderStatus: true,
       searchTag: "",
       pageNumber: 1,
       count: 0,
-      pageSize: 3,
-      pageSizes: [3, 6, 9]
+      pageSize: 20
     };
   },
   components: {
     Thumbnail
   },
+  computed: {},
   mounted() {
     this.retrieveImages();
   },
@@ -105,7 +98,7 @@ export default {
         .then(response => {
           this.images = response.data.content;
           this.count = response.data.totalElements;
-          console.log(response.data);
+          this.loaderStatus = false;
         })
         .catch(e => {
           console.log(e);
