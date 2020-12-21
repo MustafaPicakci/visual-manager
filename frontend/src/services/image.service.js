@@ -4,12 +4,13 @@ import authHeader from "./auth-header";
 const API_URL = "http://localhost:3000/api/images/";
 
 class ImageService {
-  getUserImages() {
-    return axios.get(API_URL + "list", { headers: authHeader() });
+  getUntagedImages(params) {
+    console.log(params);
+    return axios.get(API_URL + "list", { params, headers: authHeader() });
   }
   getAllUserImages(params) {
-    console.log(params)
-    return axios.get(API_URL + "getAll", { params,headers: authHeader(), });
+    console.log(params);
+    return axios.get(API_URL + "getAll", { params, headers: authHeader() });
   }
 
   SetTags(payload) {

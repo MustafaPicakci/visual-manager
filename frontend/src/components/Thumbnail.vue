@@ -1,6 +1,6 @@
 <template>
   <div class="com-thumb">
-    <Loader :status="loaderStatus"></Loader>
+
     <div class="row">
       <div v-if="!images.length" class="alert alert-danger" role="alert">
         Hiç görsel yok :(
@@ -48,11 +48,14 @@ export default {
   props: ["images"],
   data() {
     return {
-      loaderStatus: true,
+
       selectedImage: null,
       selectedImageId: null,
       imageTags: []
     };
+  },
+  mounted(){
+
   },
   components: {
     appTags: Tags
@@ -60,7 +63,7 @@ export default {
   watch: {
     images(value) {
       if (this.images.length) {
-        this.loaderStatus = false;
+        //this.loaderStatus = false;
       }
       return value;
     }

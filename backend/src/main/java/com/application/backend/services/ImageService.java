@@ -13,10 +13,13 @@ public interface ImageService {
   public abstract Images saveImage(MultipartFile file);
 
   public abstract List<Images> findImagesForUser(User user);
-  public abstract Page<Images> findImagesForUser(User user,ImagePage imagePage);
-  
-  public abstract Page<Images> findImagesForUserWithTag(String tag,User user,ImagePage imagePage);
 
+  public abstract Page<Images> findImagesForUser(User user, ImagePage imagePage);
+
+  public abstract Page<Images> findImagesForUserWithTag(String tag, User user, ImagePage imagePage);
+
+  public abstract Page<Images> findImagesForUserAndTagsIsNull(User user, ImagePage imagePage);
+  
   public abstract Images setTag(long imageId, String tagName);
 
   public abstract void deleteImage(long imageId);

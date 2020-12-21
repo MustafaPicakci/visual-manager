@@ -37,11 +37,32 @@ public class ImageController {
     return imageServiceImpl.saveImage(file);
   };
 
+  /*@GetMapping("/list")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public List<Images> listImages() {
+      User user = userDetailsServiceImpl.loadUser();
+      return imageServiceImpl.findImagesForUser(user);
+    };
+  */
   @GetMapping("/list")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-  public List<Images> listImages() {
-    User user = userDetailsServiceImpl.loadUser();
-    return imageServiceImpl.findImagesForUser(user);
+  public ResponseEntity<Page<Images>> listImages(
+      @RequestParam int pageNumber, @RequestParam int pageSize) {
+
+    try {
+      ImagePage imagePage = new ImagePage();
+      imagePage.setPageNumber(pageNumber);
+      imagePage.setPageSize(pageSize);
+      System.out.println(pageNumber + "--" + pageSize);
+
+      User user = userDetailsServiceImpl.loadUser();
+
+      return new ResponseEntity<>(
+          imageServiceImpl.findImagesForUserAndTagsIsNull(user, imagePage), HttpStatus.OK);
+
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   };
 
   @GetMapping("/getAll")

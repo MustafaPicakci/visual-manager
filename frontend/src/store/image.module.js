@@ -6,12 +6,29 @@ import imageService from "../services/image.service";
 export const imageOperations = {
   state: {
     images: [],
-    tag: null
+    tag: null,
+    totalElements: 0
   },
   actions: {
     getUserImages({ commit }) {
       ImageService.getUserImages().then(response => {
         commit("setImages", response.data);
+      });
+    },
+    getUntaggedImages({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        ImageService.getUntagedImages(payload)
+          .then(response => {
+            console.log(response);
+            let payload = response.data.totalElements;
+
+            commit("setImages", response.data.content);
+            commit("setTotalElements", payload);
+            resolve(response.data);
+          })
+          .catch(response => {
+            reject(response);
+          });
       });
     },
 
@@ -47,6 +64,9 @@ export const imageOperations = {
     }
   },
   mutations: {
+    setTotalElements(state, payload) {
+      state.totalElements = payload;
+    },
     deleteImage(state, payload) {
       if (payload) {
         Vue.delete(state.images, payload.index);
@@ -81,6 +101,9 @@ export const imageOperations = {
     }
   },
   getters: {
+    getTotalElements(state) {
+      return state.totalElements;
+    },
     getLastInsertedTag(state) {
       return state.tag;
     },
