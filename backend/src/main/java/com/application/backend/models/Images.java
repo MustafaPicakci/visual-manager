@@ -18,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,7 +34,13 @@ public class Images {
   public void setImage_id(long id) {
     this.id = id;
   }
-
+  
+  @PrePersist
+  public void method() {
+	  System.out.println("prepersist çalıştı");
+	 
+  }
+  
   @Column(nullable = true)
   private String imageName;
 

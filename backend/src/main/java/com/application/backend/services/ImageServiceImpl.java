@@ -1,11 +1,17 @@
 package com.application.backend.services;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
 
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,26 +38,23 @@ public class ImageServiceImpl implements ImageService {
   @Autowired TagRepository tagRepository;
 
   @Override
-  public Images saveImage(MultipartFile file) {
+  public Images saveImage(MultipartFile file, byte[] imageBytes) {
     Images image = new Images();
-    try {
-      byte[] imageFile = file.getBytes();
-      Date uploadDate = new Date();
-      String imageName = file.getOriginalFilename();
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      String username = authentication.getName();
 
-      User user = userRepository.findByUsername(username);
+    // byte[] imageFile = file.getBytes();
+    Date uploadDate = new Date();
+    String imageName = file.getOriginalFilename();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
 
-      image.setImage(imageFile);
-      image.setImageName(imageName);
-      image.setUploadDate(uploadDate);
-      image.setUser(user);
-      imageRepository.save(image);
+    User user = userRepository.findByUsername(username);
 
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    image.setImage(imageBytes);
+    image.setImageName(imageName);
+    image.setUploadDate(uploadDate);
+    image.setUser(user);
+    imageRepository.save(image);
+
     return image;
   }
 
@@ -127,5 +130,34 @@ public class ImageServiceImpl implements ImageService {
     Sort sort = Sort.by(imagePage.getSortDirection(), imagePage.getSortBy());
     Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
     return imageRepository.findByUserAndTagsIsNull(user, pageable);
+  }
+
+  @Override
+  public byte[] resizeImage(MultipartFile file) {
+    String fileName = file.getOriginalFilename();
+    String fileFormat = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+
+    byte[] imageBytes = null;
+    try {
+      imageBytes = file.getBytes();
+
+      // convert byte[] back to a BufferedImage
+      InputStream is = new ByteArrayInputStream(imageBytes);
+
+      BufferedImage image = ImageIO.read(is);
+
+      image = Scalr.resize(image, 900, 900);
+
+      // convert a BufferedImage to byte[]
+
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      ImageIO.write(image, fileFormat, baos);
+      imageBytes = baos.toByteArray();
+
+    } catch (IOException e) { // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return imageBytes;
   }
 }
