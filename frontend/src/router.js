@@ -58,8 +58,8 @@ export const router = new Router({
       component: BoardModerator
     },
     {
-      path: "/user",
-      name: "user",
+      path: "/MyImages",
+      name: "MyImages",
       component: BoardUser
  
     }

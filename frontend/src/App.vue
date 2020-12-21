@@ -15,8 +15,8 @@
           <router-link to="/mod" class="nav-link">Moderator Board</router-link>
         </li>
         <li class="nav-item">
-          <router-link v-if="currentUser" to="/user" class="nav-link"
-            >User</router-link
+          <router-link v-if="currentUser" to="/MyImages" class="nav-link"
+            >Görsellerim</router-link
           >
         </li>
       </div>
