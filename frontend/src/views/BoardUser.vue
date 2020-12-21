@@ -30,12 +30,12 @@
       </div>
 
       <div class="col-md-12" text-center>
-        <thumbnail :images="images"></thumbnail>
+        <thumbnail :images="getImages"></thumbnail>
 
         <b-pagination
           align="center"
           v-model="pageNumber"
-          :total-rows="totalElements"
+          :total-rows="getTotalElements"
           :per-page="pageSize"
           prev-text="Prev"
           next-text="Next"
@@ -52,6 +52,7 @@ import UserService from "../services/user.service";
 import authHeader from "../services/auth-header";
 import imageService from "../services/image.service";
 import Thumbnail from "../components/Thumbnail.vue";
+import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default {
   name: "User",
@@ -68,7 +69,9 @@ export default {
   components: {
     Thumbnail
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["getImages", "getTotalElements"])
+  },
   mounted() {
     this.retrieveImages();
   },
@@ -84,6 +87,7 @@ export default {
       if (pageSize) {
         params["pageSize"] = pageSize;
       }
+      this.loaderStatus = true;
       return params;
     },
     retrieveImages() {
@@ -92,16 +96,10 @@ export default {
         this.pageNumber,
         this.pageSize
       );
-      imageService
-        .getAllUserImages(params)
-        .then(response => {
-          this.images = response.data.content;
-          this.totalElements = response.data.totalElements;
-          this.loaderStatus = false;
-        })
-        .catch(e => {
-          console.log(e);
-        });
+
+      this.$store.dispatch("getAllUserImages", params).then(() => {
+        this.loaderStatus = false;
+      });
     },
     handlePageChange(value) {
       this.pageNumber = value;

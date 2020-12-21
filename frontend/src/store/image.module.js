@@ -7,12 +7,24 @@ export const imageOperations = {
   state: {
     images: [],
     tag: null,
+    searchTag: "",
     totalElements: 0
   },
   actions: {
-    getUserImages({ commit }) {
-      ImageService.getUserImages().then(response => {
-        commit("setImages", response.data);
+    getAllUserImages({ commit },payload) {
+      return new Promise((resolve, reject) => {
+        ImageService.getAllUserImages(payload)
+          .then(response => {
+            console.log(response);
+            let payload = response.data.totalElements;
+
+            commit("setImages", response.data.content);
+            commit("setTotalElements", payload);
+            resolve(response.data);
+          })
+          .catch(response => {
+            reject(response);
+          });
       });
     },
     getUntaggedImages({ commit }, payload) {
