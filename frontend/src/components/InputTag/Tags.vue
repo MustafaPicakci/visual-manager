@@ -52,6 +52,7 @@ export default {
     ...mapGetters(["getTags", "getLastInsertedTag"]),
     addTag(event) {
       let text = event.target;
+      text.value=text.value.trim();
       let matchedTag = false;
       if (text.value.length > 0) {
         this.tags.forEach(tag => {
