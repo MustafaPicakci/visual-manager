@@ -34,7 +34,8 @@ public class ImageController {
   @PostMapping("/add")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images add(MultipartFile file) {
-    return imageServiceImpl.saveImage(file);
+	 byte[] resizedImage=imageServiceImpl.resizeImage(file);
+    return imageServiceImpl.saveImage(file,resizedImage);
   };
 
   /*@GetMapping("/list")
