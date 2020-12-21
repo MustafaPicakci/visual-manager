@@ -1,5 +1,6 @@
 <template>
   <div class="container text-center">
+    <Loader :status="loaderStatus"></Loader>
     <br />
     <vue-dropzone
       :options="dropzoneOptions"
@@ -21,6 +22,16 @@
     <br />
     <h1>Etiketlenmeyi bekleyen görseller</h1>
     <thumbnail :images="getImages"></thumbnail>
+
+    <b-pagination
+      align="center"
+      v-model="pageNumber"
+      :total-rows="getTotalElements"
+      :per-page="pageSize"
+      prev-text="Prev"
+      next-text="Next"
+      @change="handlePageChange"
+    ></b-pagination>
   </div>
 </template>
 <script>
@@ -38,6 +49,9 @@ export default {
   },
   data() {
     return {
+      loaderStatus: true,
+      pageNumber: 1,
+      pageSize: 20,
       dropzoneOptions: {
         url: "http://localhost:3000/api/images/add",
         thumbnailWidth: 200,
@@ -47,15 +61,37 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("getUserImages");
+    this.retrieveImages();
   },
+
   computed: {
-    ...mapGetters(["getImages"])
+    ...mapGetters(["getImages", "getTotalElements"])
   },
   methods: {
     ...mapMutations(["addImage"]),
     vsuccess(file, response) {
       this.addImage(response);
+    },
+    getRequestParams(pageNumber, pageSize) {
+      let params = {};
+      if (pageNumber) {
+        params["pageNumber"] = pageNumber - 1;
+      }
+      if (pageSize) {
+        params["pageSize"] = pageSize;
+      }
+      this.loaderStatus= true;
+      return params;
+    },
+    retrieveImages() {
+      const params = this.getRequestParams(this.pageNumber, this.pageSize);
+      this.$store.dispatch("getUntaggedImages", params).then(() => {
+        this.loaderStatus = false;
+      });
+    },
+    handlePageChange(value) {
+      this.pageNumber = value;
+      this.retrieveImages();
     }
   }
 };

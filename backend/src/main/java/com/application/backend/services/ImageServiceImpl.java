@@ -121,4 +121,11 @@ public class ImageServiceImpl implements ImageService {
     Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
     return imageRepository.findByTags_TagNameContainingAndUser(tag, user, pageable);
   }
+
+  @Override
+  public Page<Images> findImagesForUserAndTagsIsNull(User user, ImagePage imagePage) {
+    Sort sort = Sort.by(imagePage.getSortDirection(), imagePage.getSortBy());
+    Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
+    return imageRepository.findByUserAndTagsIsNull(user, pageable);
+  }
 }

@@ -35,7 +35,7 @@
         <b-pagination
           align="center"
           v-model="pageNumber"
-          :total-rows="count"
+          :total-rows="totalElements"
           :per-page="pageSize"
           prev-text="Prev"
           next-text="Next"
@@ -53,7 +53,6 @@ import authHeader from "../services/auth-header";
 import imageService from "../services/image.service";
 import Thumbnail from "../components/Thumbnail.vue";
 
-
 export default {
   name: "User",
   data() {
@@ -62,7 +61,7 @@ export default {
       loaderStatus: true,
       searchTag: "",
       pageNumber: 1,
-      count: 0,
+      totalElements: 0,
       pageSize: 20
     };
   },
@@ -97,7 +96,7 @@ export default {
         .getAllUserImages(params)
         .then(response => {
           this.images = response.data.content;
-          this.count = response.data.totalElements;
+          this.totalElements = response.data.totalElements;
           this.loaderStatus = false;
         })
         .catch(e => {
@@ -106,11 +105,6 @@ export default {
     },
     handlePageChange(value) {
       this.pageNumber = value;
-      this.retrieveImages();
-    },
-    handlePageSizeChange(event) {
-      this.pageSize = event.target.value;
-      this.pageNumber = 1;
       this.retrieveImages();
     }
   }

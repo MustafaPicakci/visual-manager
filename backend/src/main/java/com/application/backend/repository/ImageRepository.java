@@ -19,7 +19,9 @@ public interface ImageRepository extends JpaRepository<Images, Long> {
 
   Page<Images> findAllByUser(User user, Pageable pageable);
 
-  Page<Images> findByTags_TagNameContainingAndUser(String tag, User user,Pageable pageable);
+  Page<Images> findByTags_TagNameContainingAndUser(String tag, User user, Pageable pageable);
+
+  Page<Images> findByUserAndTagsIsNull(User user, Pageable pageable);
 
   boolean existsByTagsId(long tagId);
 }
