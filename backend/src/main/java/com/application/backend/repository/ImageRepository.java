@@ -7,9 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
-import com.application.backend.models.Tags;
 import com.application.backend.models.User;
 
 @Repository

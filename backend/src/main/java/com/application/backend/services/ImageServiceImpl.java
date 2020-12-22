@@ -22,13 +22,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.application.backend.models.DatabaseFile;
+import com.application.backend.models.OriginalImageFile;
 import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
 
 import com.application.backend.models.Tags;
 import com.application.backend.models.User;
-import com.application.backend.repository.DatabaseFileRepository;
+import com.application.backend.repository.OriginalImageFileRepopsitory;
 import com.application.backend.repository.ImageRepository;
 
 import com.application.backend.repository.TagRepository;
@@ -40,12 +40,12 @@ public class ImageServiceImpl implements ImageService {
   @Autowired ImageRepository imageRepository;
   @Autowired UserRepository userRepository;
   @Autowired TagRepository tagRepository;
-  @Autowired DatabaseFileRepository databaseFileRepository;
+  @Autowired OriginalImageFileRepopsitory databaseFileRepository;
 
   @Override
   public Images saveImage(MultipartFile file, byte[] imageBytes) {
     Images image = new Images();
-    DatabaseFile dbFile = new DatabaseFile();
+    OriginalImageFile dbFile = new OriginalImageFile();
     byte[] imageFile = null;
     try {
       imageFile = file.getBytes();
@@ -67,7 +67,7 @@ public class ImageServiceImpl implements ImageService {
     dbFile.setData(imageFile);
     dbFile.setFileName(file.getOriginalFilename());
     dbFile.setFileType(file.getContentType());
-    image.setDbFile(dbFile);
+    image.setoriginalImageFile(dbFile);
     dbFile.setImage(image);
     imageRepository.save(image);
 
@@ -75,7 +75,7 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  public DatabaseFile findByImage(Images image) {
+  public OriginalImageFile findByImage(Images image) {
     return databaseFileRepository.findByImage(image);
   }
 
@@ -175,10 +175,15 @@ public class ImageServiceImpl implements ImageService {
       ImageIO.write(image, fileFormat, baos);
       imageBytes = baos.toByteArray();
 
-    } catch (IOException e) { // TODO Auto-generated catch block
+    } catch (IOException e) {
       e.printStackTrace();
     }
 
     return imageBytes;
+  }
+
+  @Override
+  public Images findById(long id) { 
+    return imageRepository.findById(id).get();
   }
 }

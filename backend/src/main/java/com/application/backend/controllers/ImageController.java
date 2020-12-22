@@ -1,7 +1,5 @@
 package com.application.backend.controllers;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.application.backend.models.DatabaseFile;
+import com.application.backend.models.OriginalImageFile;
 import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
 import com.application.backend.models.Tags;
@@ -47,13 +45,6 @@ public class ImageController {
     return imageServiceImpl.saveImage(file, resizedImage);
   };
 
-  /*@GetMapping("/list")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public List<Images> listImages() {
-      User user = userDetailsServiceImpl.loadUser();
-      return imageServiceImpl.findImagesForUser(user);
-    };
-  */
   @GetMapping("/list")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public ResponseEntity<Page<Images>> listImages(
@@ -122,24 +113,18 @@ public class ImageController {
     return imageServiceImpl.unlikTag(data.getImages().get(0).getId(), data.getId());
   };
 
-  /*@GetMapping("/download")
-  public ResponseEntity<byte[]> getFile(@RequestParam long id) {
-    byte[] file = imageServiceImpl.findImageById(id).getOriginalImage();
+  @GetMapping("/downloadFile/{imageId}")
+  public ResponseEntity<Resource> downloadFile(
+      @PathVariable long imageId, HttpServletRequest request) {
+
+    Images image = imageServiceImpl.findById(imageId);
+    OriginalImageFile originalImageFile = imageServiceImpl.findByImage(image);
 
     return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +   "\"")
-        .body(file);
-  }*/
-  
-  @GetMapping("/downloadFile/{imageId}")
-  public ResponseEntity<Resource> downloadFile(@PathVariable long imageId, HttpServletRequest request) {
-      // Load file as Resource
-	  Images image=imageRepository.findById(imageId).get();
-      DatabaseFile databaseFile = imageServiceImpl.findByImage(image);
-
-      return ResponseEntity.ok()
-              .contentType(MediaType.parseMediaType(databaseFile.getFileType()))
-              .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + databaseFile.getFileName() + "\"")
-              .body(new ByteArrayResource(databaseFile.getData()));
+        .contentType(MediaType.parseMediaType(originalImageFile.getFileType()))
+        .header(
+            HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=\"" + originalImageFile.getFileName() + "\"")
+        .body(new ByteArrayResource(originalImageFile.getData()));
   }
 }
