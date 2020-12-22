@@ -18,8 +18,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,13 +36,12 @@ public class Images {
   public void setImage_id(long id) {
     this.id = id;
   }
-  
+
   @PrePersist
   public void method() {
-	  System.out.println("prepersist çalıştı");
-	 
+    System.out.println("prepersist çalıştı");
   }
-  
+
   @Column(nullable = true)
   private String imageName;
 
@@ -72,6 +73,19 @@ public class Images {
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
+
+  
+  @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+  @JoinColumn(name = "OriginalImageId",nullable = false)
+  private OriginalImages originalImage;
+
+  public OriginalImages getOriginalImage() {
+    return originalImage;
+  }
+
+  public void setOriginalImage(OriginalImages originalImage) {
+    this.originalImage = originalImage;
+  }
 
   public void addTag(Tags tag) {
     tags.add(tag);
