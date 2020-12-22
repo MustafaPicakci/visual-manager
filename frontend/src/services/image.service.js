@@ -4,6 +4,24 @@ import authHeader from "./auth-header";
 const API_URL = "http://localhost:3000/api/images/";
 
 class ImageService {
+  downloadImage(imageId) {
+    return axios
+      .get(
+        API_URL + "downloadFile/" + imageId,
+
+        { headers: authHeader(), responseType: 'blob' },
+     
+      )
+      .then(response => {
+        console.log(response);
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "image.jpg");
+        document.body.appendChild(link);
+        link.click();
+      });
+  }
   getUntagedImages(params) {
     console.log(params);
     return axios.get(API_URL + "list", { params, headers: authHeader() });

@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.application.backend.models.DatabaseFile;
 import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
+
 import com.application.backend.models.User;
 
 public interface ImageService {
@@ -27,4 +29,6 @@ public interface ImageService {
   public abstract Images unlikTag(long imageId, long tagId);
 
   public byte[] resizeImage(MultipartFile file);
+
+  public DatabaseFile findByImage(Images image);
 }
