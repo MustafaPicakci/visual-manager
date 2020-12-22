@@ -24,9 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
+import com.application.backend.models.OriginalImages;
 import com.application.backend.models.Tags;
 import com.application.backend.models.User;
 import com.application.backend.repository.ImageRepository;
+import com.application.backend.repository.OriginalImageRepository;
 import com.application.backend.repository.TagRepository;
 import com.application.backend.repository.UserRepository;
 
@@ -36,12 +38,18 @@ public class ImageServiceImpl implements ImageService {
   @Autowired ImageRepository imageRepository;
   @Autowired UserRepository userRepository;
   @Autowired TagRepository tagRepository;
+  @Autowired OriginalImageRepository originalImageRepository;
 
   @Override
   public Images saveImage(MultipartFile file, byte[] imageBytes) {
     Images image = new Images();
-
-    // byte[] imageFile = file.getBytes();
+    OriginalImages originalImage = new OriginalImages();
+    byte[] imageFile = null;
+    try {
+      imageFile = file.getBytes();
+    } catch (IOException e) { // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     Date uploadDate = new Date();
     String imageName = file.getOriginalFilename();
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,6 +61,10 @@ public class ImageServiceImpl implements ImageService {
     image.setImageName(imageName);
     image.setUploadDate(uploadDate);
     image.setUser(user);
+
+    originalImage.setOriginalImage(imageFile);
+    image.setOriginalImage(originalImage);
+    //originalImage.setImage(image);
     imageRepository.save(image);
 
     return image;
