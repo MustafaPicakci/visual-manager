@@ -10,11 +10,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.core.sym.Name;
-
 @Entity
 @Table(name = "files")
-public class DatabaseFile {
+public class OriginalImageFile {
   @Id
   @GeneratedValue(generator = "uuid")
   @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -38,9 +36,9 @@ public class DatabaseFile {
     this.image = image;
   }
 
-  public DatabaseFile() {}
+  public OriginalImageFile() {}
 
-  public DatabaseFile(String fileName, String fileType, byte[] data) {
+  public OriginalImageFile(String fileName, String fileType, byte[] data) {
     this.fileName = fileName;
     this.fileType = fileType;
     this.data = data;

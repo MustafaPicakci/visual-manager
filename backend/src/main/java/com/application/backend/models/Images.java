@@ -19,9 +19,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,11 +34,6 @@ public class Images {
 
   public void setImage_id(long id) {
     this.id = id;
-  }
-
-  @PrePersist
-  public void method() {
-    System.out.println("prepersist çalıştı");
   }
 
   @Column(nullable = true)
@@ -77,16 +69,16 @@ public class Images {
   private User user;
 
   @JsonIgnore
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "dbFileId", nullable = false)
-  private DatabaseFile dbFile;
+  private OriginalImageFile originalImageFile;
 
-  public DatabaseFile getDbFile() {
-    return dbFile;
+  public OriginalImageFile getoriginalImageFile() {
+    return originalImageFile;
   }
 
-  public void setDbFile(DatabaseFile dbFile) {
-    this.dbFile = dbFile;
+  public void setoriginalImageFile(OriginalImageFile originalImageFile) {
+    this.originalImageFile = originalImageFile;
   }
 
   public void addTag(Tags tag) {

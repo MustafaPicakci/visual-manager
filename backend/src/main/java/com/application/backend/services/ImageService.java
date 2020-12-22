@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.application.backend.models.DatabaseFile;
+import com.application.backend.models.OriginalImageFile;
 import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
 
@@ -28,7 +28,9 @@ public interface ImageService {
 
   public abstract Images unlikTag(long imageId, long tagId);
 
-  public byte[] resizeImage(MultipartFile file);
+  public abstract byte[] resizeImage(MultipartFile file);
 
-  public DatabaseFile findByImage(Images image);
+  public abstract Images findById(long id);
+
+  public OriginalImageFile findByImage(Images image);
 }
