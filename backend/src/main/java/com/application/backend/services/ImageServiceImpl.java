@@ -22,13 +22,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.application.backend.models.DatabaseFile;
 import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
-import com.application.backend.models.OriginalImages;
+
 import com.application.backend.models.Tags;
 import com.application.backend.models.User;
+import com.application.backend.repository.DatabaseFileRepository;
 import com.application.backend.repository.ImageRepository;
-import com.application.backend.repository.OriginalImageRepository;
+
 import com.application.backend.repository.TagRepository;
 import com.application.backend.repository.UserRepository;
 
@@ -38,12 +40,12 @@ public class ImageServiceImpl implements ImageService {
   @Autowired ImageRepository imageRepository;
   @Autowired UserRepository userRepository;
   @Autowired TagRepository tagRepository;
-  @Autowired OriginalImageRepository originalImageRepository;
+  @Autowired DatabaseFileRepository databaseFileRepository;
 
   @Override
   public Images saveImage(MultipartFile file, byte[] imageBytes) {
     Images image = new Images();
-    OriginalImages originalImage = new OriginalImages();
+    DatabaseFile dbFile = new DatabaseFile();
     byte[] imageFile = null;
     try {
       imageFile = file.getBytes();
@@ -62,12 +64,19 @@ public class ImageServiceImpl implements ImageService {
     image.setUploadDate(uploadDate);
     image.setUser(user);
 
-    originalImage.setOriginalImage(imageFile);
-    image.setOriginalImage(originalImage);
-    //originalImage.setImage(image);
+    dbFile.setData(imageFile);
+    dbFile.setFileName(file.getOriginalFilename());
+    dbFile.setFileType(file.getContentType());
+    image.setDbFile(dbFile);
+    dbFile.setImage(image);
     imageRepository.save(image);
 
     return image;
+  }
+
+  @Override
+  public DatabaseFile findByImage(Images image) {
+    return databaseFileRepository.findByImage(image);
   }
 
   @Override

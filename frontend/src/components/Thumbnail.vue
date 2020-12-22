@@ -1,6 +1,5 @@
 <template>
   <div class="com-thumb">
-
     <div class="row">
       <div v-if="!images.length" class="alert alert-danger" role="alert">
         Hiç görsel yok :(
@@ -12,6 +11,8 @@
             v-model="imageTags"
             color="primary"
           ></app-tags>
+
+          <button @click="downloadImage(selectedImageId)">indir</button>
         </div>
         This is a modal</v-modal
       >
@@ -43,20 +44,18 @@
 import Axios from "axios";
 import Tags from "./InputTag/Tags";
 import tagService from "../services/tag.service";
+import imageService from "../services/image.service";
 
 export default {
   props: ["images"],
   data() {
     return {
-
       selectedImage: null,
       selectedImageId: null,
       imageTags: []
     };
   },
-  mounted(){
-
-  },
+  mounted() {},
   components: {
     appTags: Tags
   },
@@ -69,6 +68,10 @@ export default {
     }
   },
   methods: {
+    downloadImage(imageId) {
+
+      imageService.downloadImage(imageId);
+    },
     deleteImage(index) {
       this.selectImage(this.images[index]);
       let payload = {

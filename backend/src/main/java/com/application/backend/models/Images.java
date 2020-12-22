@@ -26,6 +26,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "images")
 public class Images {
@@ -74,17 +76,17 @@ public class Images {
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  
-  @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-  @JoinColumn(name = "OriginalImageId",nullable = false)
-  private OriginalImages originalImage;
+  @JsonIgnore
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "dbFileId", nullable = false)
+  private DatabaseFile dbFile;
 
-  public OriginalImages getOriginalImage() {
-    return originalImage;
+  public DatabaseFile getDbFile() {
+    return dbFile;
   }
 
-  public void setOriginalImage(OriginalImages originalImage) {
-    this.originalImage = originalImage;
+  public void setDbFile(DatabaseFile dbFile) {
+    this.dbFile = dbFile;
   }
 
   public void addTag(Tags tag) {
