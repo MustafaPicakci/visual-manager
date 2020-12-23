@@ -11,15 +11,15 @@ export const imageOperations = {
     totalElements: 0
   },
   actions: {
-    getAllUserImages({ commit },payload) {
+    getAllUserImages({ commit }, payload) {
       return new Promise((resolve, reject) => {
         ImageService.getAllUserImages(payload)
           .then(response => {
-            console.log(response);
             let payload = response.data.totalElements;
-
+              if(response.data.content.length){
             commit("setImages", response.data.content);
             commit("setTotalElements", payload);
+          }
             resolve(response.data);
           })
           .catch(response => {
@@ -31,7 +31,6 @@ export const imageOperations = {
       return new Promise((resolve, reject) => {
         ImageService.getUntagedImages(payload)
           .then(response => {
-            console.log(response);
             let payload = response.data.totalElements;
 
             commit("setImages", response.data.content);
