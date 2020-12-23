@@ -18,22 +18,24 @@
       >
 
       <div
-        class="col-lg-4 col-md-3 col-6 mb-4  thumbnail"
+        class="col-md-4 col-sm-6 mb-4  item"
         v-for="(image, index) in images"
         :key="image.id"
       >
-        <img
-          class="img-fluid img-thumbnail image"
-          :src="'data:image/jpeg;base64,' + image.image"
-          alt=""
-        />
-        <div class="image-panel">
-          <button @click="deleteImage(index)" class="btn btn-danger">
-            Sil
-          </button>
-          <button @click="imageInfo(image)" class="btn btn-warning">
-            Düzenle
-          </button>
+        <div class="thumbnail thumbnail-brightness">
+          <img
+            class="img-fluid img-thumbnail image"
+            :src="'data:image/jpeg;base64,' + image.image"
+            alt=""
+          />
+          <div class="image-panel">
+            <button @click="deleteImage(index)" class="btn btn-danger">
+              Sil
+            </button>
+            <button @click="imageInfo(image)" class="btn btn-warning">
+              Düzenle
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -69,7 +71,6 @@ export default {
   },
   methods: {
     downloadImage(imageId) {
-
       imageService.downloadImage(imageId);
     },
     deleteImage(index) {
@@ -98,16 +99,28 @@ export default {
 };
 </script>
 <style>
+
+/* Brightness-zoom Container */
+.thumbnail-brightness img {
+  transition: transform .5s, filter 1.0s ease-in-out;
+  transform-origin: center center;
+  filter: brightness(70%);
+}
+
+/* The Transformation */
+.thumbnail-brightness:hover img {
+  filter: brightness(100%);
+  transform: scale(1.1);
+}
+
 .image {
   opacity: 1;
   width: 300px;
   height: 300px;
   object-fit: cover;
 }
-.thumbnail:hover .image {
-  opacity: 0.3;
-}
-.thumbnail:hover .image-panel {
+
+.item:hover .image-panel {
   opacity: 1;
 }
 

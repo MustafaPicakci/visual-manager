@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <div class="content-bg"></div>
+    
     <nav v-if="currentUser" class="navbar navbar-expand navbar-dark bg-dark">
       <a href class="navbar-brand" @click.prevent>bezKoder</a>
       <div class="navbar-nav mr-auto">
@@ -56,9 +58,7 @@
 </template>
 
 <script>
-
 export default {
-  
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -89,3 +89,17 @@ export default {
   }
 };
 </script>
+<style scoped>
+.content-bg {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  background-image: url("../src/assets/images/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+ 
+</style>
