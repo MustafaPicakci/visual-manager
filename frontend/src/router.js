@@ -6,7 +6,7 @@ import Register from "./views/Register.vue";
 import Profile from "./views/Profile.vue";
 import BoardAdmin from "./views/BoardAdmin.vue";
 import BoardModerator from "./views/BoardModerator.vue";
-import BoardUser from "./views/BoardUser.vue";
+import MyImages from "./views/MyImages.vue";
 import store from "./store/store";
 
 Vue.use(Router);
@@ -19,7 +19,6 @@ export const router = new Router({
       name: "home",
       component: Home,
       beforeEnter(to, from, next) {
-        
         if (store.getters.isLoggedIn) {
           next();
         } else {
@@ -60,8 +59,7 @@ export const router = new Router({
     {
       path: "/MyImages",
       name: "MyImages",
-      component: BoardUser
- 
+      component: MyImages
     }
   ]
 });

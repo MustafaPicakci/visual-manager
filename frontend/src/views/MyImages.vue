@@ -2,18 +2,20 @@
   <div class="container">
     <Loader :status="loaderStatus"></Loader>
     <div class="list row">
-      <div class="col-md-8">
-        <div class="input-group mb-3">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Search by tag"
-            v-model="searchTag"
-            @keypress.enter="
-              pageNumber = 1;
-              retrieveImages();
-            "
-          />
+      <div class="col-md-12 ">
+        <div class="input-group mb-4 mt-5 ">
+          <div class="col-xs-4">
+            <input
+              type="text"
+              class="form-control center"
+              placeholder="Search by tag"
+              v-model="searchTag"
+              @keypress.enter="
+                pageNumber = 1;
+                retrieveImages();
+              "
+            />
+          </div>
           <div class="input-group-append">
             <button
               class="btn btn-outline-secondary"
@@ -27,9 +29,7 @@
             </button>
           </div>
         </div>
-      </div>
 
-      <div class="col-md-12" text-center>
         <thumbnail :images="getImages"></thumbnail>
 
         <b-pagination
