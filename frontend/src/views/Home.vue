@@ -54,6 +54,7 @@ export default {
       pageSize: 20,
       dropzoneOptions: {
         url: "http://localhost:3000/api/images/add",
+        maxFilesize:45.0,
         thumbnailWidth: 200,
         addRemoveLinks: true,
         headers: { ...authHeader() }
