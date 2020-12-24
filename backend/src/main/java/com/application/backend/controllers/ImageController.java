@@ -42,6 +42,7 @@ public class ImageController {
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images add(MultipartFile file) {
     byte[] resizedImage = imageServiceImpl.resizeImage(file);
+    System.out.println("tamamdır----------------------------------------------------");
     return imageServiceImpl.saveImage(file, resizedImage);
   };
 
