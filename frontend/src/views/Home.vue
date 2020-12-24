@@ -2,7 +2,7 @@
   <div class="container text-center">
     <Loader :status="loaderStatus"></Loader>
     <br />
-    <div class="dropzone">
+    <div class="dropzone mb-4">
       <vue-dropzone
         :options="dropzoneOptions"
         :useCustomSlot="true"
@@ -10,7 +10,7 @@
         @vdropzone-success="vsuccess"
         id="dropzone"
       >
-        <div class="dropzone-custom-content ">
+        <div class="dropzone-custom-content pt-5">
           <h3 class="dropzone-custom-title">
             Görselleri Buraya sürükle ve bırak !
           </h3>
@@ -20,9 +20,8 @@
         </div>
       </vue-dropzone>
     </div>
-    <br />
-    <br />
-    <br />
+
+
     <h1>Etiketlenmeyi bekleyen görseller</h1>
     <thumbnail :images="getImages"></thumbnail>
 
@@ -104,7 +103,7 @@ export default {
 </script>
 <style scoped>
 .dropzone-custom-content {
-  position: absolute;
+  position: relative;
 
   left: 50%;
   transform: translate(-50%, -50%);
@@ -126,5 +125,6 @@ export default {
   background: rgba(155, 211, 156, 0.08);
   border: 5 px solid rgba(155, 211, 156, 0.1);
   border-radius: 15px;
+  height: 200px;
 }
 </style>

@@ -12,7 +12,8 @@ import {
   faUser,
   faUserPlus,
   faSignInAlt,
-  faSignOutAlt
+  faSignOutAlt,
+  faImages
 } from "@fortawesome/free-solid-svg-icons";
 
 import VueSweetalert2 from "vue-sweetalert2";
@@ -25,7 +26,7 @@ Vue.use(VueSweetalert2);
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt);
+library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt,faImages);
 import Loader from "./components/Loader";
 Vue.use(VModal, { componentName: "v-modal" });
 Vue.component("Loader", Loader);
