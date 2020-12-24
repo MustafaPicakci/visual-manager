@@ -3,7 +3,7 @@
     <Loader :status="loaderStatus"></Loader>
     <div class="list row">
       <div class="col-md-12 ">
-        <div class="input-group mb-4 mt-5 ">
+        <div class="input-group mb-4 mt-5 d-flex justify-content-center">
           <div class="col-xs-4">
             <input
               type="text"
@@ -18,7 +18,7 @@
           </div>
           <div class="input-group-append">
             <button
-              class="btn btn-outline-secondary"
+              class="btn btn-outline-dark"
               type="button"
               @click="
                 pageNumber = 1;

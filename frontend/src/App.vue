@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="content-bg"></div>
-    
+    <!--  
     <nav v-if="currentUser" class="navbar navbar-expand navbar-dark bg-dark">
       <a href class="navbar-brand" @click.prevent>bezKoder</a>
       <div class="navbar-nav mr-auto">
@@ -50,7 +50,8 @@
         </li>
       </div>
     </nav>
-
+-->
+    <site-top :currentUser="currentUser"></site-top>
     <div>
       <router-view />
     </div>
@@ -58,7 +59,12 @@
 </template>
 
 <script>
+import SiteTop from "./components/SiteTop.vue";
 export default {
+  components: {
+    SiteTop
+  },
+
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -91,6 +97,7 @@ export default {
 </script>
 <style scoped>
 .content-bg {
+  top: 0;
   position: fixed;
   height: 100%;
   width: 100%;
@@ -100,10 +107,8 @@ export default {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
-#app{
+#app {
   position: relative;
   z-index: 55;
 }
-
- 
 </style>
