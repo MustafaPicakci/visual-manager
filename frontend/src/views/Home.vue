@@ -6,7 +6,7 @@
       <vue-dropzone
         :options="dropzoneOptions"
         :useCustomSlot="true"
-        :include-styling="false"
+        :duplicateCheck="true"
         @vdropzone-success="vsuccess"
         id="dropzone"
       >
@@ -59,7 +59,7 @@ export default {
         url: "http://localhost:3000/api/images/add",
         maxFilesize: 45.0,
         thumbnailWidth: 200,
-        addRemoveLinks: true,
+        addRemoveLinks: false,
 
         headers: { ...authHeader() }
       }
@@ -74,6 +74,7 @@ export default {
   },
   methods: {
     ...mapMutations(["addImage"]),
+
     vsuccess(file, response) {
       this.addImage(response);
     },
@@ -119,15 +120,11 @@ export default {
   color: #314b5f;
 }
 
-
 #dropzone {
   position: relative;
-  z-index: 1;
+  z-index: 99;
   background: rgba(155, 211, 156, 0.08);
-
-  height: 200px;
-  
-  border:5 px solid  rgba(155, 211, 156, 0.1);
+  border: 5 px solid rgba(155, 211, 156, 0.1);
   border-radius: 15px;
 }
 </style>

@@ -79,7 +79,19 @@ export default {
         imageId: this.selectedImage.id,
         index: index
       };
-      this.$store.dispatch("deleteImage", payload);
+      // Use sweetalert2
+      this.$swal({
+        title: "Bu görseli silmek üzeresiniz !",
+        showDenyButton: true,
+
+        confirmButtonText: `Evet, Sil !`,
+        denyButtonText: `Aah, Vazgeçtim !`
+      }).then(result => {
+        if (result.isConfirmed) {
+          this.$store.dispatch("deleteImage", payload);
+          this.$swal.fire("Görsel silindi", "", "success");
+        }
+      });
     },
     imageInfo(image) {
       this.selectImage(image);
@@ -99,12 +111,11 @@ export default {
 };
 </script>
 <style>
-
 /* Brightness-zoom Container */
 .thumbnail-brightness img {
-  transition: transform .5s, filter 1.0s ease-in-out;
+  transition: transform 0.5s, filter 1s ease-in-out;
   transform-origin: center center;
-  filter: brightness(70%);
+  filter: brightness(80%);
 }
 
 /* The Transformation */

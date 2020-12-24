@@ -100,6 +100,10 @@ export default {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+#app{
+  position: relative;
+  z-index: 55;
+}
 
  
 </style>
