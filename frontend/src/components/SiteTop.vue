@@ -2,8 +2,8 @@
   <div v-if="currentUser" class="site-top">
     <div class="site-header clearfix">
       <div class="container">
-        <router-link to="/" class="a site-brand float-left"
-          >Visual Manager</router-link
+        <router-link to="/" class="a site-brand float-left">
+          <h3>Visual <span class="green">Manager</span></h3></router-link
         >
       </div>
     </div>
@@ -12,16 +12,16 @@
       <div class="container">
         <div class="row">
           <div class="offset-md-2 col-lg-8 text-center">
-            <router-link to="/home" tag="button" class="btn btn-secondary"
+            <router-link to="/home" tag="button" class="btn btn-danger"
               ><font-awesome-icon icon="home" /> Anasayfa</router-link
             >
-            <router-link to="/MyImages" tag="button" class="btn btn-secondary"
+            <router-link to="/MyImages" tag="button" class="btn btn-info"
               ><font-awesome-icon icon="images" /> Galeri</router-link
             >
-            <router-link to="/MyImages" tag="button" class="btn btn-secondary"
+            <router-link to="/MyImages" tag="button" class="btn btn-warning"
               ><font-awesome-icon icon="user" /> Profil</router-link
             >
-            <button @click.prevent="logOut" class="btn btn-secondary">
+            <button @click.prevent="logOut" class="btn btn-dark">
               <font-awesome-icon icon="sign-out-alt" />Çıkış
             </button>
           </div>
@@ -31,7 +31,7 @@
     <!-- .site-banner -->
   </div>
   <div v-else class="unauthorized text-center m-4">
-    <h3>Visual Manager</h3>
+    <h3>Visual <span class=""> Manager</span></h3>
   </div>
 </template>
 <script>
@@ -46,6 +46,16 @@ export default {
 };
 </script>
 <style scoped>
+.h3{
+  text-shadow: 2px 2px;
+}
+.blue {
+  color: #6be;
+}
+.green {
+  color: #6e6;
+}
+
 .unauthorized {
   position: relative;
   z-index: 4;

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container text-center">
     <Loader :status="loaderStatus"></Loader>
     <div class="list row">
       <div class="col-md-12 ">
