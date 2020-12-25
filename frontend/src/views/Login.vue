@@ -8,30 +8,50 @@
       />
       <form name="form" @submit.prevent="handleLogin">
         <div class="form-group">
-          <label for="username">Username</label>
+          <label for="username">Kullanıcı Adı</label>
           <input
-            v-model="user.username"
+            v-model="username"
             type="text"
             class="form-control"
             name="username"
+            placeholder="Kullanıcı adı"
           />
+          <small v-if="!$v.username.minLength" class="form-text text-danger"
+            >Kullanıcı adı en az
+            {{ $v.username.$params.minLength.min }} karakterden
+            oluşmalıdlır</small
+          >
+          <small v-if="!$v.username.maxLength" class="form-text text-danger"
+            >Kullanıcı en fazla
+            {{ $v.username.$params.maxLength.max }} karakterden
+            oluşmalıdlır</small
+          >
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">Şifre</label>
           <input
-            v-model="user.password"
+            v-model="password"
             type="password"
             class="form-control"
             name="password"
+            placeholder="Şifre"
           />
+          <small v-if="!$v.password.minLength" class="form-text text-danger"
+            >şifre en az {{ $v.password.$params.minLength.min }} karakterden
+            oluşmalıdlır</small
+          >
+          <small v-if="!$v.password.maxLength" class="form-text text-danger"
+            >şifre en fazla {{ $v.password.$params.maxLength.max }} karakterden
+            oluşmalıdlır</small
+          >
         </div>
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <button class="btn btn-primary btn-block" :disabled="$v.$invalid">
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
             ></span>
-            <span>Login</span>
+            <span>Giriş Yap</span>
           </button>
           <router-link to="/register"
             ><a class="nav-link" href="#">Kayıt ol</a>
@@ -49,15 +69,36 @@
 
 <script>
 import User from "../models/user";
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  sameAs,
+  between
+} from "vuelidate/lib/validators";
 
 export default {
   name: "Login",
   data() {
     return {
-      user: new User("", ""),
+      username: "",
+      password: "",
       loading: false,
       message: ""
     };
+  },
+  validations: {
+    username: {
+      required,
+      minLength: minLength(6),
+      maxLength: maxLength(16)
+    },
+    password: {
+      required,
+      minLength: minLength(4),
+      maxLength: maxLength(16)
+    }
   },
   computed: {
     loggedIn() {
@@ -66,30 +107,27 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      // this.$router.push("/profile");
       this.$router.push("/home");
     }
   },
   methods: {
     handleLogin() {
       this.loading = true;
-
-      if (this.user.username && this.user.password) {
-        this.$store.dispatch("auth/login", this.user).then(
-          () => {
-            this.$router.push("/home");
-          },
-          error => {
-            this.loading = false;
-            this.message =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString();
-          }
-        );
-      }
+      var user = new User(this.username, "", this.password);
+      this.$store.dispatch("auth/login", user).then(
+        () => {
+          this.$router.push("/home");
+        },
+        error => {
+          this.loading = false;
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
     }
   }
 };
