@@ -87,6 +87,10 @@ export default {
         data => {
           this.message = data.message;
           this.successful = true;
+          setTimeout(() => {
+             this.$router.push("/login");
+          }, 3000);
+         
         },
         error => {
           this.message =
