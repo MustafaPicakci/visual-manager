@@ -9,34 +9,91 @@
       <form name="form" @submit.prevent="handleRegister">
         <div v-if="!successful">
           <div class="form-group">
-            <label for="username">Username</label>
             <input
-              v-model="user.username"
+              v-model="username"
               type="text"
               class="form-control"
               name="username"
+              placeholder="Kullanıcı adı"
             />
+            <small v-if="!$v.username.required" class="form-text text-danger"
+              >Bu alan zorunludur</small
+            >
+            <small v-if="!$v.username.minLength" class="form-text text-danger"
+              >şifre en az {{ $v.username.$params.minLength.min }} karakterden
+              oluşmalıdlır</small
+            >
+            <small v-if="!$v.username.maxLength" class="form-text text-danger"
+              >şifre en fazla
+              {{ $v.username.$params.maxLength.max }} karakterden
+              oluşmalıdlır</small
+            >
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
             <input
-              v-model="user.email"
+              v-model="email"
               type="email"
               class="form-control"
+              :class="{ 'is-invalid': $v.email.$error }"
               name="email"
+              placeholder="E-posta adresini giriniz"
             />
+            <small v-if="!$v.email.required" class="form-text text-danger"
+              >* Bu alan zorunludur</small
+            >
+            <small v-if="!$v.email.email" class="form-text text-danger"
+              >Lütfen geçerli bir e-posta giriniz..</small
+            >
           </div>
           <div class="form-group">
-            <label for="password">Password</label>
             <input
-              v-model="user.password"
+              v-model="password"
               type="password"
               class="form-control"
               name="password"
+              placeholder="Şifre tekrar"
             />
+            <small v-if="!$v.password.required" class="form-text text-danger"
+              >Bu alan zorunludur</small
+            >
+            <small v-if="!$v.password.minLength" class="form-text text-danger"
+              >şifre en az {{ $v.password.$params.minLength.min }} karakterden
+              oluşmalıdlır</small
+            >
+            <small v-if="!$v.password.maxLength" class="form-text text-danger"
+              >şifre en fazla
+              {{ $v.password.$params.maxLength.max }} karakterden
+              oluşmalıdlır</small
+            >
           </div>
           <div class="form-group">
-            <button class="btn btn-primary btn-block">Sign Up</button>
+            <input
+              v-model="$v.repassword.$model"
+              type="password"
+              class="form-control"
+              name="repassword"
+              placeholder="Şifre tekrar"
+            />
+            <small v-if="!$v.repassword.required" class="form-text text-danger"
+              >Bu alan zorunludur</small
+            >
+            <small v-if="!$v.repassword.minLength" class="form-text text-danger"
+              >şifre en az {{ $v.repassword.$params.minLength.min }} karakterden
+              oluşmalıdlır</small
+            >
+            <small v-if="!$v.repassword.maxLength" class="form-text text-danger"
+              >şifre en fazla
+              {{ $v.repassword.$params.maxLength.max }} karakterden
+              oluşmalıdlır</small
+            >
+            <small v-if="!$v.repassword.sameAs" class="form-text text-danger"
+              >Şifreler eşleşmiyor...</small
+            >
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary btn-block" :disabled="$v.$invalid">
+              Kaydol
+            </button>
             <router-link to="/login"
               ><a class="nav-link" href="#">Hesabım var</a>
             </router-link>
@@ -57,16 +114,49 @@
 
 <script>
 import User from "../models/user";
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  sameAs,
+  between
+} from "vuelidate/lib/validators";
 
 export default {
   name: "Register",
   data() {
     return {
-      user: new User("", "", ""),
+      username: "",
+      password: "",
+      email: "",
+      repassword: "",
       submitted: false,
       successful: false,
       message: ""
     };
+  },
+  validations: {
+    username: {
+      required,
+      minLength: minLength(6),
+      maxLength: maxLength(16)
+    },
+    email: {
+      required,
+      email
+    },
+    password: {
+      required,
+      minLength: minLength(4),
+      maxLength: maxLength(16)
+    },
+    repassword: {
+      required,
+      minLength: minLength(4),
+      maxLength: maxLength(16),
+      sameAs: sameAs("password")
+    }
   },
   computed: {
     loggedIn() {
@@ -82,15 +172,14 @@ export default {
     handleRegister() {
       this.message = "";
       this.submitted = true;
-
-      this.$store.dispatch("auth/register", this.user).then(
+      var user = new User(this.username, this.email, this.password);
+      this.$store.dispatch("auth/register", user).then(
         data => {
           this.message = data.message;
           this.successful = true;
           setTimeout(() => {
-             this.$router.push("/login");
-          }, 3000);
-         
+            this.$router.push("/login");
+          }, 2000);
         },
         error => {
           this.message =
