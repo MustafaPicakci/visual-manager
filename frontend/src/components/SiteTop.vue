@@ -12,13 +12,26 @@
       <div class="container">
         <div class="row">
           <div class="offset-md-2 col-lg-8 text-center">
-            <router-link to="/home" tag="button" class="btn btn-danger"
+            <router-link
+              active-class="active-class"
+              exact
+              to="/home"
+              tag="button"
+              class="btn btn-danger"
               ><font-awesome-icon icon="home" /> Anasayfa</router-link
             >
-            <router-link to="/MyImages" tag="button" class="btn btn-info"
+            <router-link
+              active-class="active-class"
+              to="/MyImages"
+              tag="button"
+              class="btn btn-info"
               ><font-awesome-icon icon="images" /> Galeri</router-link
             >
-            <router-link to="/MyImages" tag="button" class="btn btn-warning"
+            <router-link
+              active-class="active-class"
+              to="/MyImages"
+              tag="button"
+              class="btn btn-warning"
               ><font-awesome-icon icon="user" /> Profil</router-link
             >
             <button @click.prevent="logOut" class="btn btn-dark">
@@ -46,7 +59,10 @@ export default {
 };
 </script>
 <style scoped>
-.h3{
+.active-class {
+  border: 1px solid white;
+}
+.h3 {
   text-shadow: 2px 2px;
 }
 .blue {
