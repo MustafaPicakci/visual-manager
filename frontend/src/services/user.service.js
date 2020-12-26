@@ -1,23 +1,18 @@
-import axios from 'axios';
-import authHeader from './auth-header';
+import axios from "axios";
+import authHeader from "./auth-header";
 
-const API_URL = 'http://localhost:3000/api/test/';
+const API_URL = "http://localhost:3000/api/user/";
 
 class UserService {
-  getPublicContent() {
-    return axios.get(API_URL + 'all');
-  }
+  changePassword(userId, username) {
+    console.log(authHeader())
+    let data = new FormData();
+    data.append("id", userId);
+    data.append("username", username);
 
-  getUserBoard() {
-    return axios.get(API_URL + 'user', { headers: authHeader() });
-  }
-
-  getModeratorBoard() {
-    return axios.get(API_URL + 'mod', { headers: authHeader() });
-  }
-
-  getAdminBoard() {
-    return axios.get(API_URL + 'admin', { headers: authHeader() });
+    return axios.post(API_URL + "change/username", data, {
+      headers: authHeader()
+    });
   }
 }
 
