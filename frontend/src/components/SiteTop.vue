@@ -29,7 +29,7 @@
             >
             <router-link
               active-class="active-class"
-              to="/MyImages"
+              to="/profile"
               tag="button"
               class="btn btn-warning"
               ><font-awesome-icon icon="user" /> Profil</router-link

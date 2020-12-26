@@ -8,7 +8,7 @@
             <input
               type="text"
               class="form-control center"
-              placeholder="Search by tag"
+              placeholder="Etiket ile ara"
               v-model="searchTag"
               @keypress.enter="
                 pageNumber = 1;
@@ -18,14 +18,14 @@
           </div>
           <div class="input-group-append">
             <button
-              class="btn btn-outline-dark"
+              class="btn btn-outline-dark pl-3 pr-3 ml-2"
               type="button"
               @click="
                 pageNumber = 1;
                 retrieveImages();
               "
             >
-              Search
+              Ara
             </button>
           </div>
         </div>
