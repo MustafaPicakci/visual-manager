@@ -21,8 +21,9 @@
       </vue-dropzone>
     </div>
 
-
-    <h1>Etiketlenmeyi bekleyen görseller</h1>
+    <div class="info text-center mt-4 mb-5">
+      <h1>Etiketlenmeyi bekleyen görseller</h1>
+    </div>
     <thumbnail :images="getImages"></thumbnail>
 
     <b-pagination
@@ -102,6 +103,13 @@ export default {
 };
 </script>
 <style scoped>
+.info {
+  position: relative;
+  z-index: 6;
+}
+.info h1 {
+  color: #00b782;
+}
 .dropzone-custom-content {
   position: relative;
 
