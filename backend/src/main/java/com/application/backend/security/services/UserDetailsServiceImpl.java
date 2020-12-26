@@ -29,4 +29,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     String userName = authentication.getName();
     return userRepository.findByUsername(userName);
   }
+
+  public User loadUserById(long id) {
+
+    return userRepository.findById(id).get();
+  }
+
+  @Transactional
+  public void changeUserName(long userId, String username) {
+    userRepository.changeUserName(userId, username);
+  }
 }

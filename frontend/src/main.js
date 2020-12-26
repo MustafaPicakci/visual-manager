@@ -21,10 +21,19 @@ import {
   faUserPlus,
   faSignInAlt,
   faSignOutAlt,
-  faImages
+  faImages,
+  faEdit
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faImages);
+library.add(
+  faHome,
+  faUser,
+  faUserPlus,
+  faSignInAlt,
+  faSignOutAlt,
+  faImages,
+  faEdit
+);
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
