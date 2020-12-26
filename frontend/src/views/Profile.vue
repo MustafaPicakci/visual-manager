@@ -344,10 +344,8 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import UserService from "../services/user.service";
 export default {
   name: "Profile",
-  data(){
-    return{
-      
-    }
+  data() {
+    return {};
   },
   computed: {
     currentUser() {
@@ -362,35 +360,42 @@ export default {
   methods: {
     editUsername() {
       console.log(this.currentUser);
-      this.$swal({
-        title: "Yeni kullanıcı adınızı giriniz.",
-        input: "text",
-        inputAttributes: {
-          autocapitalize: "off"
-        },
-        showCancelButton: true,
-        confirmButtonText: "Look up",
-        showLoaderOnConfirm: true,
-        preConfirm: username => {
-          return UserService.changePassword(this.currentUser.id, username)
-            .then(response => {
-              this.$store.commit("auth/loginSuccess", response.data);
-              let user = JSON.parse(localStorage.getItem("user"));
-              user.username = username;
-              localStorage.setItem("user", JSON.stringify(user));
-            })
-            .catch(error => {
-              this.$swal.showValidationMessage(`Request failed: ${error}`);
-            });
-        },
-        allowOutsideClick: () => !this.$swal.isLoading()
-      }).then(result => {
-        if (result.isConfirmed) {
-          this.$swal({
-            title: `Kullanıcı adını değiştirildi`
-          });
-        }
-      });
+
+      this.$swal
+        .mixin({
+          input: "text",
+          confirmButtonText: "Next &rarr;",
+          showCancelButton: true,
+          progressSteps: ["1", "2"]
+        })
+        .queue([
+          {
+            title: "Yeni kullanıcı adınızı giriniz."
+          },
+          "Şifrenizi giriniz"
+        ])
+        .then(result => {
+          if (result.value) {
+            UserService.changeUsername(
+              this.currentUser.id,
+              result.value[0],
+              result.value[1]
+            )
+              .then(response => {
+                this.$store.commit("auth/loginSuccess", response.data);
+                let user = JSON.stringify(response.data);
+
+                localStorage.setItem("user", user);
+
+                this.$swal({
+                  title: `Kullanıcı adını değiştirildi`
+                });
+              })
+              .catch(error => {
+                this.$swal.showValidationMessage(`Request failed: ${error}`);
+              });
+          }
+        });
     }
   }
 };
