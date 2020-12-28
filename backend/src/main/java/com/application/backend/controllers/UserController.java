@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.application.backend.models.Images;
+import com.application.backend.models.Tags;
 import com.application.backend.models.User;
 import com.application.backend.payload.response.JwtResponse;
 import com.application.backend.security.jwt.JwtUtils;
@@ -62,6 +65,7 @@ public class UserController {
             userDetails.getId(),
             userDetails.getUsername(),
             userDetails.getEmail(),
+            userDetails.getProfilePhoto(),
             roles));
   }
 
@@ -69,4 +73,42 @@ public class UserController {
   public long totalImage(@RequestParam long userId) {
     return imageServiceImpl.totalImages(userId);
   }
+
+  @PostMapping("/change/profilePhoto")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public ResponseEntity<JwtResponse> changeProfilePhoto(User user, MultipartFile file) {
+    byte[] profilePhoto = null;
+    try {
+      profilePhoto = file.getBytes();
+      user.setProfilePhoto(profilePhoto);
+    } catch (Exception e) {
+    	System.out.println(e ); 
+    }
+    userDetailServiceImpl.changeProfilePhoto(user);
+    
+    Authentication authentication =
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        Long expirationDate = jwtUtils.getExpitarionDate();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> roles =
+            userDetails
+                .getAuthorities()
+                .stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(
+            new JwtResponse(
+                expirationDate,
+                jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                userDetails.getProfilePhoto(),
+                roles));
+  };
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Loader :status="loaderStatus"></Loader>
     <div class="main-body">
       <!-- Breadcrumb -->
 
@@ -9,13 +10,23 @@
             <div class="card-body">
               <div class="d-flex flex-column align-items-center text-center">
                 <img
-                  src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                  :src="'data:image/jpeg;base64,' + currentUser.profilePhoto"
                   alt="Admin"
-                  class="rounded-circle"
-                  width="150"
+                  class="rounded-circle "
+                  width="120"
+                  height="120"
                 />
+                <div>
+                  <label for="profilePhoto">Profil fotoğrafını değiştir</label>
+                  <input
+                    id="profilePhoto"
+                    type="file"
+                    accept="image/*"
+                    @change="changeImage($event)"
+                  />
+                </div>
                 <div class="mt-3">
-                  <h4>John Doe</h4>
+                  <h4>{{ currentUser.username }}</h4>
                 </div>
               </div>
             </div>
@@ -149,7 +160,9 @@ import UserService from "../services/user.service";
 export default {
   name: "Profile",
   data() {
-    return {};
+    return {
+      loaderStatus: true
+    };
   },
   computed: {
     ...mapGetters(["getTotalElements"]),
@@ -162,8 +175,53 @@ export default {
       this.$router.push("/login");
     }
     this.$store.dispatch("getTotalImages", this.currentUser.id);
+
+    this.loaderStatus = false;
   },
   methods: {
+    changeImage(event) {
+      let file = event.target.files[0];
+      if (file.size <= 8000000) {
+        this.$swal
+          .mixin({
+            input: "text",
+            confirmButtonText: "Next &rarr;",
+            showCancelButton: true,
+            progressSteps: ["1"]
+          })
+          .queue([
+            {
+              title: "Şifrenizi giriniz."
+            }
+          ])
+          .then(result => {
+            if (result.value) {
+              UserService.changeProfilePhoto(
+                this.currentUser.id,
+                this.currentUser.username,
+                result.value[0],
+                file
+              )
+                .then(response => {
+                  this.$store.commit("auth/loginSuccess", response.data);
+                  let user = JSON.stringify(response.data);
+
+                  localStorage.setItem("user", user);
+
+                  this.$swal({
+                    title: `Profil fotoğrafı değiştirildi`
+                  });
+                })
+                .catch(error => {
+                  this.$swal.showValidationMessage(`Request failed: ${error}`);
+                });
+            }
+          });
+      } else {
+        file = null;
+        alert("maksimum 80mb boyutunda görsel seçebilirsiniz.");
+      }
+    },
     editUsername() {
       console.log(this.currentUser);
 
