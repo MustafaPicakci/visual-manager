@@ -12,8 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.application.backend.models.User;
@@ -21,12 +23,14 @@ import com.application.backend.payload.response.JwtResponse;
 import com.application.backend.security.jwt.JwtUtils;
 import com.application.backend.security.services.UserDetailsImpl;
 import com.application.backend.security.services.UserDetailsServiceImpl;
+import com.application.backend.services.ImageServiceImpl;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
   @Autowired UserDetailsServiceImpl userDetailServiceImpl;
+  @Autowired ImageServiceImpl imageServiceImpl;
   @Autowired AuthenticationManager authenticationManager;
   @Autowired JwtUtils jwtUtils;
 
@@ -59,5 +63,10 @@ public class UserController {
             userDetails.getUsername(),
             userDetails.getEmail(),
             roles));
+  }
+
+  @GetMapping("/totalImages")
+  public long totalImage(@RequestParam long userId) {
+    return imageServiceImpl.totalImages(userId);
   }
 }

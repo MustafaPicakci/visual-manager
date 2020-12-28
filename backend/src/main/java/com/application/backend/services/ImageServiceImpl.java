@@ -183,7 +183,12 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  public Images findById(long id) { 
+  public Images findById(long id) {
     return imageRepository.findById(id).get();
+  }
+
+  @Override
+  public long totalImages(long userId) {
+    return imageRepository.countByUserId(userId);
   }
 }

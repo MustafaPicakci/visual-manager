@@ -15,6 +15,15 @@ class UserService {
       headers: authHeader()
     });
   }
+  getTotalImages(userId) {
+    let params = {
+      userId
+    };
+    return axios.get(API_URL + "totalImages", {
+      params,
+      headers: authHeader()
+    });
+  }
 }
 
 export default new UserService();
