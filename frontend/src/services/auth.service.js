@@ -13,6 +13,7 @@ class AuthService {
         if (response.data.accessToken) {
           localStorage.setItem('user', JSON.stringify(response.data));
           let user = JSON.parse(localStorage.getItem("user"));
+          console.log(user)
           store.dispatch("auth/setTimeoutTimer", (user.expirationDate - (new Date().getTime()) ));
          // console.log((user.expirationDate - (new Date().getTime()) ))
         }

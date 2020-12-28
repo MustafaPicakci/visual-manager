@@ -1,5 +1,7 @@
 package com.application.backend.security.services;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.application.backend.models.User;
 import com.application.backend.repository.UserRepository;
@@ -38,5 +41,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Transactional
   public void changeUserName(long userId, String username) {
     userRepository.changeUserName(userId, username);
+  }
+
+  public void changeProfilePhoto(User user) {
+
+    userRepository.changeProfilePhoto(user.getId(), user.getProfilePhoto());
   }
 }

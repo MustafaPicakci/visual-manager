@@ -12,7 +12,6 @@ import javax.persistence.*;
       @UniqueConstraint(columnNames = "username"),
       @UniqueConstraint(columnNames = "email")
     })
-
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +23,16 @@ public class User {
 
   private String password;
 
+  @Lob
+  @Column(nullable = true)
+  private byte[] profilePhoto;
+
   @OneToMany(targetEntity = Images.class, mappedBy = "user", cascade = CascadeType.ALL)
   private Set<Images> images;
 
-  @ManyToMany(fetch = FetchType.LAZY,cascade =  {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToMany(
+      fetch = FetchType.LAZY,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
       name = "user_roles",
       joinColumns = @JoinColumn(name = "user_id"),
@@ -52,6 +57,14 @@ public class User {
 
   public Long getId() {
     return id;
+  }
+
+  public byte[] getProfilePhoto() {
+    return profilePhoto;
+  }
+
+  public void setProfilePhoto(byte[] profilePhoto) {
+    this.profilePhoto = profilePhoto;
   }
 
   public void setId(Long id) {

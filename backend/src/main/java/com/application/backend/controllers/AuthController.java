@@ -30,8 +30,7 @@ import com.application.backend.repository.UserRepository;
 import com.application.backend.security.jwt.JwtUtils;
 import com.application.backend.security.services.UserDetailsImpl;
 
-
-@CrossOrigin(origins = "*", allowedHeaders ="*" , maxAge = 3600)
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -55,7 +54,7 @@ public class AuthController {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String jwt = jwtUtils.generateJwtToken(authentication);
-    Long expirationDate=jwtUtils.getExpitarionDate();
+    Long expirationDate = jwtUtils.getExpitarionDate();
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
     List<String> roles =
         userDetails
@@ -66,7 +65,13 @@ public class AuthController {
 
     return ResponseEntity.ok(
         new JwtResponse(
-           expirationDate ,jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+            expirationDate,
+            jwt,
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getEmail(),
+            userDetails.getProfilePhoto(),
+            roles));
   }
 
   @PostMapping("/signup")
@@ -92,11 +97,10 @@ public class AuthController {
     Set<Role> roles = new HashSet<>();
 
     if (strRoles == null) {
-      Role userRole =new Role();
-      userRole.setName(ERole.ROLE_USER);
-         /* roleRepository
+      Role userRole =
+          roleRepository
               .findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));*/
+              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
       roles.add(userRole);
     } else {
       strRoles.forEach(
