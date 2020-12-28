@@ -22,11 +22,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "images")
+@Table(
+    name = "images",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"imageName", "user_id"})})
 public class Images {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,7 +72,7 @@ public class Images {
   private User user;
 
   @JsonIgnore
-  @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "dbFileId", nullable = false)
   private OriginalImageFile originalImageFile;
 
