@@ -111,7 +111,7 @@ export default {
   color: #00b782;
 }
 .dropzone-custom-content {
-  position: relative;
+  position: absolute;
 
   left: 50%;
   transform: translate(-50%, -50%);
@@ -133,6 +133,5 @@ export default {
   background: rgba(155, 211, 156, 0.08);
   border: 5 px solid rgba(155, 211, 156, 0.1);
   border-radius: 15px;
-  height: 200px;
 }
 </style>
