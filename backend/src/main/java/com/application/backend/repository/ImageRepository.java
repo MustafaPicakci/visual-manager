@@ -22,4 +22,6 @@ public interface ImageRepository extends JpaRepository<Images, Long> {
   Page<Images> findByUserAndTagsIsNull(User user, Pageable pageable);
 
   boolean existsByTagsId(long tagId);
+
+  long countByUserId(long UserId);
 }
