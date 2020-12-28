@@ -2,6 +2,7 @@ import { router } from "../router";
 import ImageService from "../services/image.service";
 import Vue from "vue";
 import imageService from "../services/image.service";
+import userService from "../services/user.service";
 
 export const imageOperations = {
   state: {
@@ -11,15 +12,20 @@ export const imageOperations = {
     totalElements: 0
   },
   actions: {
+    getTotalImages({ commit }, payload) {
+      userService.getTotalImages(payload).then(response => {
+        commit("setTotalElements", response.data);
+      });
+    },
     getAllUserImages({ commit }, payload) {
       return new Promise((resolve, reject) => {
         ImageService.getAllUserImages(payload)
           .then(response => {
             let payload = response.data.totalElements;
-              if(response.data.content.length){
-            commit("setImages", response.data.content);
-            commit("setTotalElements", payload);
-          }
+            if (response.data.content.length) {
+              commit("setImages", response.data.content);
+              commit("setTotalElements", payload);
+            }
             resolve(response.data);
           })
           .catch(response => {

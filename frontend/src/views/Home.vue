@@ -10,7 +10,7 @@
         @vdropzone-success="vsuccess"
         id="dropzone"
       >
-        <div class="dropzone-custom-content pt-5">
+        <div class="dropzone-custom-content pt-4">
           <h3 class="dropzone-custom-title">
             Görselleri Buraya sürükle ve bırak !
           </h3>
@@ -111,7 +111,7 @@ export default {
   color: #00b782;
 }
 .dropzone-custom-content {
-  position: absolute;
+  position: relative;
 
   left: 50%;
   transform: translate(-50%, -50%);

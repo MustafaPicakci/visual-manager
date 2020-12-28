@@ -9,8 +9,7 @@ class ImageService {
       .get(
         API_URL + "downloadFile/" + imageId,
 
-        { headers: authHeader(), responseType: 'blob' },
-     
+        { headers: authHeader(), responseType: "blob" }
       )
       .then(response => {
         console.log(response);
@@ -22,8 +21,8 @@ class ImageService {
         link.click();
       });
   }
+
   getUntagedImages(params) {
-    console.log(params);
     return axios.get(API_URL + "list", { params, headers: authHeader() });
   }
   getAllUserImages(params) {
