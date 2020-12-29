@@ -10,16 +10,40 @@
             <div class="card-body">
               <div class="d-flex flex-column align-items-center text-center">
                 <img
+                  v-if="currentUser.profilePhoto"
                   :src="'data:image/jpeg;base64,' + currentUser.profilePhoto"
-                  alt="Admin"
+                  alt="profilePhoto"
                   class="rounded-circle "
                   width="120"
                   height="120"
                 />
+                <img
+                  v-else
+                  id="profile-img"
+                  src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                  class="profile-img-card rounded-circle"
+                  alt="profilePhoto"
+                  width="120"
+                  height="120"
+                />
                 <div>
-                  <label for="profilePhoto">Profil fotoğrafını değiştir</label>
+                  <label
+                    v-if="currentUser.profilePhoto"
+                    class="mt-3 badge bg-primary p-2"
+                    style=" cursor:pointer;  color:white"
+                    for="profilePhoto"
+                    >Profil fotoğrafını değiştir</label
+                  >
+                  <label
+                    v-else
+                    class="mt-3 badge bg-primary p-2"
+                    style=" cursor:pointer; color:white"
+                    for="profilePhoto"
+                    >Profil fotoğrafı ekle</label
+                  >
                   <input
                     id="profilePhoto"
+                    style="display: none;"
                     type="file"
                     accept="image/*"
                     @change="changeImage($event)"
