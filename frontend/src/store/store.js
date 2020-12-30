@@ -1,16 +1,23 @@
-import Axios from "axios";
 import Vue from "vue";
 import Vuex from "vuex";
 
 import { auth } from "./auth.module";
 import { imageOperations } from "./image.module";
-import authHeader from "../services/auth-header";
+import userService from "../services/user.service";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {},
   mutations: {},
-  actions: {},
+  actions: {
+    resetPassword({ commit }, email) {
+      console.log(email);
+      return userService.resetPassword(email);
+    },
+    newPassword({ commit }, payload) {
+      return userService.newPassword(payload);
+    }
+  },
   getters: {},
   modules: {
     auth,
