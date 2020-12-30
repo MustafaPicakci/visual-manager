@@ -1,16 +1,11 @@
 package com.application.backend.controllers;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +18,11 @@ import com.application.backend.models.Role;
 import com.application.backend.models.User;
 import com.application.backend.payload.request.LoginRequest;
 import com.application.backend.payload.request.SignupRequest;
-import com.application.backend.payload.response.JwtResponse;
 import com.application.backend.payload.response.MessageResponse;
 import com.application.backend.repository.RoleRepository;
 import com.application.backend.repository.UserRepository;
-import com.application.backend.security.jwt.JwtUtils;
-import com.application.backend.security.services.UserDetailsImpl;
+
+import com.application.backend.security.services.UserDetailsServiceImpl;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
@@ -42,48 +36,25 @@ public class AuthController {
 
   @Autowired PasswordEncoder encoder;
 
-  @Autowired JwtUtils jwtUtils;
+  @Autowired UserDetailsServiceImpl userDetailsServiceImpl;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(), loginRequest.getPassword()));
-
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    String jwt = jwtUtils.generateJwtToken(authentication);
-    Long expirationDate = jwtUtils.getExpitarionDate();
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-    List<String> roles =
-        userDetails
-            .getAuthorities()
-            .stream()
-            .map(item -> item.getAuthority())
-            .collect(Collectors.toList());
-
-    return ResponseEntity.ok(
-        new JwtResponse(
-            expirationDate,
-            jwt,
-            userDetails.getId(),
-            userDetails.getUsername(),
-            userDetails.getEmail(),
-            userDetails.getProfilePhoto(),
-            roles));
+    return userDetailsServiceImpl.AuthenticateUser(
+        loginRequest.getUsername(), loginRequest.getPassword());
   }
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest()
-          .body(new MessageResponse("Error: Username is already taken!"));
+          .body(new MessageResponse("Error: Bu kullanıcı adı daha önce alınmış!"));
     }
 
     if (userRepository.existsByEmail(signUpRequest.getEmail())) {
       return ResponseEntity.badRequest()
-          .body(new MessageResponse("Error: Email is already in use!"));
+          .body(new MessageResponse("Error: Bu E-posta daha önce alınmış!"));
     }
 
     // Create new user's account
@@ -135,6 +106,6 @@ public class AuthController {
     user.setRoles(roles);
     userRepository.save(user);
 
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    return ResponseEntity.ok(new MessageResponse("Kullanıcı başarı ile kaydedildi!"));
   }
 }
