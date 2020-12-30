@@ -82,33 +82,68 @@ public class UserController {
       profilePhoto = file.getBytes();
       user.setProfilePhoto(profilePhoto);
     } catch (Exception e) {
-    	System.out.println(e ); 
+      System.out.println(e);
     }
     userDetailServiceImpl.changeProfilePhoto(user);
-    
+
     Authentication authentication =
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        Long expirationDate = jwtUtils.getExpitarionDate();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles =
-            userDetails
-                .getAuthorities()
-                .stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
+    Long expirationDate = jwtUtils.getExpitarionDate();
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    List<String> roles =
+        userDetails
+            .getAuthorities()
+            .stream()
+            .map(item -> item.getAuthority())
+            .collect(Collectors.toList());
 
-        return ResponseEntity.ok(
-            new JwtResponse(
-                expirationDate,
-                jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                userDetails.getProfilePhoto(),
-                roles));
+    return ResponseEntity.ok(
+        new JwtResponse(
+            expirationDate,
+            jwt,
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getEmail(),
+            userDetails.getProfilePhoto(),
+            roles));
   };
+
+  @PostMapping("/change/password")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public ResponseEntity<JwtResponse> changePassword(User user) {
+    System.out.println(user.getId() + "--" + user.getPassword());
+    String password=null;
+    password=user.getPassword();
+    user = userDetailServiceImpl.loadUserById(user.getId());
+    
+    userDetailServiceImpl.updatePassword(user, password);
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(user.getUsername(), password));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
+    Long expirationDate = jwtUtils.getExpitarionDate();
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    List<String> roles =
+        userDetails
+            .getAuthorities()
+            .stream()
+            .map(item -> item.getAuthority())
+            .collect(Collectors.toList());
+
+    return ResponseEntity.ok(
+        new JwtResponse(
+            expirationDate,
+            jwt,
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getEmail(),
+            userDetails.getProfilePhoto(),
+            roles));
+  }
 }

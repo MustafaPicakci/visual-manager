@@ -94,7 +94,7 @@
                   ####
                 </div>
                 <div class="col-sm-4 text-center">
-                  <button class="btn btn-primary">
+                  <button @click="changePassword()" class="btn btn-primary">
                     <font-awesome-icon icon="edit" />
                   </button>
                 </div>
@@ -280,6 +280,41 @@ export default {
 
                 this.$swal({
                   title: `Kullanıcı adını değiştirildi`
+                });
+              })
+              .catch(error => {
+                this.$swal.showValidationMessage(`Request failed: ${error}`);
+              });
+          }
+        });
+    },
+    changePassword() {
+      this.$swal
+        .mixin({
+          input: "text",
+          confirmButtonText: "Next &rarr;",
+          showCancelButton: true,
+          progressSteps: ["1"]
+        })
+        .queue([
+          {
+            title: "Yeni Şifrenizi giriniz."
+          }
+        ])
+        .then(result => {
+          if (result.value) {
+            UserService.changePassword(this.currentUser.id, result.value[0])
+              .then(response => {
+                this.$store.commit("auth/loginSuccess", response.data);
+                let user = JSON.stringify(response.data);
+
+                localStorage.setItem("user", user);
+
+                this.$swal({
+                  icon: "success",
+                  title: "Şifreniz başarı ile değiştirildi.",
+                  showConfirmButton: false,
+                  timer: 1500
                 });
               })
               .catch(error => {

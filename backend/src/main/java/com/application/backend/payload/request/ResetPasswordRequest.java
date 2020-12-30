@@ -9,7 +9,7 @@ public class ResetPasswordRequest {
     return token;
   }
 
-  public void setToekn(String token) {
+  public void setToken(String token) {
     this.token = token;
   }
 
