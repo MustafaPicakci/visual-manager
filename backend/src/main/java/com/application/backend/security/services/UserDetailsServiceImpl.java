@@ -1,8 +1,12 @@
 package com.application.backend.security.services;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +15,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.application.backend.models.User;
+import com.application.backend.payload.response.JwtResponse;
 import com.application.backend.repository.UserRepository;
+import com.application.backend.security.jwt.JwtUtils;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired UserRepository userRepository;
   @Autowired PasswordEncoder encoder;
+  @Autowired AuthenticationManager authenticationManager;
+  @Autowired JwtUtils jwtUtils;
 
   @Override
   @Transactional
@@ -57,8 +64,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       userRepository.save(user);
     } else {
       // throw new CustomerNotFoundException("Could not find any customer with the email " + email);
-    	
-    	throw new Exception("bu maile sahip bir kullanıcı bulunamadı");
+
+      throw new Exception("bu maile sahip bir kullanıcı bulunamadı");
     }
   }
 
@@ -73,5 +80,32 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     user.setResetPasswordToken(null);
     userRepository.save(user);
+  }
+
+  public ResponseEntity<?> AuthenticateUser(String username, String password) {
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(username, password));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
+    Long expirationDate = jwtUtils.getExpitarionDate();
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    List<String> roles =
+        userDetails
+            .getAuthorities()
+            .stream()
+            .map(item -> item.getAuthority())
+            .collect(Collectors.toList());
+
+    return ResponseEntity.ok(
+        new JwtResponse(
+            expirationDate,
+            jwt,
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getEmail(),
+            userDetails.getProfilePhoto(),
+            roles));
   }
 }
