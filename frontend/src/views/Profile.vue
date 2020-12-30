@@ -194,13 +194,14 @@ export default {
       return this.$store.state.auth.user;
     }
   },
-  mounted() {
+  created() {
     if (!this.currentUser) {
       this.$router.push("/login");
     }
-    this.$store.dispatch("getTotalImages", this.currentUser.id);
 
-    this.loaderStatus = false;
+    setTimeout(() => {
+      this.loaderStatus = false;
+    }, 350);
   },
   methods: {
     changeImage(event) {
