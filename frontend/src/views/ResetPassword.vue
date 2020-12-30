@@ -33,11 +33,7 @@
         </div>
       </form>
 
-      <div
-        v-if="message"
-        class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
-      >
+      <div v-if="message" class="alert alert-danger">
         {{ message }}
       </div>
     </div>
@@ -52,7 +48,7 @@ import {
   sameAs,
   between
 } from "vuelidate/lib/validators";
-import userService from "../services/user.service";
+
 export default {
   name: "ResetPassword",
   data() {
@@ -74,8 +70,8 @@ export default {
       this.message = "";
       this.submitted = true;
       this.loading = true;
-      userService
-        .resetPassword(this.email)
+      this.$store
+        .dispatch("resetPassword", this.email)
         .then(response => {
           this.loading = false;
           this.$swal({

@@ -1,7 +1,5 @@
-import { router } from "../router";
 import ImageService from "../services/image.service";
 import Vue from "vue";
-import imageService from "../services/image.service";
 import userService from "../services/user.service";
 
 export const imageOperations = {

@@ -75,7 +75,6 @@ import {
   maxLength,
   sameAs
 } from "vuelidate/lib/validators";
-import userService from "../services/user.service";
 
 export default {
   name: "NewPassword",
@@ -110,9 +109,9 @@ export default {
     handleForm() {
       this.message = "";
       this.submitted = true;
-      let params = { token: this.$route.query.token, password: this.password };
-      userService
-        .newPassword(params)
+      let payload = { token: this.$route.query.token, password: this.password };
+      this.$store
+        .dispatch("newPassword", payload)
         .then(response => {
           this.message = response.data.message;
           this.$swal({

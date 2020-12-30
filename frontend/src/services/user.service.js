@@ -6,7 +6,6 @@ const API_URL = "http://localhost:3000/api/user/";
 class UserService {
   resetPassword(email) {
     console.log(email);
-
     return axios.post(
       "http://localhost:3000/api/forgot_password/email/" + email
     );
