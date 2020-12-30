@@ -11,7 +11,6 @@ export default new Vuex.Store({
   mutations: {},
   actions: {
     resetPassword({ commit }, email) {
-      console.log(email);
       return userService.resetPassword(email);
     },
     newPassword({ commit }, payload) {

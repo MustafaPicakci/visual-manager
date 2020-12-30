@@ -21,6 +21,14 @@ class UserService {
       }
     );
   }
+  changePassword(userId, newPassword) {
+    let user = new FormData();
+    user.append("id", userId);
+    user.append("password", newPassword);
+    return axios.post(API_URL + "change/password", user, {
+      headers: { ...authHeader(), "Content-Type": "application/json" }
+    });
+  }
   changeProfilePhoto(userId, username, password, file) {
     console.log(username);
     let data = new FormData();

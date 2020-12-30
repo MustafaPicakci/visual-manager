@@ -83,6 +83,7 @@ export default {
           this.$router.push("/login");
         })
         .catch(error => {
+           this.loading = false;
           this.message =
             (error.response &&
               error.response.data &&
