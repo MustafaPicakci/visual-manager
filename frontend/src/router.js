@@ -2,6 +2,8 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Login from "./views/Login.vue";
+import ResetPassword from "./views/ResetPassword.vue";
+import NewPassword from "./views/NewPassword.vue";
 import Register from "./views/Register.vue";
 import Profile from "./views/Profile.vue";
 import BoardAdmin from "./views/BoardAdmin.vue";
@@ -37,6 +39,16 @@ export const router = new Router({
     {
       path: "/register",
       component: Register
+    },
+    {
+      path: "/resetPassword",
+      component: ResetPassword
+    },
+    {
+      path: "/newPassword",
+      component: NewPassword,
+      name: "NewPassword",
+      props: route => ({ query: route.query.token })
     },
     {
       path: "/profile",
