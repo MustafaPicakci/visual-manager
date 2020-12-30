@@ -3,11 +3,6 @@ import store from "../store/store";
 const API_URL = "http://localhost:3000/api/auth/";
 
 class AuthService {
-  resetPassword(email) {
-    return axios.post(API_URL + "forgot_password", {
-      email
-    });
-  }
   login(user) {
     return axios
       .post(API_URL + "signin", {
