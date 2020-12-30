@@ -56,12 +56,16 @@
           <router-link to="/register"
             ><a class="nav-link" href="#">Kayıt ol</a>
           </router-link>
+          <router-link to="/ResetPassword"
+            ><a class="nav-link" href="#">Şifremi unuttum</a>
+          </router-link>
         </div>
         <div class="form-group">
           <div v-if="message" class="alert alert-danger" role="alert">
             {{ message }}
           </div>
         </div>
+       
       </form>
     </div>
   </div>

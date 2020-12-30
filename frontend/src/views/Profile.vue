@@ -233,7 +233,10 @@ export default {
                   localStorage.setItem("user", user);
 
                   this.$swal({
-                    title: `Profil fotoğrafı değiştirildi`
+                    icon: "success",
+                    title: "Profil fotoğrafınız başarı ile değiştirildi.",
+                    showConfirmButton: false,
+                    timer: 1500
                   });
                 })
                 .catch(error => {

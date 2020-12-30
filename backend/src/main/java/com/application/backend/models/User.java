@@ -27,6 +27,9 @@ public class User {
   @Column(nullable = true)
   private byte[] profilePhoto;
 
+  @Column(name = "reset_password_token")
+  private String resetPasswordToken;
+
   @OneToMany(targetEntity = Images.class, mappedBy = "user", cascade = CascadeType.ALL)
   private Set<Images> images;
 
@@ -46,14 +49,14 @@ public class User {
     this.email = email;
     this.password = password;
   }
-  /*
-  public Set<Images> getImages() {
-    return images;
+
+  public String getResetPasswordToken() {
+    return resetPasswordToken;
   }
 
-  public void setImages(Set<Images> images) {
-    this.images = images;
-  }*/
+  public void setResetPasswordToken(String resetPasswordToken) {
+    this.resetPasswordToken = resetPasswordToken;
+  }
 
   public Long getId() {
     return id;

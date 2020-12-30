@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ import com.application.backend.repository.UserRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired UserRepository userRepository;
+  @Autowired PasswordEncoder encoder;
 
   @Override
   @Transactional
@@ -46,5 +48,30 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public void changeProfilePhoto(User user) {
 
     userRepository.changeProfilePhoto(user.getId(), user.getProfilePhoto());
+  }
+
+  public void updateResetPasswordToken(String token, String email) throws Exception {
+    User user = userRepository.findByEmail(email);
+    if (user != null) {
+      user.setResetPasswordToken(token);
+      userRepository.save(user);
+    } else {
+      // throw new CustomerNotFoundException("Could not find any customer with the email " + email);
+    	
+    	throw new Exception("bu maile sahip bir kullanıcı bulunamadı");
+    }
+  }
+
+  public User getByResetPasswordToken(String token) {
+    return userRepository.findByResetPasswordToken(token);
+  }
+
+  public void updatePassword(User user, String newPassword) {
+    String encodedPassword = encoder.encode(newPassword);
+
+    user.setPassword(encodedPassword);
+
+    user.setResetPasswordToken(null);
+    userRepository.save(user);
   }
 }
