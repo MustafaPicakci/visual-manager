@@ -96,7 +96,6 @@ public class ImageController {
   @PostMapping("/set/tag")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images setTag(Tags data) {
-
     return imageServiceImpl.setTag(data.getImages().get(0).getId(), data.getTagName());
   };
 

@@ -65,7 +65,10 @@ export default {
       let matchedTag = false;
       if (text.value.length > 0) {
         this.tags.forEach(tag => {
-          if (tag.tagName.toLowerCase() === text.value.toLowerCase()) {
+          if (
+            tag.tagName.toLocaleLowerCase("tr") ===
+            text.value.toLocaleLowerCase("tr")
+          ) {
             matchedTag = true;
           }
         });
@@ -106,9 +109,20 @@ export default {
             .dispatch("unlinkTag", payload)
             .then(data => {
               this.tags.splice(this.tags.length - 1, 1); // son elemanı siliyoruz
+              this.$swal({
+                icon: "success",
+                title: "Etiket kaldırıldı",
+                showConfirmButton: false,
+                timer: 1500
+              });
             })
             .catch(data => {
-              alert("etiket silinemedi");
+              this.$swal({
+                icon: "error",
+                title: "Etiket kaldırılamadı",
+                showConfirmButton: false,
+                timer: 1500
+              });
             });
         }
       }
