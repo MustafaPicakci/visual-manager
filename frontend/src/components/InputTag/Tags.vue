@@ -8,7 +8,16 @@
       :index="index"
       @remove-one-tag-event="removeOneTag($event)"
     ></tag>
-    <input type="text" @keydown.enter="addTag" @keydown.delete="removeTag" />
+    <input
+      class="mt-4"
+      type="text"
+      @keydown.enter="addTag"
+      @keydown.delete="removeTag"
+    />
+    <small class="form-text text-muted mt-2"
+      >Etiket eklemek için 'enter' tuşunu, silmek için ise 'X' butonunu veya
+      'Backspace' tuşunu kullanabilirsiniz.
+    </small>
     <div v-if="error" class="error">Bu etiket daha önceden eklenmiş!!</div>
   </div>
 </template>
@@ -52,7 +61,7 @@ export default {
     ...mapGetters(["getTags", "getLastInsertedTag"]),
     addTag(event) {
       let text = event.target;
-      text.value=text.value.trim();
+      text.value = text.value.trim();
       let matchedTag = false;
       if (text.value.length > 0) {
         this.tags.forEach(tag => {

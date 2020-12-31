@@ -4,18 +4,20 @@
       <div v-if="!images.length" class="alert alert-danger" role="alert">
         Hiç görsel yok :(
       </div>
-      <v-modal name="imageInfo">
-        <div>
+      <b-modal id="bv-modal-example" centered hide-footer>
+        <template #modal-title
+          ><h3 class="text-center">Burada etiketlerini düzenleyebilirsin</h3></template
+        >
+        <div class="d-block text-center">
           <app-tags
             :imageId="selectedImageId"
             v-model="imageTags"
             color="primary"
           ></app-tags>
 
-          <button @click="downloadImage(selectedImageId)">indir</button>
+          <button class="mt-4 btn btn-primary"  @click="downloadImage(selectedImageId)">Görseli indir</button>
         </div>
-        This is a modal</v-modal
-      >
+      </b-modal>
 
       <div
         class="col-md-4 col-sm-6 mb-4  item"
@@ -95,7 +97,7 @@ export default {
     },
     imageInfo(image) {
       this.selectImage(image);
-      this.$modal.show("imageInfo");
+      this.$bvModal.show("bv-modal-example");
     },
     selectImage(image) {
       this.imageTags = [];

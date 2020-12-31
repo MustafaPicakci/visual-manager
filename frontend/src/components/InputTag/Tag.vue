@@ -2,8 +2,8 @@
   <span class="tag" :class="selectedTheme">
     <span class="content">{{ tag.tagName }}</span>
     <span @click="$emit('remove-one-tag-event', index)" class="close-btn"
-      >X</span
-    >
+      ><span class="text-danger">X</span>
+    </span>
   </span>
 </template>
 <script>
@@ -53,13 +53,13 @@ export default {
 
 .tag {
   padding: 10px;
+  margin: 5px;
   cursor: default;
-  font-size: 14px;
-  margin-right: 10px;
+
+  display: inline-block;
   border-radius: 5px;
 }
 .tag .close-btn {
-  font-size: 12px;
   cursor: pointer;
 }
 </style>
