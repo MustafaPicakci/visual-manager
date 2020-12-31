@@ -5,7 +5,7 @@ import store from "./store/store";
 import Vuex from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import VModal from "vue-js-modal";
+ 
 import Vuelidate from "vuelidate";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -37,7 +37,7 @@ library.add(
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
-Vue.use(VModal, { componentName: "v-modal" });
+ 
 Vue.use(Vuex);
 Vue.component("Loader", Loader);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
