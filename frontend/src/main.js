@@ -5,7 +5,7 @@ import store from "./store/store";
 import Vuex from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
- 
+
 import Vuelidate from "vuelidate";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -22,7 +22,10 @@ import {
   faSignInAlt,
   faSignOutAlt,
   faImages,
-  faEdit
+  faEdit,
+  faMapMarkerAlt,
+  faPhone,
+  faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -32,12 +35,15 @@ library.add(
   faSignInAlt,
   faSignOutAlt,
   faImages,
-  faEdit
+  faEdit,
+  faMapMarkerAlt,
+  faPhone,
+  faEnvelope
 );
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
- 
+
 Vue.use(Vuex);
 Vue.component("Loader", Loader);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
