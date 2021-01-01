@@ -5,14 +5,17 @@
     <div>
       <router-view />
     </div>
+    <site-footer :currentUser="currentUser"></site-footer>>
   </div>
 </template>
 
 <script>
 import SiteTop from "./components/SiteTop.vue";
+import SiteFooter from "./components/SiteFooter";
 export default {
   components: {
-    SiteTop
+    SiteTop,
+    SiteFooter
   },
 
   computed: {
