@@ -59,6 +59,9 @@ export default {
 };
 </script>
 <style scoped>
+button {
+  margin-bottom: 5px;
+}
 .active-class {
   border: 1px solid white;
 }
@@ -110,7 +113,7 @@ export default {
 }
 
 .site-banner {
-  padding-top: 80px;
+  padding-top: 60px;
 }
 
 .site-banner h2 {
