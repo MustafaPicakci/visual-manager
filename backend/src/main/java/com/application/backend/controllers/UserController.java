@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.application.backend.models.User;
 import com.application.backend.security.services.UserDetailsServiceImpl;
 import com.application.backend.services.ImageServiceImpl;
+import com.application.backend.services.UserServiceImpl;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -21,12 +22,13 @@ import com.application.backend.services.ImageServiceImpl;
 public class UserController {
   @Autowired UserDetailsServiceImpl userDetailServiceImpl;
   @Autowired ImageServiceImpl imageServiceImpl;
+  @Autowired UserServiceImpl userServiceImpl;
 
   @PostMapping("/change/username")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public ResponseEntity<?> changeUserName(User user) {
 
-    userDetailServiceImpl.changeUserName(user.getId(), user.getUsername());
+    userServiceImpl.changeUserName(user.getId(), user.getUsername());
 
     return userDetailServiceImpl.AuthenticateUser(user.getUsername(), user.getPassword());
   }
@@ -46,7 +48,7 @@ public class UserController {
     } catch (Exception e) {
       System.out.println(e);
     }
-    userDetailServiceImpl.changeProfilePhoto(user);
+    userServiceImpl.changeProfilePhoto(user);
 
     return userDetailServiceImpl.AuthenticateUser(user.getUsername(), user.getPassword());
   };
@@ -57,9 +59,9 @@ public class UserController {
 
     String password = null;
     password = user.getPassword();
-    user = userDetailServiceImpl.loadUserById(user.getId());
+    user = userServiceImpl.loadUserById(user.getId());
 
-    userDetailServiceImpl.updatePassword(user, password);
+    userServiceImpl.updatePassword(user, password);
     return userDetailServiceImpl.AuthenticateUser(user.getUsername(), password);
   }
 }

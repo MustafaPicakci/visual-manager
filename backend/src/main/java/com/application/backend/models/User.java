@@ -27,6 +27,8 @@ public class User {
   @Column(nullable = true)
   private byte[] profilePhoto;
 
+  private boolean isActive=true;
+
   @Column(name = "reset_password_token")
   private String resetPasswordToken;
 
@@ -56,6 +58,14 @@ public class User {
 
   public void setResetPasswordToken(String resetPasswordToken) {
     this.resetPasswordToken = resetPasswordToken;
+  }
+
+  public boolean isActive() {
+    return isActive;
+  }
+
+  public void setActive(boolean isActive) {
+    this.isActive = isActive;
   }
 
   public Long getId() {
