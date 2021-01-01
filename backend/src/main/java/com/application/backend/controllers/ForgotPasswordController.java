@@ -1,32 +1,21 @@
 package com.application.backend.controllers;
 
 import java.io.UnsupportedEncodingException;
-
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.application.backend.models.User;
-import com.application.backend.payload.request.LoginRequest;
 import com.application.backend.payload.request.ResetPasswordRequest;
 import com.application.backend.payload.response.MessageResponse;
-import com.application.backend.security.services.UserDetailsServiceImpl;
-
+import com.application.backend.services.UserServiceImpl;
 import net.bytebuddy.utility.RandomString;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
@@ -35,15 +24,14 @@ import net.bytebuddy.utility.RandomString;
 public class ForgotPasswordController {
 
   @Autowired private JavaMailSender mailSender;
-
-  @Autowired private UserDetailsServiceImpl userDetailsServiceImpl;
+  @Autowired private UserServiceImpl userServiceImpl;
 
   @PostMapping("/email/{email}")
   public ResponseEntity<?> processForgotPassword(@PathVariable("email") String email)
       throws UnsupportedEncodingException {
     String token = RandomString.make(30);
     try {
-      userDetailsServiceImpl.updateResetPasswordToken(token, email);
+      userServiceImpl.updateResetPasswordToken(token, email);
       if (email != null) {
         sendEmail(email, token);
       }
@@ -73,13 +61,13 @@ public class ForgotPasswordController {
   public ResponseEntity<?> processResetPassword(
       @RequestBody ResetPasswordRequest resetPasswordRequest) {
 
-    User user = userDetailsServiceImpl.getByResetPasswordToken(resetPasswordRequest.getToken());
+    User user = userServiceImpl.getByResetPasswordToken(resetPasswordRequest.getToken());
     if (user == null) {
 
       return ResponseEntity.badRequest()
           .body(new MessageResponse("Error: Kullanıcı bilgilerine ulaşılamadı!"));
     } else {
-      userDetailsServiceImpl.updatePassword(user, resetPasswordRequest.getPassword());
+      userServiceImpl.updatePassword(user, resetPasswordRequest.getPassword());
     }
 
     return ResponseEntity.ok().body(new MessageResponse("Şifreniz başarı ile değiştirildi!"));
