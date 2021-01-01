@@ -30,9 +30,18 @@
           </div>
         </div>
 
+        <div
+          v-if="!getImages.length"
+          class="alert alert-danger text-center"
+          role="alert"
+        >
+          <p>Hiç görsel Yüklememişsiniz (-_-)</p>
+          <p>Birkaç görsel yüklemeyi denemelisin !</p>
+        </div>
         <thumbnail :images="getImages"></thumbnail>
 
         <b-pagination
+          v-if="getImages.length"
           align="center"
           v-model="pageNumber"
           :total-rows="getTotalElements"

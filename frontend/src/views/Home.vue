@@ -21,12 +21,16 @@
       </vue-dropzone>
     </div>
 
-    <div class="info text-center mt-4 mb-5">
+    <div v-if="getImages.length" class="info text-center mt-4 mb-5">
       <h1>Etiketlenmeyi bekleyen görseller</h1>
+    </div>
+    <div v-else class="alert alert-danger text-center" role="alert">
+      Etiketlenmeyi bekleyen görseliniz yok
     </div>
     <thumbnail :images="getImages"></thumbnail>
 
     <b-pagination
+      v-if="getTotalElements > 0"
       align="center"
       v-model="pageNumber"
       :total-rows="getTotalElements"
