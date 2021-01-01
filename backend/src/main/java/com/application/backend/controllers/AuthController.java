@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ import com.application.backend.repository.RoleRepository;
 import com.application.backend.repository.UserRepository;
 
 import com.application.backend.security.services.UserDetailsServiceImpl;
+import com.application.backend.services.UserServiceImpl;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
@@ -37,12 +39,19 @@ public class AuthController {
   @Autowired PasswordEncoder encoder;
 
   @Autowired UserDetailsServiceImpl userDetailsServiceImpl;
+  @Autowired UserServiceImpl userServiceImpl;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
-    return userDetailsServiceImpl.AuthenticateUser(
-        loginRequest.getUsername(), loginRequest.getPassword());
+    User user = userServiceImpl.findByUsername(loginRequest.getUsername());
+    if (user.isActive()) {
+      return userDetailsServiceImpl.AuthenticateUser(
+          loginRequest.getUsername(), loginRequest.getPassword());
+    } else {
+      return new ResponseEntity<>(
+          new MessageResponse("Hesabınız Aktif durumda değil! "), HttpStatus.FORBIDDEN);
+    }
   }
 
   @PostMapping("/signup")

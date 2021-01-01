@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Modifying
   @Query("update User u set u.username = :username where u.id = :userId")
   void changeUserName(@Param("userId") long userId, @Param("username") String username);
-  
+
   @Transactional
   @Modifying
   @Query("update User u set u.password = :password where u.id = :userId")
@@ -34,7 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   void changeProfilePhoto(@Param("userId") long userId, @Param("profilePhoto") byte[] profilePhoto);
 
   @Query("SELECT u FROM User u WHERE u.email = ?1")
-  public User findByEmail(String email); 
-   
+  public User findByEmail(String email);
+
   public User findByResetPasswordToken(String token);
 }

@@ -1,5 +1,7 @@
 package com.application.backend.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,5 +56,29 @@ public class UserServiceImpl implements UserService {
 
     user.setResetPasswordToken(null);
     userRepository.save(user);
+  }
+
+  @Override
+  public List<User> ListUsers() {
+    return userRepository.findAll();
+  }
+
+  @Override
+  public void blockUser(long id) {
+    User user = userRepository.findById(id).get();
+    user.setActive(false);
+    userRepository.save(user);
+  }
+
+  @Override
+  public void unBlockUser(long id) {
+    User user = userRepository.findById(id).get();
+    user.setActive(true);
+    userRepository.save(user);
+  }
+
+  @Override
+  public User findByUsername(String username) {
+    return userRepository.findByUsername(username);
   }
 }
