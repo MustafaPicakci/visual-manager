@@ -1,12 +1,11 @@
 <template>
   <div class="com-thumb">
     <div class="row">
-      <div v-if="!images.length" class="alert alert-danger" role="alert">
-        Hiç görsel yok :(
-      </div>
       <b-modal id="bv-modal-example" centered hide-footer>
         <template #modal-title
-          ><h3 class="text-center">Burada etiketlerini düzenleyebilirsin</h3></template
+          ><h3 class="text-center">
+            Burada etiketlerini düzenleyebilirsin
+          </h3></template
         >
         <div class="d-block text-center">
           <app-tags
@@ -15,7 +14,12 @@
             color="primary"
           ></app-tags>
 
-          <button class="mt-4 btn btn-primary"  @click="downloadImage(selectedImageId)">Görseli indir</button>
+          <button
+            class="mt-4 btn btn-primary"
+            @click="downloadImage(selectedImageId)"
+          >
+            Görseli indir
+          </button>
         </div>
       </b-modal>
 
