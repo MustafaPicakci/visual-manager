@@ -28,7 +28,6 @@ export default new Vuex.Store({
     },
     listUsers({ commit }) {
       adminService.listUsers().then(response => {
-        console.log(response.data);
         commit("setUsers", response.data);
       });
     },
