@@ -25,7 +25,8 @@ import {
   faEdit,
   faMapMarkerAlt,
   faPhone,
-  faEnvelope
+  faEnvelope,
+  faUserShield
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -38,7 +39,8 @@ library.add(
   faEdit,
   faMapMarkerAlt,
   faPhone,
-  faEnvelope
+  faEnvelope,
+  faUserShield
 );
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
