@@ -4,12 +4,34 @@ import Vuex from "vuex";
 import { auth } from "./auth.module";
 import { imageOperations } from "./image.module";
 import userService from "../services/user.service";
+import adminService from "../services/admin.service";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    users: []
+  },
   actions: {
+    blockUser({ commit }, payload) {
+      adminService.blockUser(payload).then(response => {
+        if (response.status == 200) {
+          commit("changeUserStatus", response.data);
+        }
+      });
+    },
+    unBlockUser({ commit }, payload) {
+      adminService.unBlockUser(payload).then(response => {
+        if (response.status == 200) {
+          commit("changeUserStatus", response.data);
+        }
+      });
+    },
+    listUsers({ commit }) {
+      adminService.listUsers().then(response => {
+        console.log(response.data);
+        commit("setUsers", response.data);
+      });
+    },
     resetPassword({ commit }, email) {
       return userService.resetPassword(email);
     },
@@ -17,7 +39,26 @@ export default new Vuex.Store({
       return userService.newPassword(payload);
     }
   },
-  getters: {},
+  mutations: {
+    setUsers(state, payload) {
+      console.log(payload);
+      this.state.users = payload;
+    },
+    changeUserStatus(state, payload) {
+      console.log(payload);
+      for (let i = 0; i < state.users.length; i++) {
+        if (state.users[i].id == payload.id) {
+          Vue.set(state.users, i, payload);
+        }
+      }
+    }
+  },
+
+  getters: {
+    getUsers(state) {
+      return state.users;
+    }
+  },
   modules: {
     auth,
     imageOperations
