@@ -34,6 +34,20 @@
               class="btn btn-warning"
               ><font-awesome-icon icon="user" /> Profil</router-link
             >
+            <template
+              v-if="
+                currentUser.roles[0] == 'ROLE_ADMIN' ||
+                  currentUser.roles[1] == 'ROLE_ADMIN'
+              "
+            >
+              <router-link
+                active-class="active-class"
+                to="/admin"
+                tag="button"
+                class="btn btn-secondary"
+                ><font-awesome-icon icon="user-shield" /> Admin</router-link
+              >
+            </template>
             <button @click.prevent="logOut" class="btn btn-dark">
               <font-awesome-icon icon="sign-out-alt" />Çıkış
             </button>

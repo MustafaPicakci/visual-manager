@@ -36,7 +36,7 @@
           role="alert"
         >
           <p>Hiç görsel Yüklememişsiniz (-_-)</p>
-          <p>Birkaç görsel yüklemeyi denemelisin !</p>
+          <p>Birkaç görsel yüklemeyi denemelisiniz !</p>
         </div>
         <thumbnail :images="getImages"></thumbnail>
 

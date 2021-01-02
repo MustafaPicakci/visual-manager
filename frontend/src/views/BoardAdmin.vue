@@ -1,7 +1,13 @@
 <template>
   <div class="container">
     <div class="col-md-12">
-      <div class="user-list text-center">
+      <div
+        v-if="
+          currentUser.roles[0] == 'ROLE_ADMIN' ||
+            currentUser.roles[1] == 'ROLE_ADMIN'
+        "
+        class="user-list text-center"
+      >
         <h3 class="mb-3 mb-1">Kullanıcı Listesi</h3>
         <b-table stickyHeader hover :items="getUsers" :fields="fields">
           <template #cell(roles)="row">
@@ -73,7 +79,11 @@ export default {
     this.$store.dispatch("listUsers");
   },
   computed: {
-    ...mapGetters(["getUsers"])
+    ...mapGetters(["getUsers"]),
+
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
   },
   methods: {
     info(item, index, button) {
