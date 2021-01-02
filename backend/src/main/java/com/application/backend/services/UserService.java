@@ -28,4 +28,6 @@ public interface UserService {
   public abstract void unBlockUser(long id);
 
   public abstract User findByUsername(String username);
+
+  public abstract void deleteById(long id);
 }
