@@ -12,15 +12,22 @@ export default new Vuex.Store({
     users: []
   },
   actions: {
+    deleteUser({ commit }, payload) {
+      return adminService.deleteUser(payload.id).then(response => {
+        if (response.status == 200) {
+          commit("deleteUser", payload.index);
+        }
+      });
+    },
     blockUser({ commit }, payload) {
-      adminService.blockUser(payload).then(response => {
+      return adminService.blockUser(payload).then(response => {
         if (response.status == 200) {
           commit("changeUserStatus", response.data);
         }
       });
     },
     unBlockUser({ commit }, payload) {
-      adminService.unBlockUser(payload).then(response => {
+      return adminService.unBlockUser(payload).then(response => {
         if (response.status == 200) {
           commit("changeUserStatus", response.data);
         }
@@ -39,6 +46,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    deleteUser(state, payload) {
+      Vue.delete(state.users, payload);
+    },
     setUsers(state, payload) {
       console.log(payload);
       this.state.users = payload;

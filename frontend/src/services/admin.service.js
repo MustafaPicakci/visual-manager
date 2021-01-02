@@ -26,6 +26,14 @@ class AdminService {
       headers: authHeader()
     });
   }
+  deleteUser(Id) {
+    let user = {
+      id: Id
+    };
+    return axios.post(API_URL + "delete/user", user, {
+      headers: authHeader()
+    });
+  }
 }
 
 export default new AdminService();

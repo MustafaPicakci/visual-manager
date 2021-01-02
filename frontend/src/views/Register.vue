@@ -20,11 +20,11 @@
               >Bu alan zorunludur</small
             >
             <small v-if="!$v.username.minLength" class="form-text text-danger"
-              >şifre en az {{ $v.username.$params.minLength.min }} karakterden
+              >kullanıcı adı en az {{ $v.username.$params.minLength.min }} karakterden
               oluşmalıdlır</small
             >
             <small v-if="!$v.username.maxLength" class="form-text text-danger"
-              >şifre en fazla
+              >kullanıcı adı en fazla
               {{ $v.username.$params.maxLength.max }} karakterden
               oluşmalıdlır</small
             >
