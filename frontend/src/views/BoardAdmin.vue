@@ -9,25 +9,31 @@
         class="user-list text-center"
       >
         <h3 class="mb-3 mb-1">Kullanıcı Listesi</h3>
-        <b-table stickyHeader hover :items="getUsers" :fields="fields">
-          <template #cell(roles)="row">
-            {{ row.value[0].name }}
+        <b-table
+          stickyHeader
+          hover
+          :items="getUsers"
+          :fields="fields"
+          :tbody-tr-class="rowClass"
+        >
+          <template #cell(roles)="row" _rowVariant="danger">
+            {{ row.value[0].name }},
+            <template v-if="row.value.length > 1">{{
+              row.value[1].name
+            }}</template>
           </template>
+
           <template #cell(action)="row">
             <b-button
               size="sm"
-              class="btn"
+              class="btn ml-1 mb-1 mr-1"
               @click="changeStatus(row.item, $event.target)"
               :class="[row.item.active ? activeClass : 'btn-secondary']"
             >
               <span v-if="row.item.active">Block</span>
               <span v-else>UnBlock</span>
             </b-button>
-            <b-button
-              size="sm"
-              @click="info(row.item, row.index, $event.target)"
-              class="mr-1 btn btn-danger"
-            >
+            <b-button size="sm" class=" ml-1 mb-1 mr-1 btn btn-danger">
               Delete
             </b-button>
           </template>
@@ -50,7 +56,6 @@ export default {
           key: "id",
           label: "UserId",
           sortable: true
-          // Variant applies to the whole column, including the header and footer
         },
         {
           key: "username",
@@ -86,18 +91,25 @@ export default {
     }
   },
   methods: {
-    info(item, index, button) {
-      console.log(item);
-      this.infoModal.title = `Row index: ${index}`;
-      this.infoModal.content = JSON.stringify(item, null, 2);
-      this.$root.$emit("bv::show::modal", this.infoModal.id, button);
-    },
     changeStatus(item, button) {
-      if (item.active) {
-        this.$store.dispatch("blockUser", item.id);
+      if (item.id != 1) {
+        if (item.active) {
+          this.$store.dispatch("blockUser", item.id);
+        } else {
+          this.$store.dispatch("unBlockUser", item.id);
+        }
       } else {
-        this.$store.dispatch("unBlockUser", item.id);
+        this.$swal({
+          icon: "error",
+          title: "Admin kendisini engelleyemez!",
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
+    },
+    rowClass(item, type) {
+      if (!item || type !== "row") return;
+      if (item.roles.length > 1) return "table-success";
     }
   }
 };
