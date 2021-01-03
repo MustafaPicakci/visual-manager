@@ -71,24 +71,4 @@ public class UserController {
     userServiceImpl.updatePassword(user, password);
     return userDetailServiceImpl.AuthenticateUser(user.getUsername(), password);
   }
-
- /* @PostMapping("/confirm-account/{token}")
-  public ResponseEntity<?> confirmAccount(@PathVariable String token) {
-    ConfirmationToken confirmationToken =
-        confirmationTokenRepository.findByConfirmationToken(token);
-
-    if (confirmationToken == null) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Kullanıcı bulunamadı !"));
-
-    } else {
-      try {
-        userServiceImpl.confirmAccount(confirmationToken);
-      } catch (Exception e) {
-        return ResponseEntity.badRequest()
-            .body(new MessageResponse("Error: Aktivasyon sırasında bir sorun meydana geldi!" + e));
-      }
-
-      return ResponseEntity.ok().body(new MessageResponse("Hesap aktivasyonu başarılı !"));
-    }
-  }*/
 }

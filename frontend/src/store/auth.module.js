@@ -1,5 +1,6 @@
 import AuthService from "../services/auth.service";
 import { router } from "../router";
+import authService from "../services/auth.service";
 const user = JSON.parse(localStorage.getItem("user"));
 const initialState = user
   ? { status: { loggedIn: true }, user }
@@ -9,6 +10,9 @@ export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
+    confirmAccount({ commit }, token) {
+      return authService.confirmAccount(token);
+    },
     login({ commit }, user) {
       return AuthService.login(user).then(
         user => {

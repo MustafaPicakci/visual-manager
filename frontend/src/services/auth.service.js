@@ -35,6 +35,9 @@ class AuthService {
       password: user.password
     });
   }
+  confirmAccount(token) {
+    return axios.post(API_URL + "confirm-account/" + token);
+  }
 }
 
 export default new AuthService();
