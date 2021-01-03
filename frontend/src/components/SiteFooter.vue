@@ -23,11 +23,11 @@
               <div class="text-left">
                 <p>
                   <i class="fas fa-map-marker-alt"></i
-                  ><font-awesome-icon icon="map-marker-alt" /> Düzce / Turkey
+                  ><font-awesome-icon icon="map-marker-alt" /> Muğla / Turkey
                 </p>
                 <p>
                   <i class="fas fa-phone"></i
-                  ><font-awesome-icon icon="phone" /> (000) 123 45 67 890
+                  ><font-awesome-icon icon="phone" /> (0000) 123 45 08
                 </p>
                 <p>
                   <i class="fas fa-envelope"></i>
@@ -86,8 +86,7 @@
             </div>
           </div>
 
-
-        <div v-else class="row">
+          <div v-else class="row">
             <div class="col-md-6 footer-about wow fadeInUp text-center">
               <h3>Visual <span class="green">Manager</span></h3>
               <hr />
@@ -98,9 +97,7 @@
                 </p>
               </div>
             </div>
-            <div
-              class="col-md-6   footer-contact wow fadeInDown text-center"
-            >
+            <div class="col-md-6   footer-contact wow fadeInDown text-center">
               <h3>İletişim</h3>
               <hr />
               <div class="text-left">
@@ -123,11 +120,7 @@
                 </p>
               </div>
             </div>
-            
           </div>
-
-
-
         </div>
       </div>
       <div class="footer-bottom">
@@ -148,6 +141,9 @@ export default {
 };
 </script>
 <style scoped>
+h3 {
+  text-shadow: 1px 1px;
+}
 hr {
   border: 1px solid white;
   background-color: white;

@@ -1,5 +1,6 @@
 <template>
   <div class="col-md-12">
+    <Loader :status="loaderStatus"></Loader>
     <div class="card card-container">
       <img
         id="profile-img"
@@ -65,7 +66,6 @@
             {{ message }}
           </div>
         </div>
-       
       </form>
     </div>
   </div>
@@ -89,7 +89,8 @@ export default {
       username: "",
       password: "",
       loading: false,
-      message: ""
+      message: "",
+      loaderStatus: true
     };
   },
   validations: {
@@ -110,6 +111,9 @@ export default {
     }
   },
   created() {
+    setTimeout(() => {
+      this.loaderStatus = false;
+    }, 300);
     if (this.loggedIn) {
       this.$router.push("/home");
     }

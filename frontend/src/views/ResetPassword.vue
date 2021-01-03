@@ -1,5 +1,6 @@
 <template>
   <div class="col-md-12">
+    <loader :status="loaderStatus"></loader>
     <div class="card card-container">
       <form name="form" @submit.prevent="handleForm">
         <div>
@@ -21,7 +22,10 @@
           </div>
 
           <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled="$v.$invalid">
+            <button
+              class="btn btn-primary btn-block mb-2"
+              :disabled="$v.$invalid"
+            >
               <span
                 v-show="loading"
                 class="spinner-border spinner-border-sm"
@@ -56,8 +60,14 @@ export default {
       email: "",
       loading: false,
       message: "",
-      submitted: false
+      submitted: false,
+      loaderStatus: true
     };
+  },
+  created() {
+    setTimeout(() => {
+      this.loaderStatus = false;
+    }, 250);
   },
   validations: {
     email: {
@@ -83,7 +93,7 @@ export default {
           this.$router.push("/login");
         })
         .catch(error => {
-           this.loading = false;
+          this.loading = false;
           this.message =
             (error.response &&
               error.response.data &&

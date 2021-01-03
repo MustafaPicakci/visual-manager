@@ -221,5 +221,6 @@ export default {
 <style scoped>
 .user-list {
   background-color: white;
+  border-radius: 10px;
 }
 </style>
