@@ -52,7 +52,10 @@ public class AuthController {
   public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
     User user = userServiceImpl.findByUsername(loginRequest.getUsername());
-    if (user.isActive()) {
+    if (user == null) {
+      return new ResponseEntity<>(
+          new MessageResponse("Bu bilgilere sahip bir hesap bulunamadı! "), HttpStatus.FORBIDDEN);
+    } else if (user.isActive()) {
       return userDetailsServiceImpl.AuthenticateUser(
           loginRequest.getUsername(), loginRequest.getPassword());
     } else {
