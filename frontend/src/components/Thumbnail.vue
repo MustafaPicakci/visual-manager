@@ -76,6 +76,22 @@ export default {
     }
   },
   methods: {
+    successAlert(message) {
+      this.$swal({
+        icon: "success",
+        title: message,
+        showConfirmButton: false,
+        timer: 1500
+      });
+    },
+    errorAlert(message) {
+      this.$swal({
+        icon: "error",
+        title: message,
+        showConfirmButton: false,
+        timer: 1500
+      });
+    },
     downloadImage(imageId) {
       imageService.downloadImage(imageId);
     },
@@ -94,8 +110,14 @@ export default {
         denyButtonText: `Aah, Vazgeçtim !`
       }).then(result => {
         if (result.isConfirmed) {
-          this.$store.dispatch("deleteImage", payload);
-          this.$swal.fire("Görsel silindi", "", "success");
+          this.$store
+            .dispatch("deleteImage", payload)
+            .then(response => {
+              this.successAlert("Görsel silindi !");
+            })
+            .catch(error => {
+              this.errorAlert(error);
+            });
         }
       });
     },

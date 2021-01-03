@@ -204,9 +204,25 @@ export default {
     }, 350);
   },
   methods: {
+    successAlert(message) {
+      this.$swal({
+        icon: "success",
+        title: "Profil fotoğrafınız başarı ile değiştirildi.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    },
+    errorAlert(message) {
+      this.$swal({
+        icon: "error",
+        title: message,
+        showConfirmButton: false,
+        timer: 1500
+      });
+    },
     changeImage(event) {
       let file = event.target.files[0];
-      if (file.size <= 8000000) {
+      if (file.size <= 20000000) {
         this.$swal
           .mixin({
             input: "text",
@@ -233,26 +249,21 @@ export default {
 
                   localStorage.setItem("user", user);
 
-                  this.$swal({
-                    icon: "success",
-                    title: "Profil fotoğrafınız başarı ile değiştirildi.",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
+                  this.successAlert(
+                    "Profil fotoğrafınız başarı ile değiştirildi."
+                  );
                 })
                 .catch(error => {
-                  this.$swal.showValidationMessage(`Request failed: ${error}`);
+                  this.errorAlert(error);
                 });
             }
           });
       } else {
         file = null;
-        alert("maksimum 80mb boyutunda görsel seçebilirsiniz.");
+        this.errorAlert("maksimum 20mb boyutunda görsel seçebilirsiniz.");
       }
     },
     editUsername() {
-      console.log(this.currentUser);
-
       this.$swal
         .mixin({
           input: "text",
@@ -279,12 +290,10 @@ export default {
 
                 localStorage.setItem("user", user);
 
-                this.$swal({
-                  title: `Kullanıcı adını değiştirildi`
-                });
+                this.successAlert("Kullanıcı adını değiştirildi .");
               })
               .catch(error => {
-                this.$swal.showValidationMessage(`Request failed: ${error}`);
+                this.errorAlert(error);
               });
           }
         });
@@ -311,15 +320,10 @@ export default {
 
                 localStorage.setItem("user", user);
 
-                this.$swal({
-                  icon: "success",
-                  title: "Şifreniz başarı ile değiştirildi.",
-                  showConfirmButton: false,
-                  timer: 1500
-                });
+                this.successAlert("Şifreniz başarı ile değiştirildi.");
               })
               .catch(error => {
-                this.$swal.showValidationMessage(`Request failed: ${error}`);
+                this.errorAlert(error);
               });
           }
         });
