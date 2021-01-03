@@ -11,7 +11,7 @@
               <p class="card-text">
                 Aktivasyonu tamamlamak için lütfen tıklayınız.
               </p>
-              <button @click="confirm()" class="btn btn-success">
+              <button @click="confirmAccount()" class="btn btn-success">
                 Aktifleştir
               </button>
             </div>
@@ -28,20 +28,18 @@ export default {
     return {};
   },
   methods: {
-    confirm() {
+    confirmAccount() {
       let token = this.$route.query.token;
-      console.log(token);
       this.$store
-        .dispatch("confirmAccount", token)
+        .dispatch("auth/confirmAccount", token)
         .then(response => {
-          console.log(response.data);
           this.successAlert(response.data.message);
           setTimeout(() => {
-            // this.$router.push("/login");
-          }, 2000);
+            this.$router.push("/login");
+          }, 3000);
         })
         .catch(error => {
-          this.errorAlert(error);
+          this.errorAlert(error + "\n" + "\n" + error.response.data.message);
         });
     },
     successAlert(message) {

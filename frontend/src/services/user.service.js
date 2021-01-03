@@ -4,12 +4,6 @@ import authHeader from "./auth-header";
 const API_URL = "http://localhost:3000/api/user/";
 
 class UserService {
-  confirmAccount(token) {
-    console.log(token)
-    return axios.post(
-      "http://localhost:3000/api/auth/confirm-account/" + token
-    );
-  }
   resetPassword(email) {
     return axios.post(
       "http://localhost:3000/api/forgot_password/email/" + email
@@ -35,7 +29,6 @@ class UserService {
     });
   }
   changeProfilePhoto(userId, username, password, file) {
-    console.log(username);
     let data = new FormData();
     data.append("id", userId);
     data.append("username", username), data.append("password", password);

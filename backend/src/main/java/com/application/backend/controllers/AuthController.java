@@ -1,7 +1,5 @@
 package com.application.backend.controllers;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,6 +27,7 @@ import com.application.backend.repository.RoleRepository;
 import com.application.backend.repository.UserRepository;
 
 import com.application.backend.security.services.UserDetailsServiceImpl;
+import com.application.backend.services.EmailSenderService;
 import com.application.backend.services.UserServiceImpl;
 
 import com.application.backend.models.ConfirmationToken;
@@ -41,7 +39,7 @@ public class AuthController {
   @Autowired AuthenticationManager authenticationManager;
 
   @Autowired UserRepository userRepository;
-  @Autowired JavaMailSender mailSender;
+  @Autowired EmailSenderService emailSenderService;
   @Autowired RoleRepository roleRepository;
   @Autowired ConfirmationTokenRepository confirmationTokenRepository;
 
@@ -128,28 +126,39 @@ public class AuthController {
 
     confirmationTokenRepository.save(confirmationToken);
 
-    new Thread(
-            new Runnable() {
+    /*new Thread(
+        new Runnable() {
 
-              @Override
-              public void run() {
-                try {
-                  SimpleMailMessage mailMessage = new SimpleMailMessage();
-                  mailMessage.setTo(user.getEmail());
-                  mailMessage.setSubject("Hesap aktivasyonunu gerçekleştirin!");
-                  mailMessage.setFrom("info.VisualManager@gmail.com");
-                  mailMessage.setText(
-                      "Hesabınızı aktifleştirmek için lütfen tıklayın : "
-                          + "http://localhost:8080/confirm-account?token="
-                          + confirmationToken.getConfirmationToken());
+          @Override
+          public void run() {
+            try {
+              SimpleMailMessage mailMessage = new SimpleMailMessage();
+              mailMessage.setTo(user.getEmail());
+              mailMessage.setSubject("Hesap aktivasyonunu gerçekleştirin!");
+              mailMessage.setFrom("info.VisualManager@gmail.com");
+              mailMessage.setText(
+                  "Hesabınızı aktifleştirmek için lütfen tıklayın : "
+                      + "http://localhost:8080/confirm-account?token="
+                      + confirmationToken.getConfirmationToken());
 
-                  mailSender.send(mailMessage);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              }
-            })
-        .start();
+              mailSender.send(mailMessage);
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+          }
+        })
+    .start();*/
+
+    SimpleMailMessage mailMessage = new SimpleMailMessage();
+    mailMessage.setTo(user.getEmail());
+    mailMessage.setSubject("Hesap aktivasyonunu gerçekleştirin!");
+    mailMessage.setFrom("info.VisualManager@gmail.com");
+    mailMessage.setText(
+        "Hesabınızı aktifleştirmek için lütfen tıklayın : "
+            + "http://localhost:8080/confirm-account?token="
+            + confirmationToken.getConfirmationToken());
+
+    emailSenderService.sendEmail(mailMessage);
 
     return ResponseEntity.ok(
         new MessageResponse(

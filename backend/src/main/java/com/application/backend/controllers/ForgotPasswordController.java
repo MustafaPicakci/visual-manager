@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.application.backend.models.User;
 import com.application.backend.payload.request.ResetPasswordRequest;
 import com.application.backend.payload.response.MessageResponse;
+import com.application.backend.services.EmailSenderService;
 import com.application.backend.services.UserServiceImpl;
 import net.bytebuddy.utility.RandomString;
 
@@ -23,8 +24,8 @@ import net.bytebuddy.utility.RandomString;
 @RestController
 public class ForgotPasswordController {
 
-  @Autowired private JavaMailSender mailSender;
-  @Autowired private UserServiceImpl userServiceImpl;
+  @Autowired EmailSenderService emailSenderService;
+  @Autowired UserServiceImpl userServiceImpl;
 
   @PostMapping("/email/{email}")
   public ResponseEntity<?> processForgotPassword(@PathVariable("email") String email)
@@ -36,7 +37,7 @@ public class ForgotPasswordController {
         sendEmail(email, token);
       }
     } catch (Exception ex) {
-      System.out.println(ex.getMessage() + "asdasdasd");
+
       return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
     }
     return ResponseEntity.ok().body(new MessageResponse("Şifre sıfırlama Epostanız gönderildi."));
@@ -54,7 +55,7 @@ public class ForgotPasswordController {
             + "http://www.localhost:8080/newPassword?token="
             + token);
 
-    mailSender.send(mailMessage);
+    emailSenderService.sendEmail(mailMessage);
   }
 
   @PostMapping("/reset_password")
