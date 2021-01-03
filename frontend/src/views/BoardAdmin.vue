@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <loader :status="loaderStatus"></loader>
     <div class="col-md-12">
       <div
         v-if="
@@ -50,8 +51,10 @@
 <script>
 import UserService from "../services/user.service";
 import { mapGetters } from "vuex";
+import Loader from "../components/Loader.vue";
 
 export default {
+  components: { Loader },
   name: "Admin",
   data() {
     return {
@@ -81,11 +84,15 @@ export default {
           key: "action"
         }
       ],
-      activeClass: "btn-success"
+      activeClass: "btn-success",
+      loaderStatus: true
     };
   },
   created() {
     this.$store.dispatch("listUsers");
+    setTimeout(() => {
+      this.loaderStatus = false;
+    }, 300);
   },
   computed: {
     ...mapGetters(["getUsers"]),
