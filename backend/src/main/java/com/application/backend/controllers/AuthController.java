@@ -1,14 +1,19 @@
 package com.application.backend.controllers;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +25,14 @@ import com.application.backend.models.User;
 import com.application.backend.payload.request.LoginRequest;
 import com.application.backend.payload.request.SignupRequest;
 import com.application.backend.payload.response.MessageResponse;
+import com.application.backend.repository.ConfirmationTokenRepository;
 import com.application.backend.repository.RoleRepository;
 import com.application.backend.repository.UserRepository;
 
 import com.application.backend.security.services.UserDetailsServiceImpl;
 import com.application.backend.services.UserServiceImpl;
+
+import com.application.backend.models.ConfirmationToken;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
@@ -33,8 +41,9 @@ public class AuthController {
   @Autowired AuthenticationManager authenticationManager;
 
   @Autowired UserRepository userRepository;
-
+  @Autowired JavaMailSender mailSender;
   @Autowired RoleRepository roleRepository;
+  @Autowired ConfirmationTokenRepository confirmationTokenRepository;
 
   @Autowired PasswordEncoder encoder;
 
@@ -115,6 +124,55 @@ public class AuthController {
     user.setRoles(roles);
     userRepository.save(user);
 
-    return ResponseEntity.ok(new MessageResponse("Kullanıcı başarı ile kaydedildi!"));
+    ConfirmationToken confirmationToken = new ConfirmationToken(user);
+
+    confirmationTokenRepository.save(confirmationToken);
+
+    new Thread(
+            new Runnable() {
+
+              @Override
+              public void run() {
+                try {
+                  SimpleMailMessage mailMessage = new SimpleMailMessage();
+                  mailMessage.setTo(user.getEmail());
+                  mailMessage.setSubject("Hesap aktivasyonunu gerçekleştirin!");
+                  mailMessage.setFrom("info.VisualManager@gmail.com");
+                  mailMessage.setText(
+                      "Hesabınızı aktifleştirmek için lütfen tıklayın : "
+                          + "http://localhost:8080/confirm-account?token="
+                          + confirmationToken.getConfirmationToken());
+
+                  mailSender.send(mailMessage);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+              }
+            })
+        .start();
+
+    return ResponseEntity.ok(
+        new MessageResponse(
+            "Kayıt olma işlemi başarılı. Aktivasyon maili E-postanıza gönderildi."));
+  }
+
+  @PostMapping("/confirm-account/{token}")
+  public ResponseEntity<?> confirmAccount(@PathVariable String token) {
+    ConfirmationToken confirmationToken =
+        confirmationTokenRepository.findByConfirmationToken(token);
+
+    if (confirmationToken == null) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Kullanıcı bulunamadı !"));
+
+    } else {
+      try {
+        userServiceImpl.confirmAccount(confirmationToken);
+      } catch (Exception e) {
+        return ResponseEntity.badRequest()
+            .body(new MessageResponse("Error: Aktivasyon sırasında bir sorun meydana geldi!" + e));
+      }
+
+      return ResponseEntity.ok().body(new MessageResponse("Hesap aktivasyonu başarılı !"));
+    }
   }
 }

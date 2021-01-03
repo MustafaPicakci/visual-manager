@@ -10,6 +10,7 @@ import BoardAdmin from "./views/BoardAdmin.vue";
 import BoardModerator from "./views/BoardModerator.vue";
 import MyImages from "./views/MyImages.vue";
 import store from "./store/store";
+import confirmAccount from "./views/confirmAccount.vue";
 
 Vue.use(Router);
 
@@ -48,6 +49,11 @@ export const router = new Router({
       path: "/newPassword",
       component: NewPassword,
       name: "NewPassword",
+      props: route => ({ query: route.query.token })
+    },
+    {
+      path: "/confirm-account",
+      component: confirmAccount,
       props: route => ({ query: route.query.token })
     },
     {

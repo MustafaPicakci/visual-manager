@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.application.backend.models.ConfirmationToken;
 import com.application.backend.models.User;
 
 public interface UserService {
@@ -29,5 +30,9 @@ public interface UserService {
 
   public abstract User findByUsername(String username);
 
+  public abstract User findByEmail(String email);
+
   public abstract void deleteById(long id);
+
+  public abstract void confirmAccount(ConfirmationToken token);
 }

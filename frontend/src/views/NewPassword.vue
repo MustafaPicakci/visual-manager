@@ -101,10 +101,7 @@ export default {
       sameAs: sameAs("password")
     }
   },
-  computed: {},
-  created() {
-    console.log(this.$route.query.token);
-  },
+
   methods: {
     handleForm() {
       this.message = "";

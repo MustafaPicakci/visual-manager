@@ -27,7 +27,7 @@ public class User {
   @Column(nullable = true)
   private byte[] profilePhoto;
 
-  private boolean isActive=true;
+  private boolean isActive=false;
 
   @Column(name = "reset_password_token")
   private String resetPasswordToken;

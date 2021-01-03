@@ -12,6 +12,9 @@ export default new Vuex.Store({
     users: []
   },
   actions: {
+    confirmAccount({commit},token) {
+      return userService.confirmAccount(token);
+    },
     deleteUser({ commit }, payload) {
       return adminService.deleteUser(payload.id).then(response => {
         if (response.status == 200) {
