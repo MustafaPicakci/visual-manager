@@ -25,7 +25,6 @@ import com.application.backend.models.ImagePage;
 import com.application.backend.models.Images;
 import com.application.backend.models.Tags;
 import com.application.backend.models.User;
-import com.application.backend.repository.ImageRepository;
 import com.application.backend.security.services.UserDetailsServiceImpl;
 import com.application.backend.services.ImageServiceImpl;
 
@@ -36,7 +35,6 @@ public class ImageController {
 
   @Autowired ImageServiceImpl imageServiceImpl;
   @Autowired UserDetailsServiceImpl userDetailsServiceImpl;
-  @Autowired ImageRepository imageRepository;
 
   @PostMapping("/add")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
@@ -54,7 +52,6 @@ public class ImageController {
       ImagePage imagePage = new ImagePage();
       imagePage.setPageNumber(pageNumber);
       imagePage.setPageSize(pageSize);
-      System.out.println(pageNumber + "--" + pageSize);
 
       User user = userDetailsServiceImpl.loadUser();
 
@@ -77,7 +74,6 @@ public class ImageController {
       ImagePage imagePage = new ImagePage();
       imagePage.setPageNumber(pageNumber);
       imagePage.setPageSize(pageSize);
-      System.out.println(pageNumber + "--" + pageSize);
 
       User user = userDetailsServiceImpl.loadUser();
 

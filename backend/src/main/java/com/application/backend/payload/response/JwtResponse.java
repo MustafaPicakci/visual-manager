@@ -1,6 +1,5 @@
 package com.application.backend.payload.response;
 
-import java.util.Date;
 import java.util.List;
 
 public class JwtResponse {
@@ -26,7 +25,7 @@ public class JwtResponse {
     this.username = username;
     this.email = email;
     this.roles = roles;
-    this.profilePhoto=profilePhoto;
+    this.profilePhoto = profilePhoto;
     this.expirationDate = expirationDate;
   }
 
