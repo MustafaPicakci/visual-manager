@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.application.backend.models.ConfirmationToken;
 import com.application.backend.models.User;
 import com.application.backend.repository.UserRepository;
 
@@ -85,5 +86,19 @@ public class UserServiceImpl implements UserService {
   @Override
   public void deleteById(long id) {
     userRepository.deleteById(id);
+  }
+
+  @Override
+  public User findByEmail(String email) {
+    return userRepository.findByEmail(email);
+  }
+
+  @Override
+  public void confirmAccount(ConfirmationToken token) {
+    User user = userRepository.findByEmail(token.getUser().getEmail());
+    user.setActive(true);
+    userRepository.save(user);
+
+    // return userRepository.findByEmail(email);
   }
 }

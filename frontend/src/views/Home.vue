@@ -95,9 +95,14 @@ export default {
     },
     retrieveImages() {
       const params = this.getRequestParams(this.pageNumber, this.pageSize);
-      this.$store.dispatch("getUntaggedImages", params).then(() => {
-        this.loaderStatus = false;
-      });
+      this.$store
+        .dispatch("getUntaggedImages", params)
+        .then(() => {
+          this.loaderStatus = false;
+        })
+        .catch(error => {
+          this.errorAlert(error);
+        });
     },
     handlePageChange(value) {
       this.pageNumber = value;

@@ -20,7 +20,8 @@
               >Bu alan zorunludur</small
             >
             <small v-if="!$v.username.minLength" class="form-text text-danger"
-              >kullanıcı adı en az {{ $v.username.$params.minLength.min }} karakterden
+              >kullanıcı adı en az
+              {{ $v.username.$params.minLength.min }} karakterden
               oluşmalıdlır</small
             >
             <small v-if="!$v.username.maxLength" class="form-text text-danger"
@@ -92,6 +93,10 @@
           </div>
           <div class="form-group">
             <button class="btn btn-primary btn-block" :disabled="$v.$invalid">
+              <span
+                v-show="loading"
+                class="spinner-border spinner-border-sm"
+              ></span>
               Kaydol
             </button>
             <router-link to="/login"
@@ -133,7 +138,8 @@ export default {
       repassword: "",
       submitted: false,
       successful: false,
-      message: ""
+      message: "",
+      loading: false
     };
   },
   validations: {
@@ -170,6 +176,7 @@ export default {
   },
   methods: {
     handleRegister() {
+      this.loading = true;
       this.message = "";
       this.submitted = true;
       var user = new User(this.username, this.email, this.password);
@@ -177,9 +184,10 @@ export default {
         data => {
           this.message = data.message;
           this.successful = true;
+          this.loading = false;
           setTimeout(() => {
             this.$router.push("/login");
-          }, 2000);
+          }, 5000);
         },
         error => {
           this.message =
