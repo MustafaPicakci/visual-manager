@@ -2,8 +2,6 @@
   <div class="container">
     <Loader :status="loaderStatus"></Loader>
     <div class="main-body">
-      <!-- Breadcrumb -->
-
       <div class="row gutters-sm">
         <div class="col-md-12">
           <div class="card mb-3 col-md-6 offset-md-3">
@@ -207,7 +205,7 @@ export default {
     successAlert(message) {
       this.$swal({
         icon: "success",
-        title: "Profil fotoğrafınız başarı ile değiştirildi.",
+        title: message,
         showConfirmButton: false,
         timer: 1500
       });
@@ -278,7 +276,7 @@ export default {
           "Şifrenizi giriniz"
         ])
         .then(result => {
-          if (result.value) {
+          if (result.value[0].length > 5) {
             UserService.changeUsername(
               this.currentUser.id,
               result.value[0],
@@ -290,11 +288,15 @@ export default {
 
                 localStorage.setItem("user", user);
 
-                this.successAlert("Kullanıcı adını değiştirildi .");
+                this.successAlert("Kullanıcı adını değiştirildi.");
               })
               .catch(error => {
                 this.errorAlert(error);
               });
+          } else {
+            this.errorAlert(
+              "Kullanıcı adı minimum '6' karakterden oluşmalıdır."
+            );
           }
         });
     },
@@ -304,15 +306,19 @@ export default {
           input: "text",
           confirmButtonText: "Next &rarr;",
           showCancelButton: true,
-          progressSteps: ["1"]
+          progressSteps: ["1", "2"]
         })
         .queue([
           {
             title: "Yeni Şifrenizi giriniz."
-          }
+          },
+          "Yeni Şifrenizi tekrar giriniz."
         ])
         .then(result => {
-          if (result.value) {
+          if (
+            result.value[0] === result.value[1] &&
+            result.value[0].length > 3
+          ) {
             UserService.changePassword(this.currentUser.id, result.value[0])
               .then(response => {
                 this.$store.commit("auth/loginSuccess", response.data);
@@ -325,6 +331,10 @@ export default {
               .catch(error => {
                 this.errorAlert(error);
               });
+          } else if (result.value[0] != result.value[1]) {
+            this.errorAlert("Şifreler biri ile eşleşmiyor!");
+          } else {
+            this.errorAlert("Şifre minimum '4' karakterden oluşmalıdır.");
           }
         });
     }
