@@ -73,7 +73,7 @@ export const imageOperations = {
       });
     },
     deleteImage({ commit }, payload) {
-      ImageService.deleteImage(payload.imageId).then(response => {
+      return ImageService.deleteImage(payload.imageId).then(response => {
         commit("deleteImage", payload);
       });
     }
