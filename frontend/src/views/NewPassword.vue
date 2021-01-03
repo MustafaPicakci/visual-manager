@@ -1,5 +1,6 @@
 <template>
   <div class="col-md-12">
+    <Loader :status="loaderStatus"></Loader>
     <div class="card card-container">
       <form name="form" @submit.prevent="handleForm">
         <div>
@@ -85,8 +86,12 @@ export default {
       submitted: false,
       successful: false,
       message: "",
-      token: this.$route.params.token
+      token: this.$route.params.token,
+      loaderStatus: true
     };
+  },
+  created() {
+    this.loaderStatus = false;
   },
   validations: {
     password: {

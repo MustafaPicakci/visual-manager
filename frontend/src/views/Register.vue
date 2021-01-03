@@ -1,5 +1,6 @@
 <template>
   <div class="col-md-12">
+    <Loader :status="loaderStatus"></Loader>
     <div class="card card-container">
       <img
         id="profile-img"
@@ -139,7 +140,8 @@ export default {
       submitted: false,
       successful: false,
       message: "",
-      loading: false
+      loading: false,
+      loaderStatus: true
     };
   },
   validations: {
@@ -170,6 +172,9 @@ export default {
     }
   },
   mounted() {
+    setTimeout(() => {
+      this.loaderStatus = false;
+    }, 300);
     if (this.loggedIn) {
       this.$router.push("/profile");
     }

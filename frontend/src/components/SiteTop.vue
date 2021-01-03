@@ -55,10 +55,13 @@
         </div>
       </div>
     </div>
-    <!-- .site-banner -->
   </div>
   <div v-else class="unauthorized text-center m-4">
-    <h3>Visual <span class=""> Manager</span></h3>
+    <router-link to="/" tag="h1">
+      <h1>Visual <span class="green">Manager</span></h1></router-link
+    >
+
+    <!-- <h1>Visual <span class="green"> Manager</span></h1> -->
   </div>
 </template>
 <script>
@@ -67,7 +70,7 @@ export default {
   methods: {
     logOut() {
       this.$store.dispatch("auth/logout");
-      this.$router.push("/login");
+      // this.$router.push("/login");
     }
   }
 };
@@ -79,14 +82,15 @@ button {
 .active-class {
   border: 1px solid white;
 }
-.h3 {
-  text-shadow: 2px 2px;
+h1 {
+  cursor: pointer;
+  text-shadow: 1px 1px;
 }
 .blue {
   color: #6be;
 }
 .green {
-  color: #6e6;
+  color: rgb(49, 207, 49);
 }
 
 .unauthorized {
