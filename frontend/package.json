@@ -17,8 +17,6 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.1",
     "vue": "^2.6.12",
-    "vue-js-modal": "^2.0.0-rc.6",
-    "vue-masonry-gallery": "^1.1.1",
     "vue-router": "^3.4.9",
     "vue-sweetalert2": "^4.1.1",
     "vue2-dropzone": "^3.6.0",
