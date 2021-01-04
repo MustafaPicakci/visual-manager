@@ -31,8 +31,7 @@ public class ConfirmationToken {
 
   @OneToOne(
       targetEntity = User.class,
-      cascade = CascadeType.ALL,
-      orphanRemoval = true,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
       fetch = FetchType.EAGER)
   @JoinColumn(nullable = false, name = "user_id")
   private User user;

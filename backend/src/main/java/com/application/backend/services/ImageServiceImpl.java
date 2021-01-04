@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
@@ -115,7 +116,7 @@ public class ImageServiceImpl implements ImageService {
   public void deleteImage(long imageId) {
     // etiketleri başka görseller kullanmıyorsa, onları da siliyoruz
     Images image = imageRepository.getOne(imageId);
-    List<Tags> tags = image.getTags();
+    Set<Tags> tags = image.getTags();
     imageRepository.deleteById(imageId);
     for (Tags tag : tags) {
       if (!imageRepository.existsByTagsId(tag.getId())) {

@@ -3,8 +3,9 @@ package com.application.backend.models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +20,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,18 +54,18 @@ public class Images {
 
   @ManyToMany(
       fetch = FetchType.LAZY,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
   @JoinTable(
       name = "image_tags",
       joinColumns = @JoinColumn(name = "imageId"),
       inverseJoinColumns = @JoinColumn(name = "tagId"))
-  private List<Tags> tags = new ArrayList<>();
+  private Set<Tags> tags = new HashSet<>();
 
-  public List<Tags> getTags() {
+  public Set<Tags> getTags() {
     return tags;
   }
 
-  public void setTags(List<Tags> tags) {
+  public void setTags(Set<Tags> tags) {
     this.tags = tags;
   }
 
@@ -153,10 +155,9 @@ public class Images {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + Arrays.hashCode(image);
     result = prime * result + (int) (id ^ (id >>> 32));
+    result = prime * result + Arrays.hashCode(image);
     result = prime * result + ((imageName == null) ? 0 : imageName.hashCode());
-    result = prime * result + ((tags == null) ? 0 : tags.hashCode());
     result = prime * result + ((uploadDate == null) ? 0 : uploadDate.hashCode());
     return result;
   }
@@ -167,14 +168,11 @@ public class Images {
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
     Images other = (Images) obj;
-    if (!Arrays.equals(image, other.image)) return false;
     if (id != other.id) return false;
+    if (!Arrays.equals(image, other.image)) return false;
     if (imageName == null) {
       if (other.imageName != null) return false;
     } else if (!imageName.equals(other.imageName)) return false;
-    if (tags == null) {
-      if (other.tags != null) return false;
-    } else if (!tags.equals(other.tags)) return false;
     if (uploadDate == null) {
       if (other.uploadDate != null) return false;
     } else if (!uploadDate.equals(other.uploadDate)) return false;

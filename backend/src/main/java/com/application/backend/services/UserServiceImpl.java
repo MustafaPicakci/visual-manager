@@ -7,7 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.application.backend.models.ConfirmationToken;
+import com.application.backend.models.Tags;
 import com.application.backend.models.User;
+import com.application.backend.repository.TagRepository;
 import com.application.backend.repository.UserRepository;
 
 @Service
@@ -15,6 +17,7 @@ public class UserServiceImpl implements UserService {
 
   @Autowired PasswordEncoder encoder;
   @Autowired UserRepository userRepository;
+  @Autowired TagRepository tagRepository;
 
   @Override
   public User loadUserById(long Id) {
@@ -85,6 +88,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void deleteById(long id) {
+    List<Tags> userTags = tagRepository.findTagsByImages_User_Id(id);
+    tagRepository.deleteAll(userTags);
     userRepository.deleteById(id);
   }
 
@@ -98,7 +103,5 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findByEmail(token.getUser().getEmail());
     user.setActive(true);
     userRepository.save(user);
-
-    // return userRepository.findByEmail(email);
   }
 }
