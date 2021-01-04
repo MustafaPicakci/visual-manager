@@ -38,7 +38,7 @@
           <p>Hiç görsel Yüklememişsiniz (-_-)</p>
           <p>Birkaç görsel yüklemeyi denemelisiniz !</p>
         </div>
-        <thumbnail :images="getImages"></thumbnail>
+        <gallery :images="getImages"></gallery>
 
         <b-pagination
           v-if="getImages.length"
@@ -60,7 +60,7 @@ import UserService from "../services/user.service";
 
 import authHeader from "../services/auth-header";
 import imageService from "../services/image.service";
-import Thumbnail from "../components/Thumbnail.vue";
+import Gallery from "../components/Gallery.vue";
 import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default {
@@ -76,7 +76,7 @@ export default {
     };
   },
   components: {
-    Thumbnail
+    Gallery
   },
   computed: {
     ...mapGetters(["getImages", "getTotalElements"])

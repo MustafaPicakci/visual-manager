@@ -27,10 +27,10 @@
     <div v-else class="alert alert-danger text-center" role="alert">
       Etiketlenmeyi bekleyen görseliniz yok
     </div>
-    <thumbnail :images="getImages"></thumbnail>
+    <gallery :images="getImages"></gallery>
 
     <b-pagination
-      v-if="getImages.length > 19"
+      v-if="getImages.length"
       align="center"
       v-model="pageNumber"
       :total-rows="getTotalElements"
@@ -43,7 +43,7 @@
 </template>
 <script>
 import { mapGetters, mapMutations, mapState } from "vuex";
-import Thumbnail from "../components/Thumbnail.vue";
+import Gallery from "../components/Gallery.vue";
 import vueDropzone from "vue2-dropzone";
 import authHeader from "../services/auth-header";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
@@ -51,7 +51,7 @@ import "vue2-dropzone/dist/vue2Dropzone.min.css";
 export default {
   name: "Home",
   components: {
-    Thumbnail,
+    Gallery,
     vueDropzone
   },
   data() {

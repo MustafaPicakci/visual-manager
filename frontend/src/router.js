@@ -7,7 +7,6 @@ import NewPassword from "./views/NewPassword.vue";
 import Register from "./views/Register.vue";
 import Profile from "./views/Profile.vue";
 import BoardAdmin from "./views/BoardAdmin.vue";
-import BoardModerator from "./views/BoardModerator.vue";
 import MyImages from "./views/MyImages.vue";
 import store from "./store/store";
 import confirmAccount from "./views/confirmAccount.vue";
@@ -68,12 +67,6 @@ export const router = new Router({
       name: "admin",
 
       component: BoardAdmin
-    },
-    {
-      path: "/mod",
-      name: "moderator",
-
-      component: BoardModerator
     },
     {
       path: "/MyImages",
