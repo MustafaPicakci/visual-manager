@@ -92,7 +92,8 @@ public class ImageController {
   @PostMapping("/set/tag")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images setTag(Tags data) {
-    return imageServiceImpl.setTag(data.getImages().get(0).getId(), data.getTagName());
+    return imageServiceImpl.setTag(
+        data.getImages().stream().findFirst().get().getId(), data.getTagName());
   };
 
   @PostMapping("/delete")
@@ -105,7 +106,8 @@ public class ImageController {
   @PostMapping("/unlinkTag")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public Images unlinkTag(Tags data) {
-    return imageServiceImpl.unlikTag(data.getImages().get(0).getId(), data.getId());
+    return imageServiceImpl.unlikTag(
+        data.getImages().stream().findFirst().get().getId(), data.getId());
   };
 
   @GetMapping("/downloadFile/{imageId}")

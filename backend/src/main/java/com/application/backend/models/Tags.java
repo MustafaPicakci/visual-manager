@@ -1,19 +1,14 @@
 package com.application.backend.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,14 +26,8 @@ public class Tags {
 
   @JsonIgnore
   @ManyToMany(mappedBy = "tags")
-  private List<Images> images = new ArrayList<>();
+  private Set<Images> images = new HashSet<>();
 
-  /*
-  @PreRemove
-  private void preRemove() {
-    images.forEach(image -> image.setTags(null));
-  }
-*/
   public Tags() {}
 
   public Tags(String tagName) {
@@ -62,11 +51,11 @@ public class Tags {
     this.tagName = tagName;
   }
 
-  public List<Images> getImages() {
+  public Set<Images> getImages() {
     return images;
   }
 
-  public void setImages(List<Images> images) {
+  public void setImages(Set<Images> images) {
     this.images = images;
   }
 
@@ -74,7 +63,6 @@ public class Tags {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((images == null) ? 0 : images.hashCode());
     result = prime * result + (int) (id ^ (id >>> 32));
     result = prime * result + ((tagName == null) ? 0 : tagName.hashCode());
     return result;
@@ -86,9 +74,6 @@ public class Tags {
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
     Tags other = (Tags) obj;
-    if (images == null) {
-      if (other.images != null) return false;
-    } else if (!images.equals(other.images)) return false;
     if (id != other.id) return false;
     if (tagName == null) {
       if (other.tagName != null) return false;

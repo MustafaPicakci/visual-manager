@@ -30,7 +30,7 @@
     <thumbnail :images="getImages"></thumbnail>
 
     <b-pagination
-      v-if="getTotalElements > 0"
+      v-if="getImages.length > 19"
       align="center"
       v-model="pageNumber"
       :total-rows="getTotalElements"
