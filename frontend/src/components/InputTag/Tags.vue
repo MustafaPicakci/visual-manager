@@ -83,7 +83,6 @@ export default {
             .dispatch("setTag", payload)
             .then(data => {
               this.tags.push(data.tags[data.tags.length - 1]);
-             // this.successAlert("Etiket Eklendi");
             })
             .catch(data => {
               this.errorAlert("Etiket eklenemedi!");
@@ -133,7 +132,7 @@ export default {
           this.errorAlert("etiket kaldırılamadı!");
         });
     },
-    successAlert(message,time) {
+    successAlert(message, time) {
       this.$swal({
         icon: "success",
         title: message,
