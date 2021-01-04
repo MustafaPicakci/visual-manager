@@ -28,8 +28,9 @@
         v-for="(image, index) in images"
         :key="image.id"
       >
-        <div class="thumbnail thumbnail-brightness" @click="imageInfo(image)">
+        <div class="thumbnail thumbnail-brightness">
           <img
+            @click="imageInfo(image)"
             class="img-fluid img-thumbnail image"
             :src="'data:image/jpeg;base64,' + image.image"
             alt=""
