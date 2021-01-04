@@ -103,7 +103,7 @@
               <div class="text-left">
                 <p>
                   <i class="fas fa-map-marker-alt"></i
-                  ><font-awesome-icon icon="map-marker-alt" /> Düzce / Turkey
+                  ><font-awesome-icon icon="map-marker-alt" /> Muğla / Turkey
                 </p>
                 <p>
                   <i class="fas fa-phone"></i

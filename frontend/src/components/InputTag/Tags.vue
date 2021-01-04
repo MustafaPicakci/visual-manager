@@ -83,9 +83,10 @@ export default {
             .dispatch("setTag", payload)
             .then(data => {
               this.tags.push(data.tags[data.tags.length - 1]);
+             // this.successAlert("Etiket Eklendi");
             })
             .catch(data => {
-              alert("etiket eklenemedi");
+              this.errorAlert("Etiket eklenemedi!");
             });
 
           text.value = "";
@@ -109,20 +110,10 @@ export default {
             .dispatch("unlinkTag", payload)
             .then(data => {
               this.tags.splice(this.tags.length - 1, 1); // son elemanı siliyoruz
-              this.$swal({
-                icon: "success",
-                title: "Etiket kaldırıldı",
-                showConfirmButton: false,
-                timer: 1500
-              });
+              this.successAlert("Etiket kaldırıldı!");
             })
             .catch(data => {
-              this.$swal({
-                icon: "error",
-                title: "Etiket kaldırılamadı",
-                showConfirmButton: false,
-                timer: 1500
-              });
+              this.errorAlert("Etiket kaldırılamadı!");
             });
         }
       }
@@ -139,8 +130,24 @@ export default {
           this.tags.splice(index, 1);
         })
         .catch(data => {
-          alert("etiket silinemedi");
+          this.errorAlert("etiket kaldırılamadı!");
         });
+    },
+    successAlert(message,time) {
+      this.$swal({
+        icon: "success",
+        title: message,
+        showConfirmButton: false,
+        timer: 1000
+      });
+    },
+    errorAlert(message) {
+      this.$swal({
+        icon: "error",
+        title: message,
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   },
   watch: {

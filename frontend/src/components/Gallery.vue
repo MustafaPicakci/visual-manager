@@ -1,5 +1,5 @@
 <template>
-  <div class="com-thumb">
+  <div class="gallery">
     <div class="row">
       <b-modal id="bv-modal-example" centered hide-footer>
         <template #modal-title
@@ -28,7 +28,7 @@
         v-for="(image, index) in images"
         :key="image.id"
       >
-        <div class="thumbnail thumbnail-brightness">
+        <div class="thumbnail thumbnail-brightness" @click="imageInfo(image)">
           <img
             class="img-fluid img-thumbnail image"
             :src="'data:image/jpeg;base64,' + image.image"
@@ -70,7 +70,6 @@ export default {
   watch: {
     images(value) {
       if (this.images.length) {
-        //this.loaderStatus = false;
       }
       return value;
     }
@@ -139,6 +138,9 @@ export default {
 };
 </script>
 <style>
+.thumbnail {
+  cursor: pointer;
+}
 /* Brightness-zoom Container */
 .thumbnail-brightness img {
   transition: transform 0.5s, filter 1s ease-in-out;
