@@ -12,13 +12,14 @@ export default new Vuex.Store({
     users: []
   },
   actions: {
-    deleteUser({ commit }, payload) {
-      return adminService.deleteUser(payload.id).then(response => {
-        if (response.status == 200) {
+    deleteAccount({ commit }, payload) {
+      return userService.deleteAccount(payload.id).then(response => {
+        if (response.status == 200 && payload.index) {
           commit("deleteUser", payload.index);
         }
       });
     },
+
     blockUser({ commit }, payload) {
       return adminService.blockUser(payload).then(response => {
         if (response.status == 200) {

@@ -61,7 +61,6 @@
       <h1>Visual <span class="green">Manager</span></h1></router-link
     >
 
-    <!-- <h1>Visual <span class="green"> Manager</span></h1> -->
   </div>
 </template>
 <script>

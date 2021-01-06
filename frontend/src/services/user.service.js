@@ -57,6 +57,15 @@ class UserService {
       headers: authHeader()
     });
   }
+  deleteAccount(Id) {
+    console.log(Id +"asfasfas")
+    let user = {
+      id: Id
+    };
+    return axios.post(API_URL + "delete/account", user, {
+      headers: authHeader()
+    });
+  }
 }
 
 export default new UserService();
