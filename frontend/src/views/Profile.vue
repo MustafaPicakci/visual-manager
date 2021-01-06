@@ -170,6 +170,19 @@
               </div>
             </div>
           </div>
+
+          <div class="row gutters-sm ">
+            <div class="col-sm-12 mb-3">
+              <div
+                class="card  bg-danger col-md-6 offset-md-3 delete-account"
+                @click="deleteAccount()"
+              >
+                <div class="card-body">
+                  <h6 class="text-center text-white">Hesabi sil</h6>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -337,11 +350,32 @@ export default {
             this.errorAlert("Şifre minimum '4' karakterden oluşmalıdır.");
           }
         });
+    },
+    deleteAccount() {
+      let deletable = true;
+      this.currentUser.roles.forEach(element => {
+        if (element == "ROLE_ADMIN") {
+          deletable = false;
+        }
+      });
+      if (deletable) {
+        this.$store
+          .dispatch("deleteAccount", this.currentUser)
+          .then(response => {
+            this.successAlert("Seni Özleyeceğiz :(");
+            this.$store.dispatch("auth/logout");
+          });
+      } else {
+        this.errorAlert("Admin kendini silemez");
+      }
     }
   }
 };
 </script>
 <style scoped>
+.delete-account {
+  cursor: pointer;
+}
 .main-body {
   padding: 15px;
 }
@@ -358,7 +392,7 @@ export default {
   background-color: #fff;
   background-clip: border-box;
   border: 0 solid rgba(0, 0, 0, 0.125);
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 .card-body {

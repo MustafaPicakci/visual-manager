@@ -196,7 +196,7 @@ export default {
         }).then(result => {
           if (result.isConfirmed) {
             this.$store
-              .dispatch("deleteUser", payload)
+              .dispatch("deleteAccount", payload)
               .then(response => {
                 console.log(response);
                 this.successAlert("Kullanıcı silindi !");

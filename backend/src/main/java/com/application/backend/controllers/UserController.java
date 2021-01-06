@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,5 +66,11 @@ public class UserController {
 
     userServiceImpl.updatePassword(user, password);
     return userDetailServiceImpl.AuthenticateUser(user.getUsername(), password);
+  }
+
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  @PostMapping("/delete/account")
+  public void delete(@RequestBody User user) {
+    userServiceImpl.deleteById(user.getId());
   }
 }

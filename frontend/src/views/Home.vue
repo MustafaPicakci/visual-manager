@@ -101,7 +101,7 @@ export default {
           this.loaderStatus = false;
         })
         .catch(error => {
-          this.errorAlert(error);
+          alert(error);
         });
     },
     handlePageChange(value) {

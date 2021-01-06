@@ -47,10 +47,4 @@ public class Admincontroller {
     userServiceImpl.unBlockUser(user.getId());
     return new ResponseEntity<>(userServiceImpl.loadUserById(user.getId()), HttpStatus.OK);
   }
-
-  @PreAuthorize("hasRole('ADMIN')")
-  @PostMapping("/delete/user")
-  public void delete(@RequestBody User user) {
-    userServiceImpl.deleteById(user.getId());
-  }
 }
