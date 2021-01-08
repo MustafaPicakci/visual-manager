@@ -78,7 +78,7 @@ export default {
             imageId: this.imageId,
             tagName: text.value
           };
-
+          text.value = "";
           this.$store
             .dispatch("setTag", payload)
             .then(data => {
@@ -87,8 +87,6 @@ export default {
             .catch(data => {
               this.errorAlert("Etiket eklenemedi!");
             });
-
-          text.value = "";
         } else {
           this.error = true;
 
@@ -137,7 +135,7 @@ export default {
         icon: "success",
         title: message,
         showConfirmButton: false,
-        timer: 1000
+        timer: 500
       });
     },
     errorAlert(message) {
