@@ -13,9 +13,13 @@
         <b-table
           stickyHeader
           hover
+          selectable
+          select-mode="single"
           :items="getUsers"
           :fields="fields"
           :tbody-tr-class="rowClass"
+          ref="selectableTable"
+          @row-selected="onRowSelected"
         >
           <template #cell(roles)="row" _rowVariant="danger">
             {{ row.value[0].name }},
@@ -43,6 +47,19 @@
             </b-button>
           </template>
         </b-table>
+        <b-modal id="userTags" centered hide-footer>
+          <template #modal-title
+            ><h3 class="text-center">
+              Kullanıcının etiketleri 
+            </h3></template
+            
+          >
+          <div class="d-block text-center">
+            <p v-for="tag in userTags" :key="tag.id">
+              {{tag.tagName}} 
+            </p>
+          </div>
+        </b-modal>
       </div>
     </div>
   </div>
@@ -52,6 +69,7 @@
 import UserService from "../services/user.service";
 import { mapGetters } from "vuex";
 import Loader from "../components/Loader.vue";
+import userService from "../services/user.service";
 
 export default {
   components: { Loader },
@@ -85,7 +103,9 @@ export default {
         }
       ],
       activeClass: "btn-success",
-      loaderStatus: true
+      loaderStatus: true,
+      selected: [],
+      userTags: []
     };
   },
   created() {
@@ -102,6 +122,18 @@ export default {
     }
   },
   methods: {
+    onRowSelected(items) {
+      this.selected = items;
+
+      userService.getUserTags(items[0].id).then(response => {
+        this.userTags = response.data;
+        this.$bvModal.show("userTags");
+      });
+     
+    },
+    clearSelected() {
+      this.$refs.selectableTable.clearSelected();
+    },
     successAlert(message) {
       this.$swal({
         icon: "success",

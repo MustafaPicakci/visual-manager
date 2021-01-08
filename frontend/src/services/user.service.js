@@ -58,11 +58,18 @@ class UserService {
     });
   }
   deleteAccount(Id) {
-    console.log(Id +"asfasfas")
     let user = {
       id: Id
     };
     return axios.post(API_URL + "delete/account", user, {
+      headers: authHeader()
+    });
+  }
+  getUserTags(Id) {
+    let user = {
+      id: Id
+    };
+    return axios.post(API_URL + "tags", user, {
       headers: authHeader()
     });
   }

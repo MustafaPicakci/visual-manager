@@ -12,6 +12,7 @@ class TagService {
       "Content-Type": "multipart/form-data"
     });
   }
+
 }
 axios.prototype;
 
