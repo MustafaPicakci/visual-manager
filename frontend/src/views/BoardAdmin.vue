@@ -48,15 +48,14 @@
           </template>
         </b-table>
         <b-modal id="userTags" centered hide-footer>
-          <template #modal-title
+          <template #modal-title class="text-center"
             ><h3 class="text-center">
-              Kullanıcının etiketleri 
+              Kullanıcının etiketleri
             </h3></template
-            
           >
           <div class="d-block text-center">
             <p v-for="tag in userTags" :key="tag.id">
-              {{tag.tagName}} 
+              {{ tag.tagName }}
             </p>
           </div>
         </b-modal>
@@ -129,7 +128,6 @@ export default {
         this.userTags = response.data;
         this.$bvModal.show("userTags");
       });
-     
     },
     clearSelected() {
       this.$refs.selectableTable.clearSelected();
@@ -139,7 +137,7 @@ export default {
         icon: "success",
         title: message,
         showConfirmButton: false,
-        timer: 1500
+        timer: 31500
       });
     },
     errorAlert(message) {
@@ -147,7 +145,7 @@ export default {
         icon: "error",
         title: message,
         showConfirmButton: false,
-        timer: 1500
+        timer: 31500
       });
     },
     changeStatus(item, button) {
@@ -198,7 +196,7 @@ export default {
           icon: "error",
           title: "Admin kendisini engelleyemez!",
           showConfirmButton: false,
-          timer: 1500
+          timer: 31500
         });
       }
     },
@@ -243,7 +241,7 @@ export default {
           icon: "error",
           title: "Admin kendisini silemez!",
           showConfirmButton: false,
-          timer: 1500
+          timer: 31500
         });
       }
     }
