@@ -3,6 +3,7 @@ package com.application.backend.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.application.backend.repository.TagRepository;
 import com.application.backend.repository.UserRepository;
 
 @Service
+@EnableAsync
 public class UserServiceImpl implements UserService {
 
   @Autowired PasswordEncoder encoder;
@@ -88,6 +90,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Async
   public void deleteById(long id) {
     List<Tags> userTags = tagRepository.findTagsByImages_User_Id(id);
     tagRepository.deleteAll(userTags);

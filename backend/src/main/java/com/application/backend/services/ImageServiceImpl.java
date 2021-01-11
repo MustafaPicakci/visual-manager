@@ -50,7 +50,7 @@ public class ImageServiceImpl implements ImageService {
     byte[] imageFile = null;
     try {
       imageFile = file.getBytes();
-    } catch (IOException e) { // TODO Auto-generated catch block
+    } catch (IOException e) {
       e.printStackTrace();
     }
     Date uploadDate = new Date();
