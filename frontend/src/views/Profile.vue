@@ -359,14 +359,27 @@ export default {
         }
       });
       if (deletable) {
-        this.$store
-          .dispatch("deleteAccount", this.currentUser)
-          .then(response => {
-            this.successAlert("Seni Özleyeceğiz :(");
-            this.$store.dispatch("auth/logout");
-          });
+        this.$swal({
+          title: "Hesabınızı kalıcı olarak silmek istediğinize emin misiniz?",
+          showDenyButton: true,
+
+          confirmButtonText: `Evet !`,
+          denyButtonText: `Hayır !`
+        }).then(result => {
+          if (result.isConfirmed) {
+            this.$store
+              .dispatch("deleteAccount", this.currentUser)
+              .then(response => {
+                this.successAlert("Seni Özleyeceğiz :(");
+                this.$store.dispatch("auth/logout");
+              })
+              .catch(response => {
+                this.errorAlert("Kullanıcı silme işlemi başarısız !");
+              });
+          }
+        });
       } else {
-        this.errorAlert("Admin kendini silemez");
+        this.errorAlert("Admin kendisini silemez !");
       }
     }
   }
