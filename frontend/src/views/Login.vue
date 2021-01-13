@@ -149,7 +149,7 @@ label {
 
 .card-container.card {
   max-width: 350px !important;
-  max-height: 500px !important;
+  height: 550px !important;
   padding: 40px 40px;
 }
 
