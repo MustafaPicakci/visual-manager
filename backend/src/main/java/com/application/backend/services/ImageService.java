@@ -32,7 +32,7 @@ public interface ImageService {
 
   public abstract Images findById(long id);
 
-  public abstract OriginalImageFile findByImage(Images image);
+  public abstract OriginalImageFile findOriginalFile(long id);
 
   public abstract long totalImages(long userId);
 

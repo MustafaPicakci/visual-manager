@@ -72,7 +72,11 @@ public class Images {
   private User user;
 
   @JsonIgnore
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToOne(
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL,
+      optional = false,
+      orphanRemoval = true)
   @JoinColumn(name = "dbFileId", nullable = false)
   private OriginalImageFile originalImageFile;
 

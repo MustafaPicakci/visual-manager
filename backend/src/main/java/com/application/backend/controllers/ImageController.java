@@ -115,7 +115,9 @@ public class ImageController {
       @PathVariable long imageId, HttpServletRequest request) {
 
     Images image = imageServiceImpl.findById(imageId);
-    OriginalImageFile originalImageFile = imageServiceImpl.findByImage(image);
+
+    OriginalImageFile originalImageFile =
+        imageServiceImpl.findOriginalFile(image.getoriginalImageFile().getId());
 
     return ResponseEntity.ok()
         .contentType(MediaType.parseMediaType(originalImageFile.getFileType()))

@@ -225,6 +225,7 @@ export default {
           denyButtonText: `Hayır !`
         }).then(result => {
           if (result.isConfirmed) {
+            successAlert("Kullanıcı bilgileri siliniyor...")
             this.$store
               .dispatch("deleteAccount", payload)
               .then(response => {

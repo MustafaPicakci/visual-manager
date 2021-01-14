@@ -2,39 +2,23 @@ package com.application.backend.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "files")
 public class OriginalImageFile {
   @Id
-  @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
-  private String id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
   private String fileName;
 
   private String fileType;
 
   @Lob private byte[] data;
-
-  @OneToOne
-  @JoinColumn(name = "imageId")
-  private Images image;
-
-  public Images getImage() {
-    return image;
-  }
-
-  public void setImage(Images image) {
-    this.image = image;
-  }
 
   public OriginalImageFile() {}
 
@@ -44,7 +28,7 @@ public class OriginalImageFile {
     this.data = data;
   }
 
-  public String getId() {
+  public long getId() {
     return id;
   }
 
@@ -60,7 +44,7 @@ public class OriginalImageFile {
     return data;
   }
 
-  public void setId(String id) {
+  public void setId(long id) {
     this.id = id;
   }
 

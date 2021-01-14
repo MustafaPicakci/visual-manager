@@ -15,7 +15,6 @@ import com.application.backend.repository.TagRepository;
 import com.application.backend.repository.UserRepository;
 
 @Service
-@EnableAsync
 public class UserServiceImpl implements UserService {
 
   @Autowired PasswordEncoder encoder;
@@ -90,7 +89,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  @Async
   public void deleteById(long id) {
     List<Tags> userTags = tagRepository.findTagsByImages_User_Id(id);
     tagRepository.deleteAll(userTags);

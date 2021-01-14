@@ -371,9 +371,6 @@ export default {
               .dispatch("deleteAccount", this.currentUser)
               .then(response => {
                 this.successAlert("Seni Özleyeceğiz :( ");
-                this.successAlert(
-                  "Hesabın birkaç dakika içerisinde tamamen silinmiş olacak."
-                );
                 setTimeout(() => {
                   this.$store.dispatch("auth/logout");
                 }, 3500);
