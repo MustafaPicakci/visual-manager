@@ -69,15 +69,14 @@ public class ImageServiceImpl implements ImageService {
     dbFile.setFileName(file.getOriginalFilename());
     dbFile.setFileType(file.getContentType());
     image.setoriginalImageFile(dbFile);
-    dbFile.setImage(image);
     imageRepository.save(image);
 
     return image;
   }
 
   @Override
-  public OriginalImageFile findByImage(Images image) {
-    return databaseFileRepository.findByImage(image);
+  public OriginalImageFile findOriginalFile(long id) {
+    return databaseFileRepository.getOne(id);
   }
 
   @Override
