@@ -3,15 +3,12 @@ package com.application.backend.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.application.backend.models.ConfirmationToken;
-import com.application.backend.models.Tags;
 import com.application.backend.models.User;
-import com.application.backend.repository.TagRepository;
+import com.application.backend.repository.ImageRepository;
 import com.application.backend.repository.UserRepository;
 
 @Service
@@ -21,8 +18,11 @@ public class UserServiceImpl implements UserService {
 	PasswordEncoder encoder;
 	@Autowired
 	UserRepository userRepository;
+
 	@Autowired
-	TagRepository tagRepository;
+	ImageRepository imageRepository;
+	@Autowired
+	TagServiceImpl tagServiceImpl;
 
 	@Override
 	public User loadUserById(long Id) {
@@ -94,13 +94,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteById(long id) {
-		List<Tags> userTags = tagRepository.findTagsByImages_User_Id(id);
-		userTags.forEach(tag -> {
-			if (tag.getImages().size() < 2) {
-				tagRepository.deleteById(tag.getId());
-			}
-		});
-
+		tagServiceImpl.deleteUserTag(id);
 		userRepository.deleteById(id);
 	}
 

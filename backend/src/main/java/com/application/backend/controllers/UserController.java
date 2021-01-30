@@ -1,6 +1,7 @@
 package com.application.backend.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +82,7 @@ public class UserController {
   
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   @PostMapping("/tags")
-  public List<Tags> getUserTags(@RequestBody User user) {
+  public Set<Tags> getUserTags(@RequestBody User user) {
     return  tagRepository.findTagsByImages_User_Id(user.getId());
   }
 }
