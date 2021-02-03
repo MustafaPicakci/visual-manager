@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,157 +39,184 @@ import com.application.backend.repository.UserRepository;
 @Service
 public class ImageServiceImpl implements ImageService {
 
-  @Autowired ImageRepository imageRepository;
-  @Autowired UserRepository userRepository;
-  @Autowired TagRepository tagRepository;
-  @Autowired OriginalImageFileRepopsitory databaseFileRepository;
+	@Autowired
+	ImageRepository imageRepository;
+	@Autowired
+	UserRepository userRepository;
+	@Autowired
+	TagRepository tagRepository;
+	@Autowired
+	OriginalImageFileRepopsitory databaseFileRepository;
 
-  @Override
-  public Images saveImage(MultipartFile file, byte[] imageBytes) {
-    Images image = new Images();
-    OriginalImageFile dbFile = new OriginalImageFile();
-    byte[] imageFile = null;
-    try {
-      imageFile = file.getBytes();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    Date uploadDate = new Date();
-    String imageName = file.getOriginalFilename();
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String username = authentication.getName();
+	@Override
+	public Images saveImage(MultipartFile file, byte[] imageBytes) {
+		Images image = new Images();
+		OriginalImageFile dbFile = new OriginalImageFile();
+		byte[] imageFile = null;
+		try {
+			imageFile = file.getBytes();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Date uploadDate = new Date();
+		String imageName = file.getOriginalFilename();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
 
-    User user = userRepository.findByUsername(username);
+		User user = userRepository.findByUsername(username);
 
-    image.setImage(imageBytes);
-    image.setImageName(imageName);
-    image.setUploadDate(uploadDate);
-    image.setUser(user);
+		image.setImage(imageBytes);
+		image.setImageName(imageName);
+		image.setUploadDate(uploadDate);
+		image.setUser(user);
 
-    dbFile.setData(imageFile);
-    dbFile.setFileName(file.getOriginalFilename());
-    dbFile.setFileType(file.getContentType());
-    image.setoriginalImageFile(dbFile);
-    imageRepository.save(image);
+		dbFile.setData(imageFile);
+		dbFile.setFileName(file.getOriginalFilename());
+		dbFile.setFileType(file.getContentType());
+		image.setoriginalImageFile(dbFile);
+		imageRepository.save(image);
 
-    return image;
-  }
+		return image;
+	}
 
-  @Override
-  public OriginalImageFile findOriginalFile(long id) {
-    return databaseFileRepository.getOne(id);
-  }
+	@Override
+	public OriginalImageFile findOriginalFile(long id) {
+		return databaseFileRepository.getOne(id);
+	}
 
-  @Override
-  public List<Images> findImagesForUser(User user) {
-    return imageRepository.findAllByUser(user);
-  }
+	@Override
+	public List<Images> findImagesForUser(User user) {
+		return imageRepository.findAllByUser(user);
+	}
 
-  @Override
-  public Page<Images> findImagesForUser(User user, ImagePage imagePage) {
-    Sort sort = Sort.by(imagePage.getSortDirection(), imagePage.getSortBy());
-    Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
+	@Override
+	public Page<Images> findImagesForUser(User user, ImagePage imagePage) {
+		Sort sort = Sort.by(imagePage.getSortDirection(), imagePage.getSortBy());
+		Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
 
-    return imageRepository.findAllByUser(user, pageable);
-  }
+		return imageRepository.findAllByUser(user, pageable);
+	}
 
-  @Override
-  public Images setTag(long imageId, String tagName) {
-    Images image = imageRepository.getOne(imageId);
-    Tags tag = null;
-    try {
-      tag = tagRepository.findTagsByTagName(tagName);
-    } catch (Exception e) {
-      System.out.println("tagi bulma sorunlu");
-    }
-    if (tag == null) {
-      tag = new Tags(tagName);
-    }
+	@Override
+	public Images setTag(long imageId, String[] insertedTagNames, String[] deletedTagNames) {
+		Images image = imageRepository.findById(imageId);
+		Tags tag = null;
+		Set<Tags> tags = new HashSet<>();
+		if (insertedTagNames != null) {
 
-    image.addTag(tag);
+			for (String tagName : insertedTagNames) {
+				try {
+					tag = tagRepository.findTagsByTagName(tagName);
+					if (tag == null) {
+						tag = new Tags(tagName);
+					}
+					tags.add(tag);
+					tag = null;
+				} catch (Exception e) {
+					System.out.println("tagi bulma sorunlu");
+				}
 
-    return imageRepository.save(image);
-  }
+			}
+		} else {
+			tags.removeAll(tags);
 
-  @Transactional
-  @Override
-  public void deleteImage(long imageId) {
-    // etiketleri başka görseller kullanmıyorsa, onları da siliyoruz
-    Images image = imageRepository.getOne(imageId);
-    Set<Tags> tags = image.getTags();
-    imageRepository.deleteById(imageId);
-    for (Tags tag : tags) {
-      if (!imageRepository.existsByTagsId(tag.getId())) {
-        tagRepository.deleteById(tag.getId());
-      }
-    }
-  }
+		}
+		image.setTags(tags);
+		imageRepository.save(image);
+		if (deletedTagNames != null) {
+			unlikTag(imageId, deletedTagNames);
+		}
 
-  @Override
-  public Images unlikTag(long imageId, long tagId) {
-    Images image = imageRepository.getOne(imageId);
-    Tags tag = tagRepository.findTagsById(tagId);
-    image.removeTagFromImage(tag);
+		return image;
+	}
 
-    image = imageRepository.save(image);
-    if (!imageRepository.existsByTagsId(tagId)) {
-      // bu etikete sahip başka bir görsel yosa etiketi sil !
-      tagRepository.deleteById(tagId);
-    }
-    return image;
-  }
+	@Transactional
+	@Override
+	public void deleteImage(long imageId) {
+		// etiketleri başka görseller kullanmıyorsa, onları da siliyoruz
+		Images image = imageRepository.getOne(imageId);
+		Set<Tags> tags = image.getTags();
+		imageRepository.deleteById(imageId);
+		for (Tags tag : tags) {
+			if (!imageRepository.existsByTagsId(tag.getId())) {
+				tagRepository.deleteById(tag.getId());
+			}
+		}
+	}
 
-  @Override
-  public Page<Images> findImagesForUserWithTag(String tag, User user, ImagePage imagePage) {
+	@Override
+	public Images unlikTag(long imageId, String[] tagNames) {
+		Images image = imageRepository.getOne(imageId);
+		Set<Tags> tags = new HashSet<>();
+		for (String tagName : tagNames) {
+			if (!imageRepository.existsByTags_tagName(tagName)) {
+				Tags tag = tagRepository.findTagsByTagName(tagName);
+				tags.add(tag);
+				image.removeTagFromImage(tag);
+			}
+		}
+		image = imageRepository.save(image);
+		for (Tags tag : tags) {
+			if (!imageRepository.existsByTagsId(tag.getId())) {
+				// bu etikete sahip başka bir görsel yosa etiketi sil !
+				tagRepository.deleteById(tag.getId());
+			}
+		}
 
-    Sort sort = Sort.by(imagePage.getSortDirection(), imagePage.getSortBy());
-    Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
-    return imageRepository.findByTags_TagNameContainingAndUser(tag, user, pageable);
-  }
+		return image;
+	}
 
-  @Override
-  public Page<Images> findImagesForUserAndTagsIsNull(User user, ImagePage imagePage) {
-    Sort sort = Sort.by(imagePage.getSortDirection(), imagePage.getSortBy());
-    Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
-    return imageRepository.findByUserAndTagsIsNull(user, pageable);
-  }
+	@Override
+	public Page<Images> findImagesForUserWithTag(String tag, User user, ImagePage imagePage) {
 
-  @Override
-  public byte[] resizeImage(MultipartFile file) {
-    String fileName = file.getOriginalFilename();
-    String fileFormat = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+		Sort sort = Sort.by(imagePage.getSortDirection(), imagePage.getSortBy());
+		Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
+		return imageRepository.findByTags_TagNameContainingAndUser(tag, user, pageable);
+	}
 
-    byte[] imageBytes = null;
-    try {
-      imageBytes = file.getBytes();
+	@Override
+	public Page<Images> findImagesForUserAndTagsIsNull(User user, ImagePage imagePage) {
+		Sort sort = Sort.by(imagePage.getSortDirection(), imagePage.getSortBy());
+		Pageable pageable = PageRequest.of(imagePage.getPageNumber(), imagePage.getPageSize(), sort);
+		return imageRepository.findByUserAndTagsIsNull(user, pageable);
+	}
 
-      // convert byte[] back to a BufferedImage
-      InputStream is = new ByteArrayInputStream(imageBytes);
+	@Override
+	public byte[] resizeImage(MultipartFile file) {
+		String fileName = file.getOriginalFilename();
+		String fileFormat = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
-      BufferedImage image = ImageIO.read(is);
+		byte[] imageBytes = null;
+		try {
+			imageBytes = file.getBytes();
 
-      image = Scalr.resize(image, 900, 900);
+			// convert byte[] back to a BufferedImage
+			InputStream is = new ByteArrayInputStream(imageBytes);
 
-      // convert a BufferedImage to byte[]
+			BufferedImage image = ImageIO.read(is);
 
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ImageIO.write(image, fileFormat, baos);
-      imageBytes = baos.toByteArray();
+			image = Scalr.resize(image, 900, 900);
 
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+			// convert a BufferedImage to byte[]
 
-    return imageBytes;
-  }
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(image, fileFormat, baos);
+			imageBytes = baos.toByteArray();
 
-  @Override
-  public Images findById(long id) {
-    return imageRepository.findById(id).get();
-  }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-  @Override
-  public long totalImages(long userId) {
-    return imageRepository.countByUserId(userId);
-  }
+		return imageBytes;
+	}
+
+	@Override
+	public Images findById(long id) {
+		return imageRepository.findById(id);
+	}
+
+	@Override
+	public long totalImages(long userId) {
+		return imageRepository.countByUserId(userId);
+	}
 }

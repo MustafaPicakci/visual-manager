@@ -3,7 +3,7 @@
     <tag
       v-for="(tag, index) in value"
       :tagColor="color"
-      :key="tag.id"
+      :key="index"
       :tag="tag"
       :index="index"
       @remove-one-tag-event="removeOneTag($event)"
@@ -18,6 +18,9 @@
       >Etiket eklemek için 'enter' tuşunu, silmek için ise 'X' butonunu veya
       'Backspace' tuşunu kullanabilirsiniz.
     </small>
+    <button @click="saveChanges()" class="btn btn-success center">
+      Kaydet
+    </button>
     <div v-if="error" class="error">Bu etiket daha önceden eklenmiş!!</div>
   </div>
 </template>
@@ -37,56 +40,86 @@ export default {
   },
   props: {
     value: {
-      required: false
+      required: false,
     },
     imageId: {
-      required: true
+      required: true,
     },
     color: {
       type: String,
       required: false,
-      default: "primary"
-    }
+      default: "primary",
+    },
   },
   components: {
-    Tag
+    Tag,
   },
   data() {
     return {
       tags: [],
-      error: false
+      error: false,
+      deletedTags: [],
     };
   },
   methods: {
     ...mapGetters(["getTags", "getLastInsertedTag"]),
+    saveChanges() {
+      let tagNames = [];
+      let deletedTagNames = [];
+      this.tags.forEach((tag) => {
+        if (tag.tagName) {
+          tagNames.push(tag.tagName);
+        } else {
+          tagNames.push(tag);
+        }
+      });
+
+      this.deletedTags.forEach((tag) => {
+        if (tag.tagName) {
+          deletedTagNames.push(tag.tagName);
+        } else {
+          deletedTagNames.push(tag);
+        }
+      });
+
+      let payload = {
+        imageId: this.imageId,
+        insertedTagNames: tagNames,
+        deletedTagNames: deletedTagNames,
+      };
+      this.$store
+        .dispatch("setTag", payload)
+        .then((data) => {
+          this.successAlert("başarılı !");
+          this.deletedTags = [];
+        })
+        .catch((data) => {
+          this.errorAlert("Etiket eklenemedi!");
+        });
+    },
     addTag(event) {
       let text = event.target;
       text.value = text.value.trim();
       let matchedTag = false;
       if (text.value.length > 0) {
-        this.tags.forEach(tag => {
+        this.tags.forEach((tag) => {
           if (
+            tag.tagName &&
             tag.tagName.toLocaleLowerCase("tr") ===
-            text.value.toLocaleLowerCase("tr")
+              text.value.toLocaleLowerCase("tr")
+          ) {
+            matchedTag = true;
+          } else if (
+            !tag.tagName &&
+            tag.toLocaleLowerCase("tr") === text.value.toLocaleLowerCase("tr")
           ) {
             matchedTag = true;
           }
         });
 
         if (!matchedTag) {
-          let payload = {
-            imageId: this.imageId,
-            tagName: text.value
-          };
+          this.tags.push(text.value);
           text.value = "";
-          this.$store
-            .dispatch("setTag", payload)
-            .then(data => {
-              this.tags.push(data.tags[data.tags.length - 1]);
-            })
-            .catch(data => {
-              this.errorAlert("Etiket eklenemedi!");
-            });
         } else {
           this.error = true;
 
@@ -99,43 +132,22 @@ export default {
     removeTag(event) {
       if (this.tags.length > 0) {
         if (event.target.value.length <= 0) {
-          let payload = {
-            images: this.imageId,
-            tagId: this.tags[this.tags.length - 1].id
-          };
-          this.$store
-            .dispatch("unlinkTag", payload)
-            .then(data => {
-              this.tags.splice(this.tags.length - 1, 1); // son elemanı siliyoruz
-              this.successAlert("Etiket kaldırıldı!");
-            })
-            .catch(data => {
-              this.errorAlert("Etiket kaldırılamadı!");
-            });
+          let deletedTag = this.tags.splice(this.tags.length - 1, 1); // son elemanı siliyoruz
+
+          this.deletedTags.push(deletedTag[0]);
         }
       }
     },
     removeOneTag(index) {
-      let payload = {
-        images: this.imageId,
-        tagId: this.tags[index].id
-      };
-
-      this.$store
-        .dispatch("unlinkTag", payload)
-        .then(data => {
-          this.tags.splice(index, 1);
-        })
-        .catch(data => {
-          this.errorAlert("etiket kaldırılamadı!");
-        });
+      let deletedTag = this.tags.splice(index, 1);
+      this.deletedTags.push(deletedTag[0]);
     },
     successAlert(message, time) {
       this.$swal({
         icon: "success",
         title: message,
         showConfirmButton: false,
-        timer: 500
+        timer: 500,
       });
     },
     errorAlert(message) {
@@ -143,15 +155,19 @@ export default {
         icon: "error",
         title: message,
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-    }
+    },
   },
   watch: {
     tags() {
-      this.$emit("input", this.tags); //arrayde bir değişiklik olduğunda v-model in de bu değişikliği yakalamasını sağladık
-    }
-  }
+      if (this.tags.tagName) {
+        this.$emit("input", this.tags.tagName);
+      } else if (!this.tags.tagName) {
+        this.$emit("input", this.tags); //arrayde bir değişiklik olduğunda v-model in de bu değişikliği yakalamasını sağladık
+      }
+    },
+  },
 };
 </script>
 

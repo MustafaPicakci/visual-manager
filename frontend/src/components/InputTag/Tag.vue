@@ -1,6 +1,7 @@
 <template>
   <span class="tag" :class="selectedTheme">
-    <span class="content">{{ tag.tagName }}</span>
+    <span v-if="tag.tagName">{{ tag.tagName }}</span>
+    <span v-else class="content">{{ tag }}</span>
     <span @click="$emit('remove-one-tag-event', index)" class="close-btn"
       ><span class="text-danger">X</span>
     </span>

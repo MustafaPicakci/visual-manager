@@ -14,17 +14,21 @@ import com.application.backend.models.User;
 @Repository
 public interface ImageRepository extends JpaRepository<Images, Long> {
 
-  List<Images> findAllByUser(User user);
+	List<Images> findAllByUser(User user);
 
-  Page<Images> findAllByUser(User user, Pageable pageable);
+	Images findById(long id);
 
-  Page<Images> findByTags_TagNameContainingAndUser(String tag, User user, Pageable pageable);
+	Page<Images> findAllByUser(User user, Pageable pageable);
 
-  Page<Images> findByUserAndTagsIsNull(User user, Pageable pageable);
-  
-  OriginalImageFile findOriginalImageFileById(long id);
+	Page<Images> findByTags_TagNameContainingAndUser(String tag, User user, Pageable pageable);
 
-  boolean existsByTagsId(long tagId);
+	Page<Images> findByUserAndTagsIsNull(User user, Pageable pageable);
 
-  long countByUserId(long UserId);
+	OriginalImageFile findOriginalImageFileById(long id);
+
+	boolean existsByTagsId(long tagId);
+	
+	boolean existsByTags_tagName(String tagname);
+
+	long countByUserId(long UserId);
 }
