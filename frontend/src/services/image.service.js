@@ -12,7 +12,6 @@ class ImageService {
         { headers: authHeader(), responseType: "blob" }
       )
       .then(response => {
-        console.log(response);
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -26,31 +25,25 @@ class ImageService {
     return axios.get(API_URL + "list", { params, headers: authHeader() });
   }
   getAllUserImages(params) {
-    console.log(params);
     return axios.get(API_URL + "getAll", { params, headers: authHeader() });
   }
 
   SetTags(payload) {
     let data = new FormData();
-    data.append("images", payload.imageId);
-    data.append("tagName", payload.tagName);
-    console.log(data.images);
+    data.append("imageId", payload.imageId);
+    payload.insertedTagNames.forEach(element => {
+      data.append("insertedTagNames[]", element);
+    });
+    payload.deletedTagNames.forEach(element => {
+      data.append("deletedTagNames[]", element);
+    });
+
     return axios.post(API_URL + "set/tag", data, {
       headers: authHeader(),
       "Content-Type": "multipart/form-data"
     });
   }
 
-  unlinkTag(payload) {
-    let data = new FormData();
-    data.append("images", payload.images);
-    data.append("tags", payload.tagId);
-
-    return axios.post(API_URL + "unlinkTag", data, {
-      headers: authHeader(),
-      "Content-Type": "multipart/form-data"
-    });
-  }
   deleteImage(imageId) {
     let data = new FormData();
     data.append("images", imageId);

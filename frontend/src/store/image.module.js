@@ -60,18 +60,7 @@ export const imageOperations = {
           });
       });
     },
-    unlinkTag({ commit }, payload) {
-      return new Promise((resolve, reject) => {
-        ImageService.unlinkTag(payload)
-          .then(response => {
-            commit("unlinkTag", response.data);
-            resolve(response.data);
-          })
-          .catch(response => {
-            reject(response);
-          });
-      });
-    },
+
     deleteImage({ commit }, payload) {
       return ImageService.deleteImage(payload.imageId).then(response => {
         commit("deleteImage", payload);

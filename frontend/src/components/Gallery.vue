@@ -134,6 +134,9 @@ export default {
         tags.push(element);
       });
       this.imageTags = tags;
+    },
+    cancel(){
+      console.log("qasfasfas");
     }
   }
 };
