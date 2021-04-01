@@ -77,3 +77,5 @@ Follow the instructions below to run the application.
 * Users can view and update user information by visiting the profile page and and users can view their progress on little tasks in the scoreboard.
 
 * If the user who logs into the system is admin, the router of the admin page is added to the navigation bar. The admin page is the page where the administrator can change the status of user accounts actively or passively, where users can delete their accounts and view the tags that users add to images.
+
+![visual-manager Demo](./demo.gif)
