@@ -5,7 +5,7 @@
 ---
 Visual-manager is an online gallery application that makes it easy for you to manage your images.
 The backend part of the project was developed with **Spring Boot** and the frontend part was developed with **Vue**.
-**Vue** Live Demo https://visual-manager-frontend.herokuapp.com/
+**Live Demo** https://visual-manager-frontend.herokuapp.com/
 ## The goal of the project
 ---
 * Making sure you find what you need among hundreds of images
